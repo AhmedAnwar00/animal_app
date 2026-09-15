@@ -18,6 +18,10 @@ class $AssetsSplashGen {
   AssetGenImage get splashAndroid12Branding =>
       const AssetGenImage('assets/splash/splash_android12_branding.png');
 
+  /// File path: assets/splash/splash_android12_combined.png
+  AssetGenImage get splashAndroid12Combined =>
+      const AssetGenImage('assets/splash/splash_android12_combined.png');
+
   /// File path: assets/splash/splash_android12_logo.png
   AssetGenImage get splashAndroid12Logo =>
       const AssetGenImage('assets/splash/splash_android12_logo.png');
@@ -29,6 +33,7 @@ class $AssetsSplashGen {
   /// List of all assets
   List<AssetGenImage> get values => [
     splashAndroid12Branding,
+    splashAndroid12Combined,
     splashAndroid12Logo,
     splashAndroidPre12,
   ];
