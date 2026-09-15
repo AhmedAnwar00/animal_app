@@ -51,4 +51,21 @@ abstract final class AppStyles {
         fontSize: 12,
         height: 18 / 12,
       );
+
+  static TextStyle get poppinsSemiBold10 => GoogleFonts.poppins(
+        fontSize: 10,
+        fontWeight: FontWeight.w600,
+      );
+
+  static TextStyle get poppinsSemiBold9 => GoogleFonts.poppins(
+        fontSize: 9,
+        fontWeight: FontWeight.w600,
+      );
+
+  static TextStyle get urbanistMedium16 => GoogleFonts.urbanist(
+        fontSize: 16,
+        height: 1.4,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0.2,
+      );
 }

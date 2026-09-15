@@ -8,6 +8,9 @@ abstract final class AppColors {
   static const Color hintGray = Color(0xFF6C6C6C);
   static const Color fieldFill = Color(0xFFF6F6F6);
   static const Color fieldBorder = Color(0xFFEDEDED);
+  static const Color uploadFill = Color(0xFFFAFAFA);
+  static const Color passwordError = Color(0xFFFC1B1A);
+  static const Color passwordSuccess = Color(0xFF08A43A);
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
 }

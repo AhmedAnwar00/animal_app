@@ -24,8 +24,12 @@ class $AssetsAuthGen {
   AssetGenImage get loginLogo =>
       const AssetGenImage('assets/auth/login_logo.png');
 
+  /// File path: assets/auth/upload_image.svg
+  SvgGenImage get uploadImage =>
+      const SvgGenImage('assets/auth/upload_image.svg');
+
   /// List of all assets
-  List<dynamic> get values => [eye, loginLogo];
+  List<dynamic> get values => [eye, loginLogo, uploadImage];
 }
 
 class $AssetsSplashGen {

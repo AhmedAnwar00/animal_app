@@ -1,5 +1,6 @@
 import 'package:animal_app/core/routing/app_routes.dart';
 import 'package:animal_app/features/auth/ui/login_page.dart';
+import 'package:animal_app/features/auth/ui/sign_up_page.dart';
 import 'package:flutter/material.dart';
 
 abstract final class AppRouter {
@@ -30,12 +31,19 @@ abstract final class AppRouter {
     navigator.pop<T>(result);
   }
 
+  static bool get canPop => navigator.canPop();
+
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case AppRoutes.login:
         return MaterialPageRoute<void>(
           settings: settings,
           builder: (_) => const LoginPage(),
+        );
+      case AppRoutes.signUp:
+        return MaterialPageRoute<void>(
+          settings: settings,
+          builder: (_) => const SignUpPage(),
         );
       default:
         return MaterialPageRoute<void>(

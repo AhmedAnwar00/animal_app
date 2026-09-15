@@ -1,3 +1,5 @@
+import 'package:animal_app/core/routing/app_router.dart';
+import 'package:animal_app/core/routing/app_routes.dart';
 import 'package:flutter/foundation.dart';
 
 class LoginController extends ChangeNotifier {
@@ -22,5 +24,7 @@ class LoginController extends ChangeNotifier {
 
   void onForgetPasswordPressed() {}
 
-  void onSignUpPressed() {}
+  void onSignUpPressed() {
+    AppRouter.pushNamed(AppRoutes.signUp);
+  }
 }
