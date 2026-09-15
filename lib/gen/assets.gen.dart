@@ -17,6 +17,10 @@ import 'package:vector_graphics/vector_graphics.dart' as _vg;
 class $AssetsAuthGen {
   const $AssetsAuthGen();
 
+  /// File path: assets/auth/back_chevron.svg
+  SvgGenImage get backChevron =>
+      const SvgGenImage('assets/auth/back_chevron.svg');
+
   /// File path: assets/auth/eye.svg
   SvgGenImage get eye => const SvgGenImage('assets/auth/eye.svg');
 
@@ -29,7 +33,7 @@ class $AssetsAuthGen {
       const SvgGenImage('assets/auth/upload_image.svg');
 
   /// List of all assets
-  List<dynamic> get values => [eye, loginLogo, uploadImage];
+  List<dynamic> get values => [backChevron, eye, loginLogo, uploadImage];
 }
 
 class $AssetsSplashGen {

@@ -22,7 +22,9 @@ class LoginController extends ChangeNotifier {
 
   void onLogInPressed() {}
 
-  void onForgetPasswordPressed() {}
+  void onForgetPasswordPressed() {
+    AppRouter.pushNamed(AppRoutes.forgetPassword);
+  }
 
   void onSignUpPressed() {
     AppRouter.pushNamed(AppRoutes.signUp);

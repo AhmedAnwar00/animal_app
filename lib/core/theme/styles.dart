@@ -9,6 +9,12 @@ abstract final class AppStyles {
         fontWeight: FontWeight.w400,
       );
 
+  static TextStyle get otamaRegular20 => const TextStyle(
+        fontFamily: 'Otama.ep',
+        fontSize: 20,
+        fontWeight: FontWeight.w400,
+      );
+
   static TextStyle get brandMark => GoogleFonts.originalSurfer(
         fontSize: 11.444,
         height: 27.656 / 11.444,

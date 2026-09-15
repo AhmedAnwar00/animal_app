@@ -1,4 +1,5 @@
 import 'package:animal_app/core/routing/app_routes.dart';
+import 'package:animal_app/features/auth/ui/forget_password_page.dart';
 import 'package:animal_app/features/auth/ui/login_page.dart';
 import 'package:animal_app/features/auth/ui/sign_up_page.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,11 @@ abstract final class AppRouter {
         return MaterialPageRoute<void>(
           settings: settings,
           builder: (_) => const SignUpPage(),
+        );
+      case AppRoutes.forgetPassword:
+        return MaterialPageRoute<void>(
+          settings: settings,
+          builder: (_) => const ForgetPasswordPage(),
         );
       default:
         return MaterialPageRoute<void>(
