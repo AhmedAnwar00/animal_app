@@ -1,4 +1,5 @@
 import 'package:animal_app/core/routing/app_router.dart';
+import 'package:animal_app/core/routing/app_routes.dart';
 import 'package:flutter/foundation.dart';
 
 class ForgetPasswordController extends ChangeNotifier {
@@ -12,5 +13,7 @@ class ForgetPasswordController extends ChangeNotifier {
     AppRouter.pop();
   }
 
-  void onSendCodePressed() {}
+  void onSendCodePressed() {
+    AppRouter.pushNamed(AppRoutes.otpVerification);
+  }
 }

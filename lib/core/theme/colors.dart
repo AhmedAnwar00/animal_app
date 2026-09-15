@@ -9,6 +9,9 @@ abstract final class AppColors {
   static const Color hintGray = Color(0xFF6C6C6C);
   static const Color fieldFill = Color(0xFFF6F6F6);
   static const Color fieldBorder = Color(0xFFEDEDED);
+  static const Color otpFieldBorder = Color(0xFFD6D6D6);
+  static const Color otpSubtitle = Color(0x99212529);
+  static const Color otpResend = Color(0xE8180901);
   static const Color uploadFill = Color(0xFFFAFAFA);
   static const Color passwordError = Color(0xFFFC1B1A);
   static const Color passwordSuccess = Color(0xFF08A43A);
