@@ -26,7 +26,7 @@ class LoginPage extends StatelessWidget {
               alignment: Alignment.topCenter,
               child: SizedBox(
                 width: 375,
-                height: 762,
+                height: double.infinity,
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
@@ -77,10 +77,13 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                      top: 718,
-                      left: 44,
-                      child: LoginSignUpPrompt(
-                        onSignUpPressed: controller.onSignUpPressed,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Center(
+                        child: LoginSignUpPrompt(
+                          onSignUpPressed: controller.onSignUpPressed,
+                        ),
                       ),
                     ),
                   ],
