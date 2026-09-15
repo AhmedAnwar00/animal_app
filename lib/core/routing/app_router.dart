@@ -1,4 +1,5 @@
 import 'package:animal_app/core/routing/app_routes.dart';
+import 'package:animal_app/features/auth/ui/create_new_password_page.dart';
 import 'package:animal_app/features/auth/ui/forget_password_page.dart';
 import 'package:animal_app/features/auth/ui/login_page.dart';
 import 'package:animal_app/features/auth/ui/otp_verification_page.dart';
@@ -56,6 +57,11 @@ abstract final class AppRouter {
         return MaterialPageRoute<void>(
           settings: settings,
           builder: (_) => const OtpVerificationPage(),
+        );
+      case AppRoutes.createNewPassword:
+        return MaterialPageRoute<void>(
+          settings: settings,
+          builder: (_) => const CreateNewPasswordPage(),
         );
       default:
         return MaterialPageRoute<void>(

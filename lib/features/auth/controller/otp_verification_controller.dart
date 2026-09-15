@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:animal_app/core/routing/app_router.dart';
+import 'package:animal_app/core/routing/app_routes.dart';
 import 'package:flutter/widgets.dart';
 
 class OtpVerificationController extends ChangeNotifier {
@@ -45,7 +46,9 @@ class OtpVerificationController extends ChangeNotifier {
     AppRouter.pop();
   }
 
-  void onConfirmPressed() {}
+  void onConfirmPressed() {
+    AppRouter.pushNamed(AppRoutes.createNewPassword);
+  }
 
   void onResendPressed() {
     if (!canResend) return;
