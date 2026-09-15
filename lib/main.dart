@@ -1,4 +1,5 @@
-import 'package:animal_app/features/home/ui/fake_home_page.dart';
+import 'package:animal_app/features/auth/controller/login_controller.dart';
+import 'package:animal_app/features/auth/ui/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
@@ -14,9 +15,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Animoo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF04332D),
+        ),
+        useMaterial3: true,
       ),
       home: const _AppBootstrap(),
     );
@@ -24,7 +28,7 @@ class MyApp extends StatelessWidget {
 }
 
 class _AppBootstrap extends StatefulWidget {
-  const _AppBootstrap({super.key});
+  const _AppBootstrap();
 
   @override
   State<_AppBootstrap> createState() => _AppBootstrapState();
@@ -32,10 +36,12 @@ class _AppBootstrap extends StatefulWidget {
 
 class _AppBootstrapState extends State<_AppBootstrap> {
   var _ready = false;
+  late final LoginController _loginController;
 
   @override
   void initState() {
     super.initState();
+    _loginController = LoginController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FlutterNativeSplash.remove();
       setState(() => _ready = true);
@@ -43,10 +49,16 @@ class _AppBootstrapState extends State<_AppBootstrap> {
   }
 
   @override
+  void dispose() {
+    _loginController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (!_ready) {
       return const SizedBox.shrink();
     }
-    return const FakeHomePage();
+    return LoginPage(controller: _loginController);
   }
 }
