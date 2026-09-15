@@ -1,3 +1,4 @@
+import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/features/auth/controller/login_controller.dart';
 import 'package:animal_app/features/auth/ui/login_page.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'Animoo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF04332D),
+          seedColor: AppColors.primary,
         ),
         useMaterial3: true,
       ),

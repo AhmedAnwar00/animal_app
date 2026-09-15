@@ -1,5 +1,6 @@
+import 'package:animal_app/core/theme/colors.dart';
+import 'package:animal_app/core/theme/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class LoginPrimaryButton extends StatelessWidget {
   const LoginPrimaryButton({super.key, required this.onPressed});
@@ -14,8 +15,8 @@ class LoginPrimaryButton extends StatelessWidget {
       child: FilledButton(
         onPressed: onPressed,
         style: FilledButton.styleFrom(
-          backgroundColor: const Color(0xFF04332D),
-          foregroundColor: Colors.white,
+          backgroundColor: AppColors.primary,
+          foregroundColor: AppColors.white,
           minimumSize: const Size(342, 44),
           maximumSize: const Size(342, 44),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -26,10 +27,7 @@ class LoginPrimaryButton extends StatelessWidget {
         ),
         child: Text(
           'Log In',
-          style: GoogleFonts.poppins(
-            fontSize: 14,
-            color: Colors.white,
-          ),
+          style: AppStyles.poppinsRegular14.copyWith(color: AppColors.white),
         ),
       ),
     );

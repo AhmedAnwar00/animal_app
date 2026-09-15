@@ -1,5 +1,6 @@
+import 'package:animal_app/core/theme/colors.dart';
+import 'package:animal_app/core/theme/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class LoginForgetPasswordLink extends StatelessWidget {
   const LoginForgetPasswordLink({
@@ -24,13 +25,10 @@ class LoginForgetPasswordLink extends StatelessWidget {
             'Forget Password....?',
             maxLines: 1,
             softWrap: false,
-            style: GoogleFonts.poppins(
-              fontSize: 10,
-              height: 36 / 10,
-              fontWeight: FontWeight.w500,
-              color: const Color(0xFF04332D),
+            style: AppStyles.poppinsMedium10.copyWith(
+              color: AppColors.primary,
               decoration: TextDecoration.underline,
-              decorationColor: const Color(0xFF04332D),
+              decorationColor: AppColors.primary,
             ),
           ),
         ),

@@ -1,5 +1,6 @@
+import 'package:animal_app/core/theme/colors.dart';
+import 'package:animal_app/core/theme/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class LoginPasswordField extends StatelessWidget {
   const LoginPasswordField({
@@ -23,10 +24,8 @@ class LoginPasswordField extends StatelessWidget {
             left: 0,
             child: Text(
               'Password',
-              style: GoogleFonts.poppins(
-                fontSize: 16,
-                height: 24 / 16,
-                color: const Color(0xFF505050),
+              style: AppStyles.poppinsRegular16.copyWith(
+                color: AppColors.textSecondary,
               ),
             ),
           ),
@@ -39,28 +38,25 @@ class LoginPasswordField extends StatelessWidget {
               child: TextField(
                 onChanged: onChanged,
                 obscureText: obscureText,
-                style: GoogleFonts.poppins(
-                  fontSize: 16,
-                  height: 24 / 16,
-                  fontWeight: FontWeight.w500,
-                  color: const Color(0xFF686F80),
+                style: AppStyles.poppinsMedium16.copyWith(
+                  color: AppColors.labelGray,
                 ),
                 decoration: InputDecoration(
                   isDense: true,
                   filled: true,
-                  fillColor: const Color(0xFFF6F6F6),
+                  fillColor: AppColors.fieldFill,
                   contentPadding: const EdgeInsets.fromLTRB(14, 10, 40, 10),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: Color(0xFFEDEDED)),
+                    borderSide: const BorderSide(color: AppColors.fieldBorder),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: Color(0xFFEDEDED)),
+                    borderSide: const BorderSide(color: AppColors.fieldBorder),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: Color(0xFFEDEDED)),
+                    borderSide: const BorderSide(color: AppColors.fieldBorder),
                   ),
                 ),
               ),

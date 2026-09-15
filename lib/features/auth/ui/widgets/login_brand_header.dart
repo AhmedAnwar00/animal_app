@@ -1,6 +1,7 @@
+import 'package:animal_app/core/theme/colors.dart';
+import 'package:animal_app/core/theme/styles.dart';
 import 'package:animal_app/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class LoginBrandHeader extends StatelessWidget {
   const LoginBrandHeader({super.key});
@@ -29,11 +30,7 @@ class LoginBrandHeader extends StatelessWidget {
             child: Text(
               'ANIMOOO',
               textAlign: TextAlign.center,
-              style: GoogleFonts.originalSurfer(
-                fontSize: 11.444,
-                height: 27.656 / 11.444,
-                color: const Color(0xFF04332D),
-              ),
+              style: AppStyles.brandMark.copyWith(color: AppColors.primary),
             ),
           ),
         ],
