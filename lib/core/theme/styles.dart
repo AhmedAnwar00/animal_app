@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 abstract final class AppStyles {
-  static TextStyle get loginTitle => GoogleFonts.playfairDisplay(
+  static TextStyle get loginTitle => const TextStyle(
+        fontFamily: 'Otama.ep',
         fontSize: 38.211,
         height: 92.342 / 38.211,
         fontWeight: FontWeight.w400,
