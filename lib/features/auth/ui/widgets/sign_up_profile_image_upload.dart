@@ -28,7 +28,7 @@ class SignUpProfileImageUpload extends StatelessWidget {
           GestureDetector(
             onTap: onSelectFilePressed,
             child: CustomPaint(
-              painter: const _DashedBorderPainter(
+              foregroundPainter: const _DashedBorderPainter(
                 color: AppColors.primary,
                 radius: 10,
               ),
