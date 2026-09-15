@@ -1,0 +1,21 @@
+---
+description: Do not run or reload the app unless the user explicitly asks
+alwaysApply: true
+---
+
+# No Run / Reload Unless Asked
+
+Do not run, launch, hot reload, or hot restart the application unless the user explicitly asks.
+
+## Rules
+
+- Do not run `flutter run`, `dart run`, or equivalent app launch commands by default
+- Do not call hot reload, hot restart, or similar Dart/Flutter MCP tools by default
+- Do not restart an already running app after code changes unless asked
+- Only run or reload when the user explicitly requests it (e.g. "run the app", "hot reload", "restart")
+
+```text
+❌ BAD — after editing UI code, automatically hot reload or flutter run
+
+✅ GOOD — finish the code change and wait; run/reload only if the user asks
+```
