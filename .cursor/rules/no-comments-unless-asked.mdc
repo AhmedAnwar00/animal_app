@@ -1,0 +1,33 @@
+---
+description: Do not add code comments unless the user explicitly asks
+alwaysApply: true
+---
+
+# No Comments Unless Asked
+
+Do not add comments to code unless the user explicitly asks for them.
+
+## Rules
+
+- Never write `//`, `///`, `/* */`, or `#` comments in new or edited code by default
+- Do not add doc comments, section banners, or narrating comments
+- Do not leave leftover comments explaining what changed
+- Only add comments when the user explicitly requests them (e.g. "add comments", "document this")
+
+```dart
+// ❌ BAD — unsolicited comment
+// Fetch animals from the API
+final animals = await repository.fetchAnimals();
+
+// ✅ GOOD — code only
+final animals = await repository.fetchAnimals();
+```
+
+```dart
+// ❌ BAD — narrating the change
+// Fixed null check
+if (animal != null) return animal.name;
+
+// ✅ GOOD
+if (animal != null) return animal.name;
+```

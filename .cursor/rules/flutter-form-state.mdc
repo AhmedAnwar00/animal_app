@@ -1,0 +1,58 @@
+---
+description: Manage Flutter form state with variables; avoid TextEditingController unless required
+alwaysApply: true
+---
+
+# Flutter Form State
+
+Default to local variables updated through `onChanged` or `onSubmitted`. Do not create a `TextEditingController` unless programmatic text manipulation is explicitly required.
+
+## Default: variables + callbacks
+
+```dart
+// ✅ GOOD
+class LoginForm extends StatefulWidget { ... }
+
+class _LoginFormState extends State<LoginForm> {
+  String _email = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      onChanged: (value) => setState(() => _email = value),
+      onSubmitted: (_) => _submit(),
+    );
+  }
+}
+```
+
+```dart
+// ❌ BAD — controller with no programmatic text edits
+final _emailController = TextEditingController();
+
+TextField(controller: _emailController)
+```
+
+## When a controller is required
+
+Use `TextEditingController` only when the field text must be set, cleared, or selected from code (e.g. `text`, `selection`, `clear()`).
+
+Dispose it in `dispose()`:
+
+```dart
+// ✅ GOOD — required controller, disposed
+class _SearchFieldState extends State<SearchField> {
+  final _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+}
+```
+
+```dart
+// ❌ BAD — controller never disposed
+final _controller = TextEditingController();
+```

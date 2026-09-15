@@ -1,0 +1,63 @@
+---
+description: Pass model objects to widgets, prefer const constructors, one widget per file
+alwaysApply: true
+---
+
+# Pass Models, Const Constructors, Own Files
+
+## Pass the Model, Not Primitives
+
+When a widget needs multiple fields from one data model, pass the whole object. Do not destructure into primitive constructor params.
+
+```dart
+// ❌ BAD
+class AnimalTile extends StatelessWidget {
+  const AnimalTile({
+    super.key,
+    required this.name,
+    required this.species,
+    required this.age,
+  });
+  final String name;
+  final String species;
+  final int age;
+}
+
+// ✅ GOOD
+class AnimalTile extends StatelessWidget {
+  const AnimalTile({super.key, required this.animal});
+  final Animal animal;
+}
+```
+
+Primitive or simple params are fine when the widget truly needs only one value (e.g. a title `String`, a flag `bool`).
+
+## Prefer const constructors
+
+Every `StatelessWidget` / immutable widget should expose a `const` constructor when all fields are immutable. Use `const` at call sites when possible.
+
+```dart
+// ❌ BAD
+class AnimalHeader extends StatelessWidget {
+  AnimalHeader({super.key, required this.title});
+  final String title;
+}
+
+// ✅ GOOD
+class AnimalHeader extends StatelessWidget {
+  const AnimalHeader({super.key, required this.title});
+  final String title;
+}
+```
+
+## One widget per file
+
+Put each custom widget in its own file under a nearby `widgets/` folder. Do not nest multiple widget classes in a screen file.
+
+```dart
+// ❌ BAD — AnimalListPage and AnimalTile in the same file
+
+// ✅ GOOD
+// animal_list_page.dart → AnimalListPage only
+// widgets/animal_tile.dart → AnimalTile only
+```

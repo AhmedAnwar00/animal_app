@@ -1,0 +1,81 @@
+---
+description: Flutter UI must use custom widgets only — no Widget-returning helpers
+alwaysApply: true
+---
+
+# Flutter UI: Custom Widgets Only
+
+Mandatory for every generated Flutter UI in this project.
+
+## Custom widgets only
+
+Build UI with `StatelessWidget` or `StatefulWidget` subclasses (or `HookWidget` if the project uses hooks). Do not use Widget-returning functions or methods.
+
+```dart
+// ❌ BAD
+Widget _buildHeader() {
+  return Text(title);
+}
+
+Widget buildCard(Animal animal) {
+  return ListTile(title: Text(animal.name));
+}
+```
+
+```dart
+// ✅ GOOD
+class AnimalHeader extends StatelessWidget {
+  const AnimalHeader({super.key, required this.title});
+  final String title;
+
+  @override
+  Widget build(BuildContext context) => Text(title);
+}
+```
+
+## One widget per file
+
+Put each custom widget in its own file under a nearby `widgets/` folder (e.g. `lib/features/<feature>/ui/widgets/`).
+
+```dart
+// ❌ BAD — multiple widgets or private helpers in the screen file
+class AnimalListPage extends StatelessWidget { ... }
+class _AnimalTile extends StatelessWidget { ... }
+```
+
+```dart
+// ✅ GOOD
+// lib/features/animals/ui/animal_list_page.dart → AnimalListPage only
+// lib/features/animals/ui/widgets/animal_tile.dart → AnimalTile only
+```
+
+## Compose screens from widgets
+
+Screens/pages only assemble imported widgets. Do not define large private widget classes or build helpers inline in the screen file.
+
+```dart
+// ❌ BAD
+class AnimalListPage extends StatelessWidget {
+  Widget _buildList(List<Animal> animals) { ... }
+}
+```
+
+```dart
+// ✅ GOOD
+class AnimalListPage extends StatelessWidget {
+  const AnimalListPage({super.key, required this.controller});
+  final AnimalListController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const AnimalHeader(title: 'Animals'),
+        AnimalList(animals: controller.animals),
+      ],
+    );
+  }
+}
+```
+
+Exception: Widget-returning helpers only when the user explicitly requests that pattern.

@@ -1,0 +1,39 @@
+---
+description: Live-lookup latest pub package versions; use modern Flutter/Dart APIs only
+alwaysApply: true
+---
+
+# Pub versions and modern Flutter/Dart APIs
+
+## Pub package versions
+
+- Before adding or bumping a dependency in `pubspec.yaml`, look up the **current** stable version on pub.dev. Prefer `user-dart` `pub_dev_search`, `dart pub add`, or a live fetch — never invent or reuse stale versions from memory.
+- Prefer caret constraints (`^x.y.z`) matching the latest stable release unless this project already uses a different constraint style.
+- After changing deps, run `flutter pub get` (or `dart pub get`) and fix resolution issues.
+
+```yaml
+# ❌ BAD — guessed / remembered version
+dependencies:
+  http: ^0.13.0
+
+# ✅ GOOD — version confirmed from pub.dev just now
+dependencies:
+  http: ^1.2.2
+```
+
+## Modern APIs only
+
+- Use current Flutter/Dart stable APIs only. Do not introduce deprecated members, Material 2-only patterns when Material 3 is the project default, or obsolete packages when a maintained replacement exists.
+- When unsure an API is current, verify with package docs or Dart MCP (`read_package_uris`, `analyze_files`) — do not guess.
+- Prefer null-safe, modern language features already used in the repo (records, patterns, sealed classes, etc.) when they fit existing style. Do not regress to pre-null-safety or deprecated patterns.
+
+```dart
+// ❌ BAD — deprecated API
+ThemeData(primarySwatch: Colors.blue);
+
+// ✅ GOOD — current Material 3 API
+ThemeData(
+  colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+  useMaterial3: true,
+);
+```

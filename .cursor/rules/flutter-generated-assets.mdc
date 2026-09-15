@@ -1,0 +1,32 @@
+---
+description: Use generated asset classes only; never raw string paths
+alwaysApply: true
+---
+
+# Flutter Generated Assets
+
+Before adding or referencing an asset, inspect the project (`pubspec.yaml`, generated files, `dev_dependencies`) to identify the existing asset generation package (e.g. `flutter_gen`).
+
+## Use generated classes only
+
+Never use raw string paths. Use the generated API:
+
+```dart
+// ❌ BAD
+Image.asset('assets/images/logo.png')
+SvgPicture.asset('assets/images/fitflow_logo.svg')
+
+// ✅ GOOD
+Image.asset(Assets.images.logo.path)
+SvgPicture.asset(Assets.images.fitflowLogo.path)
+```
+
+## If no generator is found
+
+Stop. Do not add a generator or use raw paths. Ask which generator they prefer.
+
+Once they answer, append the package name under **Preferred generator** in this file, then use that package.
+
+## Preferred generator
+
+(none recorded)

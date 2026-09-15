@@ -1,0 +1,64 @@
+---
+description: Enforce Flutter MVC architecture — Model, View, Controller separation
+alwaysApply: true
+---
+
+# Flutter MVC Architecture
+
+Use MVC for all Flutter features in this project. Keep Model, View, and Controller responsibilities separate.
+
+## Model
+- Data models, entities, request/response types, serialization only
+- Must not contain Flutter UI code
+- Must not depend on Widgets or `BuildContext`
+
+## View
+- Flutter Widgets: layout, styling, rendering, user interaction
+- No business logic and no direct API/network calls
+- Communicate with Controllers for actions and state changes
+
+## Controller
+- Coordinates Views and Models
+- Handles user actions and presentation/UI-related state
+- Calls services/repositories for data
+- Keeps business logic out of Widgets
+
+## Hard rules
+- Always follow MVC when creating or changing a feature
+- Do not put business logic in Widgets or UI logic in Models
+- Do not make network/API calls from Views
+- Follow the existing project structure; do not invent new folder patterns
+- Do not introduce Clean Architecture, MVVM, Riverpod architecture, or another pattern unless explicitly requested
+
+## New features
+1. Define Model responsibilities
+2. Define Controller responsibilities
+3. Build the View with reusable Widgets
+4. Connect the View to the Controller
+5. Keep data/networking outside the View
+
+```dart
+// ❌ BAD — logic / API in the View
+class AnimalListPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // fetchAnimals() called from build / onPressed in the widget
+    return ListView(...);
+  }
+}
+
+// ✅ GOOD — View delegates to Controller
+class AnimalListPage extends StatelessWidget {
+  const AnimalListPage({required this.controller});
+  final AnimalListController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        for (final animal in controller.animals) Text(animal.name),
+      ],
+    );
+  }
+}
+```

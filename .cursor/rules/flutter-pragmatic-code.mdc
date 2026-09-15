@@ -1,0 +1,64 @@
+---
+description: Pragmatic Flutter code — no over-engineering, SRP, DRY, accurate naming
+alwaysApply: true
+---
+
+# Pragmatic Flutter Code
+
+Write scalable code that fits the immediate need. Do not over-engineer.
+
+## Solve the current requirement
+
+- Implement only what the requirement needs now
+- Do not add unused layers, abstractions, or "just in case" APIs
+- Prefer a straightforward class over a generic framework, factory, or extra interface until a second real use case exists
+- Scalability means clear structure and easy extension — not premature architecture
+
+## SRP
+
+- One class / function / widget has one clear reason to change
+- Split only when responsibilities are already mixed or a second use appears
+
+```dart
+// ❌ BAD — fetch, map, and UI in one place
+class AnimalsPage extends StatelessWidget {
+  Future<void> load() async { /* http + parse + setState */ }
+}
+
+ // ✅ GOOD — each unit does one job
+class AnimalRepository {
+  Future<List<Animal>> fetchAnimals() async { /* http + parse */ }
+}
+
+class AnimalListController {
+  AnimalListController(this._repository);
+  final AnimalRepository _repository;
+  List<Animal> animals = [];
+
+  Future<void> load() async {
+    animals = await _repository.fetchAnimals();
+  }
+}
+```
+
+## DRY
+
+- Extract shared logic only after duplication is real (same logic in 2+ places)
+- Do not create shared helpers for a single call site
+
+## Accurate naming
+
+- Names must describe what the thing is or does (`AnimalListController`, not `Manager` / `Helper` / `Data`)
+- Prefer domain words over vague tech words (`fetchAnimals`, not `getData` / `process`)
+
+```dart
+// ❌ BAD
+class DataHelper {
+  Future<dynamic> getStuff() async { ... }
+}
+
+// ✅ GOOD
+class AnimalRepository {
+  Future<List<Animal>> fetchAnimals() async { ... }
+}
+```
