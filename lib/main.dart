@@ -1,6 +1,6 @@
+import 'package:animal_app/core/routing/app_router.dart';
+import 'package:animal_app/core/routing/app_routes.dart';
 import 'package:animal_app/core/theme/colors.dart';
-import 'package:animal_app/features/auth/controller/login_controller.dart';
-import 'package:animal_app/features/auth/ui/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
@@ -10,11 +10,31 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  var _ready = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FlutterNativeSplash.remove();
+      setState(() => _ready = true);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (!_ready) {
+      return const SizedBox.shrink();
+    }
+
     return MaterialApp(
       title: 'Animoo',
       theme: ThemeData(
@@ -23,43 +43,9 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const _AppBootstrap(),
+      navigatorKey: AppRouter.navigatorKey,
+      initialRoute: AppRoutes.login,
+      onGenerateRoute: AppRouter.onGenerateRoute,
     );
-  }
-}
-
-class _AppBootstrap extends StatefulWidget {
-  const _AppBootstrap();
-
-  @override
-  State<_AppBootstrap> createState() => _AppBootstrapState();
-}
-
-class _AppBootstrapState extends State<_AppBootstrap> {
-  var _ready = false;
-  late final LoginController _loginController;
-
-  @override
-  void initState() {
-    super.initState();
-    _loginController = LoginController();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      FlutterNativeSplash.remove();
-      setState(() => _ready = true);
-    });
-  }
-
-  @override
-  void dispose() {
-    _loginController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!_ready) {
-      return const SizedBox.shrink();
-    }
-    return LoginPage(controller: _loginController);
   }
 }

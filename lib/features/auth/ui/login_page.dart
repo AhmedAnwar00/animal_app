@@ -9,10 +9,27 @@ import 'package:animal_app/features/auth/ui/widgets/login_sign_up_prompt.dart';
 import 'package:animal_app/features/auth/ui/widgets/login_title.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key, required this.controller});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
-  final LoginController controller;
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  late final LoginController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = LoginController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +37,7 @@ class LoginPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: ListenableBuilder(
-          listenable: controller,
+          listenable: _controller,
           builder: (context, _) {
             return Align(
               alignment: Alignment.topCenter,
@@ -44,36 +61,36 @@ class LoginPage extends StatelessWidget {
                       top: 192,
                       left: 18,
                       child: LoginEmailField(
-                        onChanged: controller.updateEmail,
+                        onChanged: _controller.updateEmail,
                       ),
                     ),
                     Positioned(
                       top: 282,
                       left: 18,
                       child: LoginPasswordField(
-                        obscureText: controller.obscurePassword,
-                        onChanged: controller.updatePassword,
+                        obscureText: _controller.obscurePassword,
+                        onChanged: _controller.updatePassword,
                       ),
                     ),
                     Positioned(
                       top: 326,
                       left: 324,
                       child: LoginPasswordEyeButton(
-                        onPressed: controller.toggleObscure,
+                        onPressed: _controller.toggleObscure,
                       ),
                     ),
                     Positioned(
                       top: 350,
                       left: 241,
                       child: LoginForgetPasswordLink(
-                        onPressed: controller.onForgetPasswordPressed,
+                        onPressed: _controller.onForgetPasswordPressed,
                       ),
                     ),
                     Positioned(
                       top: 417,
                       left: 18,
                       child: LoginPrimaryButton(
-                        onPressed: controller.onLogInPressed,
+                        onPressed: _controller.onLogInPressed,
                       ),
                     ),
                     Positioned(
@@ -82,7 +99,7 @@ class LoginPage extends StatelessWidget {
                       bottom: 0,
                       child: Center(
                         child: LoginSignUpPrompt(
-                          onSignUpPressed: controller.onSignUpPressed,
+                          onSignUpPressed: _controller.onSignUpPressed,
                         ),
                       ),
                     ),
