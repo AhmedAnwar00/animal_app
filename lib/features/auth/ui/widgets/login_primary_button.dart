@@ -9,13 +9,16 @@ class LoginPrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
+      width: 342,
       height: 44,
       child: FilledButton(
         onPressed: onPressed,
         style: FilledButton.styleFrom(
           backgroundColor: const Color(0xFF04332D),
           foregroundColor: Colors.white,
+          minimumSize: const Size(342, 44),
+          maximumSize: const Size(342, 44),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(5),
           ),

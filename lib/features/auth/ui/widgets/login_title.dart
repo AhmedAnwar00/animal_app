@@ -6,14 +6,22 @@ class LoginTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      'Log In',
-      textAlign: TextAlign.center,
-      style: GoogleFonts.playfairDisplay(
-        fontSize: 38.2,
-        height: 92.342 / 38.2,
-        color: Colors.black,
-        fontWeight: FontWeight.w400,
+    return SizedBox(
+      width: 108,
+      height: 93,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          'Log In',
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          style: GoogleFonts.playfairDisplay(
+            fontSize: 38.211,
+            height: 92.342 / 38.211,
+            color: Colors.black,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
       ),
     );
   }

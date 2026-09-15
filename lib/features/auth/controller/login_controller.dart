@@ -19,4 +19,8 @@ class LoginController extends ChangeNotifier {
   }
 
   void onLogInPressed() {}
+
+  void onForgetPasswordPressed() {}
+
+  void onSignUpPressed() {}
 }

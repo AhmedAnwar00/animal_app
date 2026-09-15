@@ -1,8 +1,11 @@
 import 'package:animal_app/features/auth/controller/login_controller.dart';
 import 'package:animal_app/features/auth/ui/widgets/login_brand_header.dart';
 import 'package:animal_app/features/auth/ui/widgets/login_email_field.dart';
+import 'package:animal_app/features/auth/ui/widgets/login_forget_password_link.dart';
+import 'package:animal_app/features/auth/ui/widgets/login_password_eye_button.dart';
 import 'package:animal_app/features/auth/ui/widgets/login_password_field.dart';
 import 'package:animal_app/features/auth/ui/widgets/login_primary_button.dart';
+import 'package:animal_app/features/auth/ui/widgets/login_sign_up_prompt.dart';
 import 'package:animal_app/features/auth/ui/widgets/login_title.dart';
 import 'package:flutter/material.dart';
 
@@ -19,35 +22,68 @@ class LoginPage extends StatelessWidget {
         child: ListenableBuilder(
           listenable: controller,
           builder: (context, _) {
-            return Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 400),
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(height: 16),
-                      const LoginBrandHeader(),
-                      const SizedBox(height: 24),
-                      const LoginTitle(),
-                      const SizedBox(height: 24),
-                      LoginEmailField(
+            return Align(
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                width: 375,
+                height: 762,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    const Positioned(
+                      top: 0,
+                      left: 152,
+                      child: LoginBrandHeader(),
+                    ),
+                    const Positioned(
+                      top: 102,
+                      left: 134,
+                      child: LoginTitle(),
+                    ),
+                    Positioned(
+                      top: 192,
+                      left: 18,
+                      child: LoginEmailField(
                         onChanged: controller.updateEmail,
                       ),
-                      const SizedBox(height: 20),
-                      LoginPasswordField(
+                    ),
+                    Positioned(
+                      top: 282,
+                      left: 18,
+                      child: LoginPasswordField(
                         obscureText: controller.obscurePassword,
                         onChanged: controller.updatePassword,
-                        onToggleObscure: controller.toggleObscure,
                       ),
-                      const SizedBox(height: 40),
-                      LoginPrimaryButton(
+                    ),
+                    Positioned(
+                      top: 326,
+                      left: 324,
+                      child: LoginPasswordEyeButton(
+                        onPressed: controller.toggleObscure,
+                      ),
+                    ),
+                    Positioned(
+                      top: 350,
+                      left: 241,
+                      child: LoginForgetPasswordLink(
+                        onPressed: controller.onForgetPasswordPressed,
+                      ),
+                    ),
+                    Positioned(
+                      top: 417,
+                      left: 18,
+                      child: LoginPrimaryButton(
                         onPressed: controller.onLogInPressed,
                       ),
-                      const SizedBox(height: 24),
-                    ],
-                  ),
+                    ),
+                    Positioned(
+                      top: 718,
+                      left: 44,
+                      child: LoginSignUpPrompt(
+                        onSignUpPressed: controller.onSignUpPressed,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );

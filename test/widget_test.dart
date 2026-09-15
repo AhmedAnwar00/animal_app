@@ -9,5 +9,7 @@ void main() {
 
     expect(find.text('Log In'), findsWidgets);
     expect(find.text('ANIMOOO'), findsOneWidget);
+    expect(find.text('Forget Password....?'), findsOneWidget);
+    expect(find.text('Sign up now'), findsOneWidget);
   });
 }
