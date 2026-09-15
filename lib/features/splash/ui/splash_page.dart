@@ -8,11 +8,9 @@ class SplashPage extends StatefulWidget {
   const SplashPage({
     super.key,
     required this.controller,
-    required this.nextPageBuilder,
   });
 
   final SplashController controller;
-  final WidgetBuilder nextPageBuilder;
 
   @override
   State<SplashPage> createState() => _SplashPageState();
@@ -24,16 +22,7 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FlutterNativeSplash.remove();
-      _continueToHome();
     });
-  }
-
-  Future<void> _continueToHome() async {
-    await widget.controller.waitThenContinue();
-    if (!mounted) return;
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute<void>(builder: widget.nextPageBuilder),
-    );
   }
 
   @override
