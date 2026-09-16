@@ -47,6 +47,10 @@ class $AssetsSplashGen {
   AssetGenImage get splashAndroid12Combined =>
       const AssetGenImage('assets/splash/splash_android12_combined.png');
 
+  /// File path: assets/splash/splash_android12_combined_dark.png
+  AssetGenImage get splashAndroid12CombinedDark =>
+      const AssetGenImage('assets/splash/splash_android12_combined_dark.png');
+
   /// File path: assets/splash/splash_android12_logo.png
   AssetGenImage get splashAndroid12Logo =>
       const AssetGenImage('assets/splash/splash_android12_logo.png');
@@ -55,12 +59,18 @@ class $AssetsSplashGen {
   AssetGenImage get splashAndroidPre12 =>
       const AssetGenImage('assets/splash/splash_android_pre12.png');
 
+  /// File path: assets/splash/splash_android_pre12_dark.png
+  AssetGenImage get splashAndroidPre12Dark =>
+      const AssetGenImage('assets/splash/splash_android_pre12_dark.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
     splashAndroid12Branding,
     splashAndroid12Combined,
+    splashAndroid12CombinedDark,
     splashAndroid12Logo,
     splashAndroidPre12,
+    splashAndroidPre12Dark,
   ];
 }
 
