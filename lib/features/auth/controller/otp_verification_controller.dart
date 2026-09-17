@@ -3,13 +3,21 @@ import 'dart:async';
 import 'package:animal_app/core/routing/app_router.dart';
 import 'package:animal_app/core/routing/app_routes.dart';
 import 'package:animal_app/features/auth/model/otp_flow.dart';
+import 'package:animal_app/features/auth/model/verification_code_request.dart';
+import 'package:animal_app/features/auth/service/auth_service.dart';
 import 'package:flutter/widgets.dart';
 
 class OtpVerificationController extends ChangeNotifier {
-  OtpVerificationController({this.flow = OtpFlow.forgotPassword}) {
+  OtpVerificationController(
+    this._authService, {
+    required this.email,
+    this.flow = OtpFlow.forgotPassword,
+  }) {
     _startTimer();
   }
 
+  final AuthService _authService;
+  final String email;
   final OtpFlow flow;
 
   static const int digitCount = 5;
@@ -23,6 +31,8 @@ class OtpVerificationController extends ChangeNotifier {
 
   int secondsLeft = resendSeconds;
   Timer? _timer;
+  bool isLoading = false;
+  String? errorMessage;
 
   String get formattedTime {
     final minutes = (secondsLeft ~/ 60).toString().padLeft(2, '0');
@@ -31,6 +41,8 @@ class OtpVerificationController extends ChangeNotifier {
   }
 
   bool get canResend => secondsLeft == 0;
+
+  String get _code => digits.join();
 
   void updateDigit(int index, String value) {
     if (index < 0 || index >= digitCount) return;
@@ -45,16 +57,52 @@ class OtpVerificationController extends ChangeNotifier {
     }
   }
 
+  void clearError() {
+    if (errorMessage == null) return;
+    errorMessage = null;
+  }
+
   void onCancelPressed() {
     AppRouter.pop();
   }
 
-  void onConfirmPressed() {
-    if (flow == OtpFlow.signup) {
-      AppRouter.pushNamedAndRemoveUntil(AppRoutes.login);
+  Future<void> onConfirmPressed() async {
+    if (isLoading) return;
+
+    if (digits.any((digit) => digit.isEmpty)) {
+      errorMessage = 'Please enter the full verification code';
+      notifyListeners();
       return;
     }
-    AppRouter.pushNamed(AppRoutes.createNewPassword);
+
+    if (flow == OtpFlow.forgotPassword) {
+      AppRouter.pushNamed(AppRoutes.createNewPassword);
+      return;
+    }
+
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    try {
+      final response = await _authService.verifyCode(
+        VerificationCodeRequest(
+          email: email,
+          code: _code,
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        AppRouter.pushNamedAndRemoveUntil(AppRoutes.login);
+      } else {
+        errorMessage = response.message;
+      }
+    } catch (e) {
+      errorMessage = e.toString().replaceFirst('Exception: ', '');
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
   void onResendPressed() {

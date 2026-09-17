@@ -2,6 +2,8 @@ import 'package:animal_app/core/network/api_constants.dart';
 import 'package:animal_app/core/network/dio_client.dart';
 import 'package:animal_app/features/auth/model/signup_request.dart';
 import 'package:animal_app/features/auth/model/signup_response.dart';
+import 'package:animal_app/features/auth/model/verification_code_request.dart';
+import 'package:animal_app/features/auth/model/verification_code_response.dart';
 import 'package:dio/dio.dart';
 
 class AuthService {
@@ -36,11 +38,33 @@ class AuthService {
 
       return SignupResponse.fromJson(data);
     } on DioException catch (e) {
-      throw Exception(_messageFromDioException(e));
+      throw Exception(_messageFromDioException(e, 'Signup failed. Please try again.'));
     }
   }
 
-  String _messageFromDioException(DioException e) {
+  Future<VerificationCodeResponse> verifyCode(
+    VerificationCodeRequest request,
+  ) async {
+    try {
+      final response = await _client.dio.post<Map<String, dynamic>>(
+        ApiConstants.verificationCode,
+        data: request.toJson(),
+      );
+
+      final data = response.data;
+      if (data == null) {
+        throw Exception('Empty response from server');
+      }
+
+      return VerificationCodeResponse.fromJson(data);
+    } on DioException catch (e) {
+      throw Exception(
+        _messageFromDioException(e, 'Verification failed. Please try again.'),
+      );
+    }
+  }
+
+  String _messageFromDioException(DioException e, String fallback) {
     final data = e.response?.data;
     if (data is Map<String, dynamic>) {
       final message = data['message'];
@@ -48,6 +72,6 @@ class AuthService {
         return message;
       }
     }
-    return e.message ?? 'Signup failed. Please try again.';
+    return e.message ?? fallback;
   }
 }

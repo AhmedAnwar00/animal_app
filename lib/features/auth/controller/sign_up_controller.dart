@@ -1,6 +1,7 @@
 import 'package:animal_app/core/routing/app_router.dart';
 import 'package:animal_app/core/routing/app_routes.dart';
 import 'package:animal_app/features/auth/model/otp_flow.dart';
+import 'package:animal_app/features/auth/model/otp_verification_args.dart';
 import 'package:animal_app/features/auth/model/signup_request.dart';
 import 'package:animal_app/features/auth/service/auth_service.dart';
 import 'package:flutter/foundation.dart';
@@ -117,7 +118,10 @@ class SignUpController extends ChangeNotifier {
       if (response.statusCode == 201) {
         AppRouter.pushNamed(
           AppRoutes.otpVerification,
-          arguments: OtpFlow.signup,
+          arguments: OtpVerificationArgs(
+            flow: OtpFlow.signup,
+            email: email.trim(),
+          ),
         );
       } else {
         errorMessage = response.message;

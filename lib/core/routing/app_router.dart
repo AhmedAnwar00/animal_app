@@ -1,5 +1,6 @@
 import 'package:animal_app/core/routing/app_routes.dart';
 import 'package:animal_app/features/auth/model/otp_flow.dart';
+import 'package:animal_app/features/auth/model/otp_verification_args.dart';
 import 'package:animal_app/features/auth/ui/create_new_password_page.dart';
 import 'package:animal_app/features/auth/ui/forget_password_page.dart';
 import 'package:animal_app/features/auth/ui/login_page.dart';
@@ -67,12 +68,22 @@ abstract final class AppRouter {
           builder: (_) => const ForgetPasswordPage(),
         );
       case AppRoutes.otpVerification:
-        final flow = settings.arguments is OtpFlow
-            ? settings.arguments! as OtpFlow
-            : OtpFlow.forgotPassword;
+        final args = settings.arguments;
+        final OtpFlow flow;
+        final String email;
+        if (args is OtpVerificationArgs) {
+          flow = args.flow;
+          email = args.email;
+        } else if (args is OtpFlow) {
+          flow = args;
+          email = '';
+        } else {
+          flow = OtpFlow.forgotPassword;
+          email = '';
+        }
         return MaterialPageRoute<void>(
           settings: settings,
-          builder: (_) => OtpVerificationPage(flow: flow),
+          builder: (_) => OtpVerificationPage(flow: flow, email: email),
         );
       case AppRoutes.createNewPassword:
         return MaterialPageRoute<void>(
