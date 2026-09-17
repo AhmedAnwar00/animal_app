@@ -1,4 +1,5 @@
 import 'package:animal_app/core/routing/app_routes.dart';
+import 'package:animal_app/features/auth/model/otp_flow.dart';
 import 'package:animal_app/features/auth/ui/create_new_password_page.dart';
 import 'package:animal_app/features/auth/ui/forget_password_page.dart';
 import 'package:animal_app/features/auth/ui/login_page.dart';
@@ -30,6 +31,18 @@ abstract final class AppRouter {
     );
   }
 
+  static Future<T?> pushNamedAndRemoveUntil<T extends Object?>(
+    String route, {
+    bool Function(Route<dynamic>)? predicate,
+    Object? arguments,
+  }) {
+    return navigator.pushNamedAndRemoveUntil<T>(
+      route,
+      predicate ?? (_) => false,
+      arguments: arguments,
+    );
+  }
+
   static void pop<T extends Object?>([T? result]) {
     navigator.pop<T>(result);
   }
@@ -54,9 +67,12 @@ abstract final class AppRouter {
           builder: (_) => const ForgetPasswordPage(),
         );
       case AppRoutes.otpVerification:
+        final flow = settings.arguments is OtpFlow
+            ? settings.arguments! as OtpFlow
+            : OtpFlow.forgotPassword;
         return MaterialPageRoute<void>(
           settings: settings,
-          builder: (_) => const OtpVerificationPage(),
+          builder: (_) => OtpVerificationPage(flow: flow),
         );
       case AppRoutes.createNewPassword:
         return MaterialPageRoute<void>(

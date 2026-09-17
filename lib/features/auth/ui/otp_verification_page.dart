@@ -1,4 +1,5 @@
 import 'package:animal_app/features/auth/controller/otp_verification_controller.dart';
+import 'package:animal_app/features/auth/model/otp_flow.dart';
 import 'package:animal_app/features/auth/ui/widgets/otp_verification_cancel_button.dart';
 import 'package:animal_app/features/auth/ui/widgets/otp_verification_code_fields.dart';
 import 'package:animal_app/features/auth/ui/widgets/otp_verification_confirm_button.dart';
@@ -8,7 +9,12 @@ import 'package:animal_app/features/auth/ui/widgets/otp_verification_title.dart'
 import 'package:flutter/material.dart';
 
 class OtpVerificationPage extends StatefulWidget {
-  const OtpVerificationPage({super.key});
+  const OtpVerificationPage({
+    super.key,
+    this.flow = OtpFlow.forgotPassword,
+  });
+
+  final OtpFlow flow;
 
   @override
   State<OtpVerificationPage> createState() => _OtpVerificationPageState();
@@ -20,7 +26,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   @override
   void initState() {
     super.initState();
-    _controller = OtpVerificationController();
+    _controller = OtpVerificationController(flow: widget.flow);
   }
 
   @override

@@ -2,12 +2,15 @@ import 'dart:async';
 
 import 'package:animal_app/core/routing/app_router.dart';
 import 'package:animal_app/core/routing/app_routes.dart';
+import 'package:animal_app/features/auth/model/otp_flow.dart';
 import 'package:flutter/widgets.dart';
 
 class OtpVerificationController extends ChangeNotifier {
-  OtpVerificationController() {
+  OtpVerificationController({this.flow = OtpFlow.forgotPassword}) {
     _startTimer();
   }
+
+  final OtpFlow flow;
 
   static const int digitCount = 5;
   static const int resendSeconds = 59;
@@ -47,6 +50,10 @@ class OtpVerificationController extends ChangeNotifier {
   }
 
   void onConfirmPressed() {
+    if (flow == OtpFlow.signup) {
+      AppRouter.pushNamedAndRemoveUntil(AppRoutes.login);
+      return;
+    }
     AppRouter.pushNamed(AppRoutes.createNewPassword);
   }
 
