@@ -1,4 +1,6 @@
+import 'package:animal_app/core/network/dio_client.dart';
 import 'package:animal_app/features/auth/controller/sign_up_controller.dart';
+import 'package:animal_app/features/auth/service/auth_service.dart';
 import 'package:animal_app/features/auth/ui/widgets/login_brand_header.dart';
 import 'package:animal_app/features/auth/ui/widgets/login_password_eye_button.dart';
 import 'package:animal_app/features/auth/ui/widgets/sign_up_labeled_field.dart';
@@ -24,13 +26,25 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   void initState() {
     super.initState();
-    _controller = SignUpController();
+    _controller = SignUpController(AuthService(DioClient()));
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _handleErrorMessage() {
+    final message = _controller.errorMessage;
+    if (message == null || !mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+      _controller.clearError();
+    });
   }
 
   @override
@@ -41,6 +55,7 @@ class _SignUpPageState extends State<SignUpPage> {
         child: ListenableBuilder(
           listenable: _controller,
           builder: (context, _) {
+            _handleErrorMessage();
             return Align(
               alignment: Alignment.topCenter,
               child: SingleChildScrollView(
@@ -151,6 +166,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         top: 859,
                         left: 18,
                         child: SignUpProfileImageUpload(
+                          imagePath: _controller.imagePath,
                           onSelectFilePressed: _controller.onSelectImagePressed,
                         ),
                       ),
@@ -158,6 +174,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         top: 1105,
                         left: 16.5,
                         child: SignUpPrimaryButton(
+                          isLoading: _controller.isLoading,
                           onPressed: _controller.onSignUpPressed,
                         ),
                       ),

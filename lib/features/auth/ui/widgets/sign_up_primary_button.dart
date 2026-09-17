@@ -3,9 +3,14 @@ import 'package:animal_app/core/theme/styles.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPrimaryButton extends StatelessWidget {
-  const SignUpPrimaryButton({super.key, required this.onPressed});
+  const SignUpPrimaryButton({
+    super.key,
+    required this.onPressed,
+    this.isLoading = false,
+  });
 
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +18,12 @@ class SignUpPrimaryButton extends StatelessWidget {
       width: 342,
       height: 44,
       child: FilledButton(
-        onPressed: onPressed,
+        onPressed: isLoading ? null : onPressed,
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.white,
+          disabledBackgroundColor: AppColors.primary,
+          disabledForegroundColor: AppColors.white,
           minimumSize: const Size(342, 44),
           maximumSize: const Size(342, 44),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -25,10 +32,21 @@ class SignUpPrimaryButton extends StatelessWidget {
           ),
           padding: const EdgeInsets.all(10),
         ),
-        child: Text(
-          'Sign Up',
-          style: AppStyles.poppinsRegular14.copyWith(color: AppColors.white),
-        ),
+        child: isLoading
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.white,
+                ),
+              )
+            : Text(
+                'Sign Up',
+                style: AppStyles.poppinsRegular14.copyWith(
+                  color: AppColors.white,
+                ),
+              ),
       ),
     );
   }

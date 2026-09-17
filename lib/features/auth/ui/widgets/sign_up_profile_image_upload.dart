@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:animal_app/gen/assets.gen.dart';
@@ -7,9 +9,11 @@ class SignUpProfileImageUpload extends StatelessWidget {
   const SignUpProfileImageUpload({
     super.key,
     required this.onSelectFilePressed,
+    this.imagePath,
   });
 
   final VoidCallback onSelectFilePressed;
+  final String? imagePath;
 
   @override
   Widget build(BuildContext context) {
@@ -35,32 +39,42 @@ class SignUpProfileImageUpload extends StatelessWidget {
               child: Container(
                 width: 339,
                 height: 200,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 32,
-                ),
+                padding: imagePath == null
+                    ? const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 32,
+                      )
+                    : EdgeInsets.zero,
                 decoration: BoxDecoration(
                   color: AppColors.uploadFill,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Assets.auth.uploadImage.svg(
-                      width: 28,
-                      height: 28,
-                      fit: BoxFit.contain,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Select file',
-                      textAlign: TextAlign.center,
-                      style: AppStyles.urbanistMedium16.copyWith(
-                        color: AppColors.primary,
+                clipBehavior: Clip.antiAlias,
+                child: imagePath != null
+                    ? Image.file(
+                        File(imagePath!),
+                        width: 339,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Assets.auth.uploadImage.svg(
+                            width: 28,
+                            height: 28,
+                            fit: BoxFit.contain,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Select file',
+                            textAlign: TextAlign.center,
+                            style: AppStyles.urbanistMedium16.copyWith(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
               ),
             ),
           ),
