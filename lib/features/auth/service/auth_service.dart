@@ -4,6 +4,7 @@ import 'package:animal_app/features/auth/model/create_new_password_request.dart'
 import 'package:animal_app/features/auth/model/create_new_password_response.dart';
 import 'package:animal_app/features/auth/model/forget_password_request.dart';
 import 'package:animal_app/features/auth/model/forget_password_response.dart';
+import 'package:animal_app/features/auth/model/generate_access_token_response.dart';
 import 'package:animal_app/features/auth/model/login_request.dart';
 import 'package:animal_app/features/auth/model/login_response.dart';
 import 'package:animal_app/features/auth/model/signup_request.dart';
@@ -158,12 +159,48 @@ class AuthService {
     }
   }
 
+  Future<GenerateAccessTokenResponse> generateAccessToken(
+    String refreshToken,
+  ) async {
+    try {
+      final response = await _client.dio.post<Map<String, dynamic>>(
+        ApiConstants.generateAccessToken,
+        options: Options(headers: {'refresh_token': refreshToken}),
+      );
+
+      final data = response.data;
+      if (data == null) {
+        throw Exception('Empty response from server');
+      }
+
+      return GenerateAccessTokenResponse.fromJson(data);
+    } on DioException catch (e) {
+      throw Exception(
+        _messageFromDioException(
+          e,
+          'Failed to refresh access token. Please try again.',
+        ),
+      );
+    }
+  }
+
   String _messageFromDioException(DioException e, String fallback) {
     final data = e.response?.data;
     if (data is Map<String, dynamic>) {
       final message = data['message'];
       if (message is String && message.isNotEmpty) {
         return message;
+      }
+
+      final error = data['error'];
+      if (error is List) {
+        final parts = error
+            .whereType<String>()
+            .where((item) => item.isNotEmpty)
+            .toList();
+        if (parts.isNotEmpty) {
+          return parts.join(', ');
+        }
       }
     }
     return e.message ?? fallback;

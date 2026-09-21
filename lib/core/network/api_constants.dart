@@ -5,4 +5,5 @@ abstract final class ApiConstants {
   static const login = '/api/login';
   static const forgetPassword = '/api/forget_password';
   static const createNewPassword = '/api/create_new_possword';
+  static const generateAccessToken = '/api/generateAccessToken';
 }
