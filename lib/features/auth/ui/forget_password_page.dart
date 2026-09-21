@@ -1,4 +1,6 @@
+import 'package:animal_app/core/network/dio_client.dart';
 import 'package:animal_app/features/auth/controller/forget_password_controller.dart';
+import 'package:animal_app/features/auth/service/auth_service.dart';
 import 'package:animal_app/features/auth/ui/widgets/forget_password_back_button.dart';
 import 'package:animal_app/features/auth/ui/widgets/forget_password_send_code_button.dart';
 import 'package:animal_app/features/auth/ui/widgets/forget_password_subtitle.dart';
@@ -19,13 +21,25 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   @override
   void initState() {
     super.initState();
-    _controller = ForgetPasswordController();
+    _controller = ForgetPasswordController(AuthService(DioClient()));
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _handleErrorMessage() {
+    final message = _controller.errorMessage;
+    if (message == null || !mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+      _controller.clearError();
+    });
   }
 
   @override
@@ -36,6 +50,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         child: ListenableBuilder(
           listenable: _controller,
           builder: (context, _) {
+            _handleErrorMessage();
             return Align(
               alignment: Alignment.topCenter,
               child: SizedBox(
@@ -76,6 +91,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       left: 18,
                       child: ForgetPasswordSendCodeButton(
                         onPressed: _controller.onSendCodePressed,
+                        isLoading: _controller.isLoading,
                       ),
                     ),
                   ],

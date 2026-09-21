@@ -3,4 +3,5 @@ abstract final class ApiConstants {
   static const signup = '/api/signup';
   static const verificationCode = '/api/verification_code';
   static const login = '/api/login';
+  static const forgetPassword = '/api/forget_password';
 }
