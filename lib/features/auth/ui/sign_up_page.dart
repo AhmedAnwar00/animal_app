@@ -9,6 +9,7 @@ import 'package:animal_app/features/auth/ui/widgets/sign_up_password_field.dart'
 import 'package:animal_app/features/auth/ui/widgets/sign_up_password_hint.dart';
 import 'package:animal_app/features/auth/ui/widgets/sign_up_password_rules.dart';
 import 'package:animal_app/features/auth/ui/widgets/sign_up_primary_button.dart';
+import 'package:animal_app/features/auth/ui/widgets/sign_up_image_source_sheet.dart';
 import 'package:animal_app/features/auth/ui/widgets/sign_up_profile_image_upload.dart';
 import 'package:animal_app/features/auth/ui/widgets/sign_up_title.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,20 @@ class _SignUpPageState extends State<SignUpPage> {
       );
       _controller.clearError();
     });
+  }
+
+  Future<void> _onSelectFilePressed() async {
+    final source = await SignUpImageSourceSheet.show(context);
+    if (!mounted) return;
+    switch (source) {
+      case SignUpImageSource.gallery:
+        await _controller.pickFromGallery();
+      case SignUpImageSource.camera:
+        await _controller.pickFromCamera();
+      case SignUpImageSource.cancel:
+      case null:
+        break;
+    }
   }
 
   @override
@@ -167,7 +182,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         left: 18,
                         child: SignUpProfileImageUpload(
                           imagePath: _controller.imagePath,
-                          onSelectFilePressed: _controller.onSelectImagePressed,
+                          onSelectFilePressed: _onSelectFilePressed,
                         ),
                       ),
                       Positioned(

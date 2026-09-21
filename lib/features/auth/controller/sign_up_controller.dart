@@ -6,6 +6,7 @@ import 'package:animal_app/features/auth/model/signup_request.dart';
 import 'package:animal_app/features/auth/service/auth_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SignUpController extends ChangeNotifier {
   SignUpController(this._authService);
@@ -82,11 +83,43 @@ class SignUpController extends ChangeNotifier {
     errorMessage = null;
   }
 
-  Future<void> onSelectImagePressed() async {
-    final file = await _imagePicker.pickImage(source: ImageSource.gallery);
-    if (file == null) return;
-    imagePath = file.path;
-    notifyListeners();
+  Future<void> pickFromGallery() async {
+    await _pickImage(
+      source: ImageSource.gallery,
+      permission: Permission.photos,
+      deniedMessage: 'Photo library permission is required to select an image',
+    );
+  }
+
+  Future<void> pickFromCamera() async {
+    await _pickImage(
+      source: ImageSource.camera,
+      permission: Permission.camera,
+      deniedMessage: 'Camera permission is required to take a photo',
+    );
+  }
+
+  Future<void> _pickImage({
+    required ImageSource source,
+    required Permission permission,
+    required String deniedMessage,
+  }) async {
+    final status = await permission.request();
+    if (!status.isGranted && !status.isLimited) {
+      errorMessage = deniedMessage;
+      notifyListeners();
+      return;
+    }
+
+    try {
+      final file = await _imagePicker.pickImage(source: source);
+      if (file == null) return;
+      imagePath = file.path;
+      notifyListeners();
+    } catch (_) {
+      errorMessage = 'Failed to pick image. Please try again';
+      notifyListeners();
+    }
   }
 
   Future<void> onSignUpPressed() async {
