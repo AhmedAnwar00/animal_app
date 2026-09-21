@@ -47,6 +47,7 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp(
       title: 'Animoo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppColors.primary,
