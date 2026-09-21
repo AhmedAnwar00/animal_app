@@ -4,4 +4,5 @@ abstract final class AppRoutes {
   static const forgetPassword = '/forget-password';
   static const otpVerification = '/otp-verification';
   static const createNewPassword = '/create-new-password';
+  static const home = '/home';
 }

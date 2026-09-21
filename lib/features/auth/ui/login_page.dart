@@ -1,4 +1,7 @@
+import 'package:animal_app/core/network/dio_client.dart';
+import 'package:animal_app/core/storage/token_storage.dart';
 import 'package:animal_app/features/auth/controller/login_controller.dart';
+import 'package:animal_app/features/auth/service/auth_service.dart';
 import 'package:animal_app/features/auth/ui/widgets/login_brand_header.dart';
 import 'package:animal_app/features/auth/ui/widgets/login_email_field.dart';
 import 'package:animal_app/features/auth/ui/widgets/login_forget_password_link.dart';
@@ -22,13 +25,25 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    _controller = LoginController();
+    _controller = LoginController(AuthService(DioClient()), TokenStorage());
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _handleErrorMessage() {
+    final message = _controller.errorMessage;
+    if (message == null || !mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+      _controller.clearError();
+    });
   }
 
   @override
@@ -39,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
         child: ListenableBuilder(
           listenable: _controller,
           builder: (context, _) {
+            _handleErrorMessage();
             return Align(
               alignment: Alignment.topCenter,
               child: SizedBox(
@@ -90,6 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                       top: 417,
                       left: 18,
                       child: LoginPrimaryButton(
+                        isLoading: _controller.isLoading,
                         onPressed: _controller.onLogInPressed,
                       ),
                     ),

@@ -1,5 +1,7 @@
 import 'package:animal_app/core/network/api_constants.dart';
 import 'package:animal_app/core/network/dio_client.dart';
+import 'package:animal_app/features/auth/model/login_request.dart';
+import 'package:animal_app/features/auth/model/login_response.dart';
 import 'package:animal_app/features/auth/model/signup_request.dart';
 import 'package:animal_app/features/auth/model/signup_response.dart';
 import 'package:animal_app/features/auth/model/verification_code_request.dart';
@@ -60,6 +62,26 @@ class AuthService {
     } on DioException catch (e) {
       throw Exception(
         _messageFromDioException(e, 'Verification failed. Please try again.'),
+      );
+    }
+  }
+
+  Future<LoginResponse> login(LoginRequest request) async {
+    try {
+      final response = await _client.dio.post<Map<String, dynamic>>(
+        ApiConstants.login,
+        data: request.toJson(),
+      );
+
+      final data = response.data;
+      if (data == null) {
+        throw Exception('Empty response from server');
+      }
+
+      return LoginResponse.fromJson(data);
+    } on DioException catch (e) {
+      throw Exception(
+        _messageFromDioException(e, 'Login failed. Please try again.'),
       );
     }
   }

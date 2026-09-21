@@ -1,11 +1,21 @@
 import 'package:animal_app/core/routing/app_router.dart';
 import 'package:animal_app/core/routing/app_routes.dart';
+import 'package:animal_app/core/storage/token_storage.dart';
+import 'package:animal_app/features/auth/model/login_request.dart';
+import 'package:animal_app/features/auth/service/auth_service.dart';
 import 'package:flutter/foundation.dart';
 
 class LoginController extends ChangeNotifier {
+  LoginController(this._authService, this._tokenStorage);
+
+  final AuthService _authService;
+  final TokenStorage _tokenStorage;
+
   String email = '';
   String password = '';
   bool obscurePassword = true;
+  bool isLoading = false;
+  String? errorMessage;
 
   void updateEmail(String value) {
     email = value;
@@ -20,7 +30,59 @@ class LoginController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onLogInPressed() {}
+  void clearError() {
+    if (errorMessage == null) return;
+    errorMessage = null;
+  }
+
+  Future<void> onLogInPressed() async {
+    if (isLoading) return;
+
+    final validationError = _validate();
+    if (validationError != null) {
+      errorMessage = validationError;
+      notifyListeners();
+      return;
+    }
+
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    try {
+      final response = await _authService.login(
+        LoginRequest(
+          email: email.trim(),
+          password: password,
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        await _tokenStorage.saveTokens(
+          accessToken: response.accessToken,
+          refreshToken: response.refreshToken,
+        );
+        AppRouter.pushNamedAndRemoveUntil(AppRoutes.home);
+      } else {
+        errorMessage = response.message;
+      }
+    } catch (e) {
+      errorMessage = e.toString().replaceFirst('Exception: ', '');
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  String? _validate() {
+    final trimmedEmail = email.trim();
+    if (trimmedEmail.isEmpty) return 'Email is required';
+    if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(trimmedEmail)) {
+      return 'Please enter a valid email';
+    }
+    if (password.isEmpty) return 'Password is required';
+    return null;
+  }
 
   void onForgetPasswordPressed() {
     AppRouter.pushNamed(AppRoutes.forgetPassword);
