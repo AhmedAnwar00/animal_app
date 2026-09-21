@@ -1,5 +1,6 @@
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
+import 'package:animal_app/core/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 
 class LoginPasswordField extends StatelessWidget {
@@ -35,30 +36,13 @@ class LoginPasswordField extends StatelessWidget {
             child: SizedBox(
               width: 339,
               height: 44,
-              child: TextField(
+              child: AppTextField(
                 onChanged: onChanged,
                 obscureText: obscureText,
                 style: AppStyles.poppinsMedium16.copyWith(
                   color: AppColors.labelGray,
                 ),
-                decoration: InputDecoration(
-                  isDense: true,
-                  filled: true,
-                  fillColor: AppColors.fieldFill,
-                  contentPadding: const EdgeInsets.fromLTRB(14, 10, 40, 10),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: AppColors.fieldBorder),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: AppColors.fieldBorder),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: AppColors.fieldBorder),
-                  ),
-                ),
+                contentPadding: const EdgeInsets.fromLTRB(14, 10, 40, 10),
               ),
             ),
           ),
