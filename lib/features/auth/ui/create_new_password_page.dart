@@ -1,4 +1,6 @@
+import 'package:animal_app/core/network/dio_client.dart';
 import 'package:animal_app/features/auth/controller/create_new_password_controller.dart';
+import 'package:animal_app/features/auth/service/auth_service.dart';
 import 'package:animal_app/features/auth/ui/widgets/create_new_password_submit_button.dart';
 import 'package:animal_app/features/auth/ui/widgets/create_new_password_title.dart';
 import 'package:animal_app/features/auth/ui/widgets/login_password_eye_button.dart';
@@ -9,7 +11,9 @@ import 'package:animal_app/features/auth/ui/widgets/sign_up_password_rules.dart'
 import 'package:flutter/material.dart';
 
 class CreateNewPasswordPage extends StatefulWidget {
-  const CreateNewPasswordPage({super.key});
+  const CreateNewPasswordPage({super.key, required this.email});
+
+  final String email;
 
   @override
   State<CreateNewPasswordPage> createState() => _CreateNewPasswordPageState();
@@ -21,13 +25,28 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
   @override
   void initState() {
     super.initState();
-    _controller = CreateNewPasswordController();
+    _controller = CreateNewPasswordController(
+      AuthService(DioClient()),
+      email: widget.email,
+    );
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _handleErrorMessage() {
+    final message = _controller.errorMessage;
+    if (message == null || !mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+      _controller.clearError();
+    });
   }
 
   @override
@@ -38,6 +57,7 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
         child: ListenableBuilder(
           listenable: _controller,
           builder: (context, _) {
+            _handleErrorMessage();
             return Align(
               alignment: Alignment.topCenter,
               child: SizedBox(
@@ -111,6 +131,7 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
                       left: 18,
                       child: CreateNewPasswordSubmitButton(
                         onPressed: _controller.onSubmitPressed,
+                        isLoading: _controller.isLoading,
                       ),
                     ),
                   ],

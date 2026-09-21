@@ -76,7 +76,10 @@ class OtpVerificationController extends ChangeNotifier {
     }
 
     if (flow == OtpFlow.forgotPassword) {
-      AppRouter.pushNamed(AppRoutes.createNewPassword);
+      AppRouter.pushNamed(
+        AppRoutes.createNewPassword,
+        arguments: email,
+      );
       return;
     }
 

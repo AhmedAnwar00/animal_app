@@ -87,9 +87,11 @@ abstract final class AppRouter {
           builder: (_) => OtpVerificationPage(flow: flow, email: email),
         );
       case AppRoutes.createNewPassword:
+        final email =
+            settings.arguments is String ? settings.arguments as String : '';
         return MaterialPageRoute<void>(
           settings: settings,
-          builder: (_) => const CreateNewPasswordPage(),
+          builder: (_) => CreateNewPasswordPage(email: email),
         );
       case AppRoutes.home:
         return MaterialPageRoute<void>(
