@@ -107,13 +107,14 @@ class _LoginPageState extends State<LoginPage> {
                       left: 18,
                       child: LoginPrimaryButton(
                         isLoading: _controller.isLoading,
-                        onPressed: _controller.onLogInPressed,
+                        onPressed: () => _controller.onLogInPressed(),
                       ),
                     ),
                     Positioned(
                       left: 0,
                       right: 0,
                       bottom: 0,
+                      height: 36,
                       child: Center(
                         child: LoginSignUpPrompt(
                           onSignUpPressed: _controller.onSignUpPressed,
