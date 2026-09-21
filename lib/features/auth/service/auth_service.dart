@@ -7,6 +7,7 @@ import 'package:animal_app/features/auth/model/signup_response.dart';
 import 'package:animal_app/features/auth/model/verification_code_request.dart';
 import 'package:animal_app/features/auth/model/verification_code_response.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthService {
   AuthService(this._client);
@@ -67,10 +68,18 @@ class AuthService {
   }
 
   Future<LoginResponse> login(LoginRequest request) async {
+    final baseUrl = _client.dio.options.baseUrl;
+    final path = ApiConstants.login;
+    debugPrint('[LOGIN DEBUG] 3 AuthService.login start');
+    debugPrint('[LOGIN DEBUG] 3 POST $baseUrl$path');
+    debugPrint('[LOGIN DEBUG] 3 body=${request.toJson()}');
     try {
       final response = await _client.dio.post<Map<String, dynamic>>(
         ApiConstants.login,
         data: request.toJson(),
+      );
+      debugPrint(
+        '[LOGIN DEBUG] 3 Dio response status=${response.statusCode} data=${response.data}',
       );
 
       final data = response.data;
@@ -80,9 +89,18 @@ class AuthService {
 
       return LoginResponse.fromJson(data);
     } on DioException catch (e) {
-      throw Exception(
-        _messageFromDioException(e, 'Login failed. Please try again.'),
+      debugPrint('[LOGIN DEBUG] 3 DioException type=${e.type}');
+      debugPrint('[LOGIN DEBUG] 3 requestUrl=${e.requestOptions.uri}');
+      debugPrint('[LOGIN DEBUG] 3 statusCode=${e.response?.statusCode}');
+      debugPrint('[LOGIN DEBUG] 3 statusMessage=${e.response?.statusMessage}');
+      debugPrint('[LOGIN DEBUG] 3 responseData=${e.response?.data}');
+      debugPrint('[LOGIN DEBUG] 3 dioMessage=${e.message}');
+      final mapped = _messageFromDioException(
+        e,
+        'Login failed. Please try again.',
       );
+      debugPrint('[LOGIN DEBUG] 3 mapped errorMessage="$mapped"');
+      throw Exception(mapped);
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class LoginPrimaryButton extends StatelessWidget {
@@ -18,7 +19,12 @@ class LoginPrimaryButton extends StatelessWidget {
       width: 342,
       height: 44,
       child: FilledButton(
-        onPressed: isLoading ? null : onPressed,
+        onPressed: isLoading
+            ? null
+            : () {
+                debugPrint('[LOGIN DEBUG] 1 LoginPrimaryButton.onPressed');
+                onPressed();
+              },
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.white,

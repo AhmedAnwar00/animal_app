@@ -36,10 +36,16 @@ class LoginController extends ChangeNotifier {
   }
 
   Future<void> onLogInPressed() async {
-    if (isLoading) return;
+    debugPrint('[LOGIN DEBUG] 2 LoginController.onLogInPressed start');
+    debugPrint('[LOGIN DEBUG] 2 email="$email" passwordLen=${password.length} isLoading=$isLoading');
+    if (isLoading) {
+      debugPrint('[LOGIN DEBUG] 2 STOP: already loading');
+      return;
+    }
 
     final validationError = _validate();
     if (validationError != null) {
+      debugPrint('[LOGIN DEBUG] 2 STOP: validation → $validationError');
       errorMessage = validationError;
       notifyListeners();
       return;
@@ -50,11 +56,15 @@ class LoginController extends ChangeNotifier {
     notifyListeners();
 
     try {
+      debugPrint('[LOGIN DEBUG] 2 calling AuthService.login()');
       final response = await _authService.login(
         LoginRequest(
           email: email.trim(),
           password: password,
         ),
+      );
+      debugPrint(
+        '[LOGIN DEBUG] 2 AuthService.login returned statusCode=${response.statusCode} message=${response.message}',
       );
 
       if (response.statusCode == 200) {
@@ -64,10 +74,15 @@ class LoginController extends ChangeNotifier {
         );
         AppRouter.pushNamedAndRemoveUntil(AppRoutes.home);
       } else {
+        debugPrint(
+          '[LOGIN DEBUG] 2 errorMessage ← response.message: "${response.message}"',
+        );
         errorMessage = response.message;
       }
     } catch (e) {
-      errorMessage = e.toString().replaceFirst('Exception: ', '');
+      final mapped = e.toString().replaceFirst('Exception: ', '');
+      debugPrint('[LOGIN DEBUG] 2 errorMessage ← catch: "$mapped"');
+      errorMessage = mapped;
     } finally {
       isLoading = false;
       notifyListeners();
