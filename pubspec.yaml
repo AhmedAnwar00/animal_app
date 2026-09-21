@@ -39,6 +39,7 @@ dependencies:
   google_fonts: ^8.2.1
   flutter_svg: ^2.3.0
   image_picker: ^1.2.3
+  connectivity_plus: ^7.3.1
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +74,7 @@ flutter:
   assets:
     - assets/splash/
     - assets/auth/
+    - assets/connectivity/
 
   fonts:
     - family: Otama.ep

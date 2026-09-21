@@ -36,6 +36,17 @@ class $AssetsAuthGen {
   List<dynamic> get values => [backChevron, eye, loginLogo, uploadImage];
 }
 
+class $AssetsConnectivityGen {
+  const $AssetsConnectivityGen();
+
+  /// File path: assets/connectivity/no_internet_robot.svg
+  SvgGenImage get noInternetRobot =>
+      const SvgGenImage('assets/connectivity/no_internet_robot.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [noInternetRobot];
+}
+
 class $AssetsSplashGen {
   const $AssetsSplashGen();
 
@@ -76,6 +87,7 @@ class $AssetsSplashGen {
 
 abstract final class Assets {
   static const $AssetsAuthGen auth = $AssetsAuthGen();
+  static const $AssetsConnectivityGen connectivity = $AssetsConnectivityGen();
   static const $AssetsSplashGen splash = $AssetsSplashGen();
 }
 

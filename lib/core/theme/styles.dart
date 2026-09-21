@@ -74,4 +74,15 @@ abstract final class AppStyles {
         fontWeight: FontWeight.w500,
         letterSpacing: 0.2,
       );
+
+  static TextStyle get urbanistMedium14 => GoogleFonts.urbanist(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+      );
+
+  static TextStyle get urbanistRegular12 => GoogleFonts.urbanist(
+        fontSize: 12,
+        height: 16 / 12,
+        fontWeight: FontWeight.w400,
+      );
 }
