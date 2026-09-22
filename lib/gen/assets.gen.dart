@@ -118,6 +118,17 @@ class $AssetsHomeGen {
   ];
 }
 
+class $AssetsSearchGen {
+  const $AssetsSearchGen();
+
+  /// File path: assets/search/search_icon.svg
+  SvgGenImage get searchIcon =>
+      const SvgGenImage('assets/search/search_icon.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [searchIcon];
+}
+
 class $AssetsSplashGen {
   const $AssetsSplashGen();
 
@@ -161,6 +172,7 @@ abstract final class Assets {
   static const $AssetsCategoryGen category = $AssetsCategoryGen();
   static const $AssetsConnectivityGen connectivity = $AssetsConnectivityGen();
   static const $AssetsHomeGen home = $AssetsHomeGen();
+  static const $AssetsSearchGen search = $AssetsSearchGen();
   static const $AssetsSplashGen splash = $AssetsSplashGen();
 }
 

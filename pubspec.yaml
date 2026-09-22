@@ -79,6 +79,7 @@ flutter:
     - assets/connectivity/
     - assets/home/
     - assets/category/
+    - assets/search/
 
   fonts:
     - family: Otama.ep

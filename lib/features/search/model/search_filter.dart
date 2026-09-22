@@ -1,0 +1,4 @@
+enum SearchFilter {
+  category,
+  animal,
+}
