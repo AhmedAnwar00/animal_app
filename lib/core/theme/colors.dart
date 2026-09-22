@@ -17,4 +17,7 @@ abstract final class AppColors {
   static const Color passwordSuccess = Color(0xFF08A43A);
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
+  static const Color textCaption = Color(0xFF999999);
+  static const Color seeAll = Color(0xFF155F45);
+  static const Color navInactive = Color(0xFF737373);
 }

@@ -77,6 +77,7 @@ flutter:
     - assets/splash/
     - assets/auth/
     - assets/connectivity/
+    - assets/home/
 
   fonts:
     - family: Otama.ep

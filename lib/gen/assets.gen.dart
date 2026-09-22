@@ -47,6 +47,63 @@ class $AssetsConnectivityGen {
   List<SvgGenImage> get values => [noInternetRobot];
 }
 
+class $AssetsHomeGen {
+  const $AssetsHomeGen();
+
+  /// File path: assets/home/animal_card.png
+  AssetGenImage get animalCard =>
+      const AssetGenImage('assets/home/animal_card.png');
+
+  /// File path: assets/home/category_cat.png
+  AssetGenImage get categoryCat =>
+      const AssetGenImage('assets/home/category_cat.png');
+
+  /// File path: assets/home/category_dog.png
+  AssetGenImage get categoryDog =>
+      const AssetGenImage('assets/home/category_dog.png');
+
+  /// File path: assets/home/category_rabbit.png
+  AssetGenImage get categoryRabbit =>
+      const AssetGenImage('assets/home/category_rabbit.png');
+
+  /// File path: assets/home/logo.png
+  AssetGenImage get logo => const AssetGenImage('assets/home/logo.png');
+
+  /// File path: assets/home/more_vert.svg
+  SvgGenImage get moreVert => const SvgGenImage('assets/home/more_vert.svg');
+
+  /// File path: assets/home/nav_animal.svg
+  SvgGenImage get navAnimal => const SvgGenImage('assets/home/nav_animal.svg');
+
+  /// File path: assets/home/nav_category.svg
+  SvgGenImage get navCategory =>
+      const SvgGenImage('assets/home/nav_category.svg');
+
+  /// File path: assets/home/nav_home.svg
+  SvgGenImage get navHome => const SvgGenImage('assets/home/nav_home.svg');
+
+  /// File path: assets/home/nav_me.svg
+  SvgGenImage get navMe => const SvgGenImage('assets/home/nav_me.svg');
+
+  /// File path: assets/home/nav_search.svg
+  SvgGenImage get navSearch => const SvgGenImage('assets/home/nav_search.svg');
+
+  /// List of all assets
+  List<dynamic> get values => [
+    animalCard,
+    categoryCat,
+    categoryDog,
+    categoryRabbit,
+    logo,
+    moreVert,
+    navAnimal,
+    navCategory,
+    navHome,
+    navMe,
+    navSearch,
+  ];
+}
+
 class $AssetsSplashGen {
   const $AssetsSplashGen();
 
@@ -88,6 +145,7 @@ class $AssetsSplashGen {
 abstract final class Assets {
   static const $AssetsAuthGen auth = $AssetsAuthGen();
   static const $AssetsConnectivityGen connectivity = $AssetsConnectivityGen();
+  static const $AssetsHomeGen home = $AssetsHomeGen();
   static const $AssetsSplashGen splash = $AssetsSplashGen();
 }
 

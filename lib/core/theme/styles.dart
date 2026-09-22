@@ -85,4 +85,36 @@ abstract final class AppStyles {
         height: 16 / 12,
         fontWeight: FontWeight.w400,
       );
+
+  static TextStyle get homeGreeting => GoogleFonts.originalSurfer(
+        fontSize: 24,
+        fontWeight: FontWeight.w400,
+      );
+
+  static TextStyle get otamaRegular12 => const TextStyle(
+        fontFamily: 'Otama.ep',
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+      );
+
+  static TextStyle get urbanistSemiBold12 => GoogleFonts.urbanist(
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+      );
+
+  static TextStyle get urbanistMedium12 => GoogleFonts.urbanist(
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+      );
+
+  static TextStyle get plusJakartaSansMedium12 => GoogleFonts.plusJakartaSans(
+        fontSize: 12,
+        height: 18 / 12,
+        fontWeight: FontWeight.w500,
+      );
+
+  static TextStyle get poppinsRegular8 => GoogleFonts.poppins(
+        fontSize: 8,
+        fontWeight: FontWeight.w400,
+      );
 }
