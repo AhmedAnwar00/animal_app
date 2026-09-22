@@ -1,5 +1,6 @@
 import 'package:animal_app/core/routing/app_router.dart';
 import 'package:animal_app/core/routing/app_routes.dart';
+import 'package:animal_app/core/storage/token_storage.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/features/connectivity/controller/connectivity_controller.dart';
 import 'package:animal_app/features/connectivity/ui/no_internet_connection_page.dart';
@@ -21,16 +22,22 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var _ready = false;
+  var _initialRoute = AppRoutes.login;
   late final ConnectivityController _connectivityController;
 
   @override
   void initState() {
     super.initState();
     _connectivityController = ConnectivityController();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      FlutterNativeSplash.remove();
-      setState(() => _ready = true);
-    });
+    _bootstrap();
+  }
+
+  Future<void> _bootstrap() async {
+    final hasSession = await TokenStorage().hasTokens();
+    if (!mounted) return;
+    _initialRoute = hasSession ? AppRoutes.home : AppRoutes.login;
+    FlutterNativeSplash.remove();
+    setState(() => _ready = true);
   }
 
   @override
@@ -55,7 +62,7 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
       navigatorKey: AppRouter.navigatorKey,
-      initialRoute: AppRoutes.login,
+      initialRoute: _initialRoute,
       onGenerateRoute: AppRouter.onGenerateRoute,
       builder: (context, child) {
         return ListenableBuilder(
