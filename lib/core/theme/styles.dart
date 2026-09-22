@@ -86,6 +86,11 @@ abstract final class AppStyles {
         fontWeight: FontWeight.w400,
       );
 
+  static TextStyle get urbanistRegular10 => GoogleFonts.urbanist(
+        fontSize: 10,
+        fontWeight: FontWeight.w400,
+      );
+
   static TextStyle get homeGreeting => GoogleFonts.originalSurfer(
         fontSize: 24,
         fontWeight: FontWeight.w400,

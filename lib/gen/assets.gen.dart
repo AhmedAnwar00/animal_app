@@ -36,6 +36,20 @@ class $AssetsAuthGen {
   List<dynamic> get values => [backChevron, eye, loginLogo, uploadImage];
 }
 
+class $AssetsCategoryGen {
+  const $AssetsCategoryGen();
+
+  /// File path: assets/category/avatar.png
+  AssetGenImage get avatar => const AssetGenImage('assets/category/avatar.png');
+
+  /// File path: assets/category/globe_asia.svg
+  SvgGenImage get globeAsia =>
+      const SvgGenImage('assets/category/globe_asia.svg');
+
+  /// List of all assets
+  List<dynamic> get values => [avatar, globeAsia];
+}
+
 class $AssetsConnectivityGen {
   const $AssetsConnectivityGen();
 
@@ -144,6 +158,7 @@ class $AssetsSplashGen {
 
 abstract final class Assets {
   static const $AssetsAuthGen auth = $AssetsAuthGen();
+  static const $AssetsCategoryGen category = $AssetsCategoryGen();
   static const $AssetsConnectivityGen connectivity = $AssetsConnectivityGen();
   static const $AssetsHomeGen home = $AssetsHomeGen();
   static const $AssetsSplashGen splash = $AssetsSplashGen();

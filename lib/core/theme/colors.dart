@@ -20,4 +20,5 @@ abstract final class AppColors {
   static const Color textCaption = Color(0xFF999999);
   static const Color seeAll = Color(0xFF155F45);
   static const Color navInactive = Color(0xFF737373);
+  static const Color public = Color(0xFF16A99F);
 }
