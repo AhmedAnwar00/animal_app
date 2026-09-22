@@ -8,6 +8,7 @@ import 'package:animal_app/features/auth/ui/widgets/login_forget_password_link.d
 import 'package:animal_app/features/auth/ui/widgets/login_password_eye_button.dart';
 import 'package:animal_app/features/auth/ui/widgets/login_password_field.dart';
 import 'package:animal_app/features/auth/ui/widgets/login_primary_button.dart';
+import 'package:animal_app/features/auth/ui/widgets/login_remember_me.dart';
 import 'package:animal_app/features/auth/ui/widgets/login_sign_up_prompt.dart';
 import 'package:animal_app/features/auth/ui/widgets/login_title.dart';
 import 'package:flutter/material.dart';
@@ -97,9 +98,26 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Positioned(
                       top: 350,
-                      left: 241,
-                      child: LoginForgetPasswordLink(
-                        onPressed: _controller.onForgetPasswordPressed,
+                      left: 18,
+                      child: SizedBox(
+                        width: 339,
+                        height: 36,
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: LoginRememberMe(
+                                  value: _controller.rememberMe,
+                                  onToggle: _controller.toggleRememberMe,
+                                ),
+                              ),
+                            ),
+                            LoginForgetPasswordLink(
+                              onPressed: _controller.onForgetPasswordPressed,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Positioned(

@@ -14,6 +14,7 @@ class LoginController extends ChangeNotifier {
   String email = '';
   String password = '';
   bool obscurePassword = true;
+  bool rememberMe = false;
   bool isLoading = false;
   String? errorMessage;
 
@@ -27,6 +28,11 @@ class LoginController extends ChangeNotifier {
 
   void toggleObscure() {
     obscurePassword = !obscurePassword;
+    notifyListeners();
+  }
+
+  void toggleRememberMe() {
+    rememberMe = !rememberMe;
     notifyListeners();
   }
 
