@@ -107,6 +107,11 @@ abstract final class AppStyles {
         fontWeight: FontWeight.w600,
       );
 
+  static TextStyle get urbanistSemiBold28 => GoogleFonts.urbanist(
+        fontSize: 28,
+        fontWeight: FontWeight.w600,
+      );
+
   static TextStyle get urbanistMedium12 => GoogleFonts.urbanist(
         fontSize: 12,
         fontWeight: FontWeight.w500,
