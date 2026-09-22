@@ -6,7 +6,7 @@ import 'package:animal_app/features/auth/ui/forget_password_page.dart';
 import 'package:animal_app/features/auth/ui/login_page.dart';
 import 'package:animal_app/features/auth/ui/otp_verification_page.dart';
 import 'package:animal_app/features/auth/ui/sign_up_page.dart';
-import 'package:animal_app/features/home/ui/home_page.dart';
+import 'package:animal_app/features/shell/ui/app_shell.dart';
 import 'package:flutter/material.dart';
 
 abstract final class AppRouter {
@@ -96,7 +96,7 @@ abstract final class AppRouter {
       case AppRoutes.home:
         return MaterialPageRoute<void>(
           settings: settings,
-          builder: (_) => const HomePage(),
+          builder: (_) => const AppShell(),
         );
       default:
         return MaterialPageRoute<void>(

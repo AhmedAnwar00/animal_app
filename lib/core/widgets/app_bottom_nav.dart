@@ -1,20 +1,25 @@
 import 'package:animal_app/core/theme/colors.dart';
-import 'package:animal_app/features/home/ui/widgets/home_bottom_nav_item.dart';
+import 'package:animal_app/core/widgets/app_bottom_nav_item.dart';
 import 'package:animal_app/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 
-class HomeBottomNav extends StatelessWidget {
-  const HomeBottomNav({super.key});
+class AppBottomNav extends StatelessWidget {
+  const AppBottomNav({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
+  });
+
+  final int currentIndex;
+  final ValueChanged<int> onTap;
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: AppColors.uploadFill,
-        border: Border(
-          top: BorderSide(color: AppColors.fieldBorder),
-        ),
-      ),
+    return Material(
+      color: AppColors.white,
+      elevation: 8,
+      shadowColor: AppColors.black.withValues(alpha: 0.08),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       child: SafeArea(
         top: false,
         child: Padding(
@@ -22,42 +27,47 @@ class HomeBottomNav extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: HomeBottomNavItem(
+                child: AppBottomNavItem(
                   icon: Assets.home.navHome,
                   label: 'Home',
-                  selected: true,
+                  selected: currentIndex == 0,
+                  onTap: () => onTap(0),
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
-                child: HomeBottomNavItem(
+                child: AppBottomNavItem(
                   icon: Assets.home.navSearch,
                   label: 'Search',
-                  selected: false,
+                  selected: currentIndex == 1,
+                  onTap: () => onTap(1),
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
-                child: HomeBottomNavItem(
+                child: AppBottomNavItem(
                   icon: Assets.home.navCategory,
                   label: 'category',
-                  selected: false,
+                  selected: currentIndex == 2,
+                  onTap: () => onTap(2),
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
-                child: HomeBottomNavItem(
+                child: AppBottomNavItem(
                   icon: Assets.home.navAnimal,
                   label: 'animal',
-                  selected: false,
+                  selected: currentIndex == 3,
+                  onTap: () => onTap(3),
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
-                child: HomeBottomNavItem(
+                child: AppBottomNavItem(
                   icon: Assets.home.navMe,
                   label: 'Me',
-                  selected: false,
+                  selected: currentIndex == 4,
+                  onTap: () => onTap(4),
                 ),
               ),
             ],

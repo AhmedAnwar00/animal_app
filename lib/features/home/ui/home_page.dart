@@ -1,7 +1,6 @@
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/features/home/controller/home_controller.dart';
 import 'package:animal_app/features/home/ui/widgets/home_animal_card.dart';
-import 'package:animal_app/features/home/ui/widgets/home_bottom_nav.dart';
 import 'package:animal_app/features/home/ui/widgets/home_category_row.dart';
 import 'package:animal_app/features/home/ui/widgets/home_header.dart';
 import 'package:animal_app/features/home/ui/widgets/home_section_header.dart';
@@ -52,7 +51,6 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const HomeBottomNav(),
               ],
             ),
           ),
