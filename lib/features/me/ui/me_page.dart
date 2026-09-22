@@ -12,7 +12,7 @@ class MePage extends StatelessWidget {
       body: SafeArea(
         bottom: false,
         child: Align(
-          alignment: Alignment.topCenter,
+          alignment: Alignment.topLeft,
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 390),
             child: const Padding(
