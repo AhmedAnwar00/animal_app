@@ -80,16 +80,13 @@ class AppTextField extends StatelessWidget {
       focusNode: focusNode,
       obscureText: obscureText,
       keyboardType: keyboardType,
+      autocorrect: false,
+      enableSuggestions: false,
       validator: validator,
       onChanged: onChanged,
       onFieldSubmitted: onFieldSubmitted,
       enabled: enabled,
       readOnly: readOnly,
-      onTap: readOnly
-          ? null
-          : () {
-              SystemChannels.textInput.invokeMethod('TextInput.show');
-            },
       inputFormatters: inputFormatters,
       maxLines: maxLines,
       textInputAction: textInputAction,
