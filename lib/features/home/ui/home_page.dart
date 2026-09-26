@@ -41,8 +41,9 @@ class HomePage extends StatelessWidget {
                       return ListView(
                         padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
                         children: [
-                          const HomeSectionHeader(
-                            title: 'Categories ( 10 )',
+                          HomeSectionHeader(
+                            title:
+                                'Categories ( ${categoryController.categories.length} )',
                             action: 'Add New Category',
                           ),
                           const SizedBox(height: 22),
