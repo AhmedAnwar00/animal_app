@@ -25,12 +25,14 @@ class DioClient {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: _onRequest,
+        onResponse: _onResponse,
         onError: _onError,
       ),
     );
   }
 
   static const _authRetryKey = '_authRetry';
+  static const _expiryLeewaySeconds = 30;
 
   static const _publicPaths = {
     ApiConstants.signup,
@@ -58,10 +60,15 @@ class DioClient {
       }
 
       var accessToken = await _tokenStorage.readAccessToken();
-      if (accessToken != null &&
-          accessToken.isNotEmpty &&
-          _isAccessTokenExpired(accessToken)) {
-        accessToken = await _refreshAccessToken();
+      final needsRefresh = accessToken == null ||
+          accessToken.isEmpty ||
+          _isAccessTokenExpired(accessToken);
+
+      if (needsRefresh) {
+        final refreshed = await _refreshAccessToken();
+        if (refreshed != null && refreshed.isNotEmpty) {
+          accessToken = refreshed;
+        }
       }
 
       if (accessToken != null && accessToken.isNotEmpty) {
@@ -80,6 +87,28 @@ class DioClient {
     }
   }
 
+  Future<void> _onResponse(
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) async {
+    final options = response.requestOptions;
+
+    if (options.extra[_authRetryKey] == true ||
+        _isPublicPath(options.path) ||
+        !_isAuthFailureData(response.data)) {
+      handler.next(response);
+      return;
+    }
+
+    final retried = await _retryAfterRefresh(options);
+    if (retried != null) {
+      handler.resolve(retried);
+      return;
+    }
+
+    handler.next(response);
+  }
+
   Future<void> _onError(
     DioException error,
     ErrorInterceptorHandler handler,
@@ -93,49 +122,98 @@ class DioClient {
       return;
     }
 
+    final retried = await _retryAfterRefresh(options);
+    if (retried != null) {
+      handler.resolve(retried);
+      return;
+    }
+
+    handler.next(error);
+  }
+
+  Future<Response<dynamic>?> _retryAfterRefresh(
+    RequestOptions options,
+  ) async {
     try {
       final accessToken = await _refreshAccessToken();
       if (accessToken == null || accessToken.isEmpty) {
-        handler.next(error);
-        return;
+        return null;
       }
 
-      options.headers['Authorization'] = 'Bearer $accessToken';
-      options.extra[_authRetryKey] = true;
+      final retryOptions = options.copyWith(
+        headers: Map<String, dynamic>.from(options.headers)
+          ..['Authorization'] = 'Bearer $accessToken',
+        extra: Map<String, dynamic>.from(options.extra)
+          ..[_authRetryKey] = true,
+        data: _cloneRequestData(options.data),
+      );
 
-      final response = await dio.fetch<dynamic>(options);
-      handler.resolve(response);
+      return await dio.fetch<dynamic>(retryOptions);
     } catch (_) {
-      handler.next(error);
+      return null;
     }
   }
 
+  dynamic _cloneRequestData(dynamic data) {
+    if (data is FormData) {
+      return data.clone();
+    }
+    return data;
+  }
+
   bool _isPublicPath(String path) {
-    final normalized = path.startsWith('http')
-        ? Uri.parse(path).path
-        : path;
+    final normalized =
+        path.startsWith('http') ? Uri.parse(path).path : path;
     return _publicPaths.contains(normalized);
   }
 
   bool _isAuthFailure(DioException error) {
-    if (error.response?.statusCode == 401) return true;
+    final statusCode = error.response?.statusCode;
+    if (statusCode == 401 || statusCode == 403) return true;
+    return _isAuthFailureData(error.response?.data);
+  }
 
-    final data = error.response?.data;
-    if (data is Map<String, dynamic>) {
-      final message = data['message'];
-      if (message is String &&
-          message.toLowerCase().contains('invalid or expired token')) {
-        return true;
-      }
+  bool _isAuthFailureData(dynamic data) {
+    final map = _asStringKeyMap(data);
+    if (map == null) return false;
+
+    final statusCode = map['statusCode'];
+    if (statusCode == 401 || statusCode == 403) return true;
+
+    final message = map['message'];
+    if (message is String &&
+        message.toLowerCase().contains('invalid or expired token')) {
+      return true;
     }
     return false;
+  }
+
+  Map<String, dynamic>? _asStringKeyMap(dynamic data) {
+    if (data is Map<String, dynamic>) return data;
+    if (data is Map) {
+      return data.map((key, value) => MapEntry(key.toString(), value));
+    }
+    if (data is String && data.isNotEmpty) {
+      try {
+        final decoded = jsonDecode(data);
+        if (decoded is Map<String, dynamic>) return decoded;
+        if (decoded is Map) {
+          return decoded.map(
+            (key, value) => MapEntry(key.toString(), value),
+          );
+        }
+      } catch (_) {
+        return null;
+      }
+    }
+    return null;
   }
 
   bool _isAccessTokenExpired(String token) {
     final exp = _jwtExpirySeconds(token);
     if (exp == null) return false;
     final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    return exp <= now;
+    return exp <= now + _expiryLeewaySeconds;
   }
 
   int? _jwtExpirySeconds(String token) {
@@ -177,7 +255,17 @@ class DioClient {
       );
 
       final data = response.data;
-      final accessToken = data?['access_token'];
+      if (data == null) {
+        completer.complete(null);
+        return null;
+      }
+
+      final statusCode = data['statusCode'];
+      final accessToken = data['access_token'];
+      if (statusCode != null && statusCode != 200) {
+        completer.complete(null);
+        return null;
+      }
       if (accessToken is! String || accessToken.isEmpty) {
         completer.complete(null);
         return null;

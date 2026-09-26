@@ -34,5 +34,10 @@ class TokenStorage {
         refresh.isNotEmpty;
   }
 
+  Future<bool> hasSession() async {
+    final refresh = await readRefreshToken();
+    return refresh != null && refresh.isNotEmpty;
+  }
+
   Future<void> clear() => _storage.deleteAll();
 }
