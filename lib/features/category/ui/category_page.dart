@@ -1,6 +1,8 @@
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/features/auth/ui/widgets/sign_up_image_source_sheet.dart';
 import 'package:animal_app/features/category/controller/category_controller.dart';
+import 'package:animal_app/features/category/ui/widgets/category_delete_button.dart';
+import 'package:animal_app/features/category/ui/widgets/category_delete_confirmation_dialog.dart';
 import 'package:animal_app/features/category/ui/widgets/category_description_field.dart';
 import 'package:animal_app/features/category/ui/widgets/category_image_upload.dart';
 import 'package:animal_app/features/category/ui/widgets/category_labeled_field.dart';
@@ -67,6 +69,17 @@ class _CategoryPageState extends State<CategoryPage> {
     }
   }
 
+  Future<void> _onDeletePressed() async {
+    final confirmed = await CategoryDeleteConfirmationDialog.show(context);
+    if (!confirmed || !mounted) return;
+
+    final success = await widget.controller.deleteCategory();
+    if (!mounted) return;
+    if (success) {
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,6 +129,10 @@ class _CategoryPageState extends State<CategoryPage> {
                       label: isEditing ? 'Edit' : 'Save',
                       onPressed: _onSavePressed,
                     ),
+                    if (isEditing) ...[
+                      const SizedBox(height: 12),
+                      CategoryDeleteButton(onPressed: _onDeletePressed),
+                    ],
                   ],
                 );
               },

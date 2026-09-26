@@ -3,6 +3,7 @@ import 'package:animal_app/core/network/dio_client.dart';
 import 'package:animal_app/features/category/model/categories_response.dart';
 import 'package:animal_app/features/category/model/create_category_request.dart';
 import 'package:animal_app/features/category/model/create_category_response.dart';
+import 'package:animal_app/features/category/model/delete_category_response.dart';
 import 'package:animal_app/features/category/model/update_category_request.dart';
 import 'package:animal_app/features/category/model/update_category_response.dart';
 import 'package:dio/dio.dart';
@@ -106,6 +107,39 @@ class CategoryService {
         _messageFromDioException(
           e,
           'Failed to update category. Please try again.',
+        ),
+      );
+    }
+  }
+
+  Future<DeleteCategoryResponse> deleteCategory(int categoryId) async {
+    try {
+      final response = await _client.dio.delete<dynamic>(
+        ApiConstants.deleteCategory,
+        queryParameters: {'id': categoryId},
+      );
+
+      final data = response.data;
+      if (data is Map<String, dynamic>) {
+        return DeleteCategoryResponse.fromJson(data);
+      }
+      if (data is Map) {
+        return DeleteCategoryResponse.fromJson(
+          data.map((key, value) => MapEntry(key.toString(), value)),
+        );
+      }
+      if (response.statusCode == 200) {
+        return const DeleteCategoryResponse(
+          statusCode: 200,
+          message: 'Category deleted successfully',
+        );
+      }
+      throw Exception('Empty response from server');
+    } on DioException catch (e) {
+      throw Exception(
+        _messageFromDioException(
+          e,
+          'Failed to delete category. Please try again.',
         ),
       );
     }

@@ -22,6 +22,7 @@ class CategoryController extends ChangeNotifier {
   bool isLoading = false;
   bool isCreating = false;
   bool isUpdating = false;
+  bool isDeleting = false;
   String? errorMessage;
   String? successMessage;
 
@@ -132,7 +133,7 @@ class CategoryController extends ChangeNotifier {
   }
 
   Future<bool> createCategory() async {
-    if (isCreating || isUpdating) return false;
+    if (isCreating || isUpdating || isDeleting) return false;
 
     final validationError = _validateCreate();
     if (validationError != null) {
@@ -172,7 +173,7 @@ class CategoryController extends ChangeNotifier {
   }
 
   Future<bool> updateCategory() async {
-    if (isCreating || isUpdating) return false;
+    if (isCreating || isUpdating || isDeleting) return false;
 
     final id = editingCategoryId;
     if (id == null) {
@@ -215,6 +216,40 @@ class CategoryController extends ChangeNotifier {
       return false;
     } finally {
       isUpdating = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> deleteCategory() async {
+    if (isCreating || isUpdating || isDeleting) return false;
+
+    final id = editingCategoryId;
+    if (id == null) {
+      errorMessage = 'No category selected for delete';
+      notifyListeners();
+      return false;
+    }
+
+    isDeleting = true;
+    errorMessage = null;
+    successMessage = null;
+    notifyListeners();
+
+    try {
+      final response = await _categoryService.deleteCategory(id);
+
+      if (response.statusCode == 200) {
+        categories = categories.where((category) => category.id != id).toList();
+        successMessage = response.message;
+        return true;
+      }
+      errorMessage = response.message;
+      return false;
+    } catch (e) {
+      errorMessage = e.toString().replaceFirst('Exception: ', '');
+      return false;
+    } finally {
+      isDeleting = false;
       notifyListeners();
     }
   }
