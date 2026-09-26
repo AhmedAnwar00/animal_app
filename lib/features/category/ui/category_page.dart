@@ -8,27 +8,10 @@ import 'package:animal_app/features/category/ui/widgets/category_title.dart';
 import 'package:animal_app/features/category/ui/widgets/category_user_header.dart';
 import 'package:flutter/material.dart';
 
-class CategoryPage extends StatefulWidget {
-  const CategoryPage({super.key});
+class CategoryPage extends StatelessWidget {
+  const CategoryPage({super.key, required this.controller});
 
-  @override
-  State<CategoryPage> createState() => _CategoryPageState();
-}
-
-class _CategoryPageState extends State<CategoryPage> {
-  late final CategoryController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = CategoryController();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
+  final CategoryController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +24,7 @@ class _CategoryPageState extends State<CategoryPage> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 390),
             child: ListenableBuilder(
-              listenable: _controller,
+              listenable: controller,
               builder: (context, _) {
                 return ListView(
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
@@ -53,11 +36,11 @@ class _CategoryPageState extends State<CategoryPage> {
                     CategoryLabeledField(
                       label: 'Category Name',
                       hintText: 'Enter your Category Name',
-                      onChanged: _controller.updateCategoryName,
+                      onChanged: controller.updateCategoryName,
                     ),
                     const SizedBox(height: 22),
                     CategoryDescriptionField(
-                      onChanged: _controller.updateDescription,
+                      onChanged: controller.updateDescription,
                     ),
                     const SizedBox(height: 22),
                     CategoryImageUpload(
