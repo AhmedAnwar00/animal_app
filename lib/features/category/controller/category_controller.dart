@@ -42,7 +42,7 @@ class CategoryController extends ChangeNotifier {
     categoryName = category.name;
     description = category.description;
     imagePath = null;
-    existingImageUrl = _resolveImageUrl(category.imagePath);
+    existingImageUrl = ApiConstants.resolveMediaUrl(category.imagePath);
     errorMessage = null;
     successMessage = null;
     notifyListeners();
@@ -232,18 +232,5 @@ class CategoryController extends ChangeNotifier {
     if (categoryName.trim().isEmpty) return 'Category name is required';
     if (description.trim().isEmpty) return 'Description is required';
     return null;
-  }
-
-  String? _resolveImageUrl(String path) {
-    final trimmed = path.trim();
-    if (trimmed.isEmpty) return null;
-    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
-      return trimmed;
-    }
-    final base = ApiConstants.baseUrl;
-    if (trimmed.startsWith('/')) {
-      return '$base$trimmed';
-    }
-    return '$base/$trimmed';
   }
 }

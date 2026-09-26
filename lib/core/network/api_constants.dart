@@ -9,4 +9,31 @@ abstract final class ApiConstants {
   static const allCategories = '/api/allCategories';
   static const createNewCategory = '/api/createNewCategory';
   static const updateCategory = '/api/updateCategory';
+
+  static String? resolveMediaUrl(String? path) {
+    if (path == null) return null;
+    final trimmed = path.trim();
+    if (trimmed.isEmpty) return null;
+
+    final base = Uri.parse(baseUrl);
+
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      final uri = Uri.parse(trimmed);
+      if (uri.host == 'localhost' || uri.host == '127.0.0.1') {
+        return uri
+            .replace(
+              scheme: base.scheme,
+              host: base.host,
+              port: base.hasPort ? base.port : null,
+            )
+            .toString();
+      }
+      return trimmed;
+    }
+
+    if (trimmed.startsWith('/')) {
+      return '$baseUrl$trimmed';
+    }
+    return '$baseUrl/$trimmed';
+  }
 }

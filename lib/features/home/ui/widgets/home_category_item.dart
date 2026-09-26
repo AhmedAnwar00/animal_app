@@ -1,19 +1,18 @@
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:animal_app/features/home/model/home_category.dart';
-import 'package:animal_app/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 
 class HomeCategoryItem extends StatelessWidget {
   const HomeCategoryItem({
     super.key,
     required this.category,
-    required this.image,
+    required this.imageUrl,
     this.onTap,
   });
 
   final HomeCategory category;
-  final AssetGenImage image;
+  final String imageUrl;
   final VoidCallback? onTap;
 
   @override
@@ -30,7 +29,8 @@ class HomeCategoryItem extends StatelessWidget {
               clipBehavior: Clip.none,
               children: [
                 ClipOval(
-                  child: image.image(
+                  child: Image.network(
+                    imageUrl,
                     width: 63,
                     height: 63,
                     fit: BoxFit.cover,
