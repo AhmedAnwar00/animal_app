@@ -74,14 +74,14 @@ class LoginController extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        if (rememberMe) {
-          await _tokenStorage.saveTokens(
-            accessToken: response.accessToken,
-            refreshToken: response.refreshToken,
-          );
-        } else {
-          await _tokenStorage.clear();
-        }
+        await _tokenStorage.saveTokens(
+          accessToken: response.accessToken,
+          refreshToken: response.refreshToken,
+        );
+        await _tokenStorage.saveRememberMe(rememberMe);
+        debugPrint(
+          '[AUTH DEBUG] login saved tokens accessExists=true refreshExists=true rememberMe=$rememberMe',
+        );
         AppRouter.pushNamedAndRemoveUntil(AppRoutes.home);
       } else {
         debugPrint(

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:animal_app/core/network/api_constants.dart';
 import 'package:animal_app/core/storage/token_storage.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class DioClient {
   DioClient([TokenStorage? tokenStorage])
@@ -60,17 +61,25 @@ class DioClient {
       }
 
       var accessToken = await _tokenStorage.readAccessToken();
+      final refreshToken = await _tokenStorage.readRefreshToken();
+      final accessExists = accessToken != null && accessToken.isNotEmpty;
+      final refreshExists = refreshToken != null && refreshToken.isNotEmpty;
+
+      debugPrint('[AUTH DEBUG] 1 access token exists: $accessExists');
+      debugPrint('[AUTH DEBUG] 2 refresh token exists: $refreshExists');
+
       final needsRefresh = accessToken == null ||
           accessToken.isEmpty ||
           _isAccessTokenExpired(accessToken);
 
-      if (needsRefresh) {
+      if (needsRefresh && refreshExists) {
         final refreshed = await _refreshAccessToken();
         if (refreshed != null && refreshed.isNotEmpty) {
           accessToken = refreshed;
         }
       }
 
+      options.headers.remove('Authorization');
       if (accessToken != null && accessToken.isNotEmpty) {
         options.headers['Authorization'] = 'Bearer $accessToken';
       }
@@ -137,19 +146,22 @@ class DioClient {
     try {
       final accessToken = await _refreshAccessToken();
       if (accessToken == null || accessToken.isEmpty) {
+        debugPrint('[AUTH DEBUG] retry aborted: no access token after refresh');
         return null;
       }
 
-      final retryOptions = options.copyWith(
-        headers: Map<String, dynamic>.from(options.headers)
-          ..['Authorization'] = 'Bearer $accessToken',
-        extra: Map<String, dynamic>.from(options.extra)
-          ..[_authRetryKey] = true,
-        data: _cloneRequestData(options.data),
+      options.headers.remove('Authorization');
+      options.headers['Authorization'] = 'Bearer $accessToken';
+      options.extra[_authRetryKey] = true;
+      options.data = _cloneRequestData(options.data);
+
+      debugPrint(
+        '[AUTH DEBUG] 6 original request retried: ${options.path}',
       );
 
-      return await dio.fetch<dynamic>(retryOptions);
-    } catch (_) {
+      return await dio.fetch<dynamic>(options);
+    } catch (e) {
+      debugPrint('[AUTH DEBUG] retry failed: ${e.runtimeType}');
       return null;
     }
   }
@@ -178,7 +190,13 @@ class DioClient {
     if (map == null) return false;
 
     final statusCode = map['statusCode'];
-    if (statusCode == 401 || statusCode == 403) return true;
+    if (_isSuccessStatus(statusCode)) return false;
+    if (statusCode == 401 ||
+        statusCode == 403 ||
+        statusCode == '401' ||
+        statusCode == '403') {
+      return true;
+    }
 
     final message = map['message'];
     if (message is String &&
@@ -186,6 +204,10 @@ class DioClient {
       return true;
     }
     return false;
+  }
+
+  bool _isSuccessStatus(dynamic statusCode) {
+    return statusCode == 200 || statusCode == '200';
   }
 
   Map<String, dynamic>? _asStringKeyMap(dynamic data) {
@@ -244,10 +266,16 @@ class DioClient {
 
     try {
       final refreshToken = await _tokenStorage.readRefreshToken();
-      if (refreshToken == null || refreshToken.isEmpty) {
+      final refreshExists = refreshToken != null && refreshToken.isNotEmpty;
+      debugPrint('[AUTH DEBUG] 2 refresh token exists: $refreshExists');
+
+      if (!refreshExists) {
+        debugPrint('[AUTH DEBUG] refresh aborted: refresh token missing');
         completer.complete(null);
         return null;
       }
+
+      debugPrint('[AUTH DEBUG] 3 refresh request starts');
 
       final response = await _refreshDio.post<Map<String, dynamic>>(
         ApiConstants.generateAccessToken,
@@ -255,26 +283,41 @@ class DioClient {
       );
 
       final data = response.data;
+      final bodyStatus = data?['statusCode'];
+      debugPrint(
+        '[AUTH DEBUG] 4 refresh response status: http=${response.statusCode} bodyStatusCode=$bodyStatus',
+      );
+
       if (data == null) {
+        debugPrint('[AUTH DEBUG] refresh failed: empty body');
         completer.complete(null);
         return null;
       }
 
-      final statusCode = data['statusCode'];
-      final accessToken = data['access_token'];
-      if (statusCode != null && statusCode != 200) {
+      if (bodyStatus != null && !_isSuccessStatus(bodyStatus)) {
+        debugPrint('[AUTH DEBUG] refresh failed: non-success body status');
         completer.complete(null);
         return null;
       }
+
+      final accessToken = data['access_token'];
       if (accessToken is! String || accessToken.isEmpty) {
+        debugPrint('[AUTH DEBUG] refresh failed: access_token missing');
         completer.complete(null);
         return null;
       }
 
       await _tokenStorage.saveAccessToken(accessToken);
+      debugPrint('[AUTH DEBUG] 5 new access token saved');
       completer.complete(accessToken);
       return accessToken;
-    } catch (_) {
+    } catch (e) {
+      debugPrint('[AUTH DEBUG] refresh failed: ${e.runtimeType}');
+      if (e is DioException) {
+        debugPrint(
+          '[AUTH DEBUG] 4 refresh response status: http=${e.response?.statusCode} bodyStatusCode=${e.response?.data is Map ? (e.response?.data as Map)['statusCode'] : null}',
+        );
+      }
       completer.complete(null);
       return null;
     } finally {

@@ -33,9 +33,20 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _bootstrap() async {
-    final hasSession = await TokenStorage().hasSession();
-    if (!mounted) return;
-    _initialRoute = hasSession ? AppRoutes.home : AppRoutes.login;
+    final tokenStorage = TokenStorage();
+    final rememberMe = await tokenStorage.readRememberMe();
+
+    if (!rememberMe) {
+      await tokenStorage.clear();
+      if (!mounted) return;
+      _initialRoute = AppRoutes.login;
+    } else {
+      final refresh = await tokenStorage.readRefreshToken();
+      final hasRefresh = refresh != null && refresh.isNotEmpty;
+      if (!mounted) return;
+      _initialRoute = hasRefresh ? AppRoutes.home : AppRoutes.login;
+    }
+
     FlutterNativeSplash.remove();
     setState(() => _ready = true);
   }
