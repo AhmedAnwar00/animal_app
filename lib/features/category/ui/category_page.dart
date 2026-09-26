@@ -20,12 +20,15 @@ class CategoryPage extends StatefulWidget {
 
 class _CategoryPageState extends State<CategoryPage> {
   void _handleMessages() {
-    final error = widget.controller.errorMessage;
-    final success = widget.controller.successMessage;
-    if ((error == null && success == null) || !mounted) return;
+    if (widget.controller.errorMessage == null &&
+        widget.controller.successMessage == null) {
+      return;
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
+      final error = widget.controller.errorMessage;
+      final success = widget.controller.successMessage;
       if (error != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(error)),
@@ -55,6 +58,15 @@ class _CategoryPageState extends State<CategoryPage> {
     }
   }
 
+  Future<void> _onSavePressed() async {
+    final wasEditing = widget.controller.isEditing;
+    final success = await widget.controller.saveCategory();
+    if (!mounted) return;
+    if (wasEditing && success) {
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,6 +81,8 @@ class _CategoryPageState extends State<CategoryPage> {
               listenable: widget.controller,
               builder: (context, _) {
                 _handleMessages();
+                final isEditing = widget.controller.isEditing;
+                final editKey = ValueKey(widget.controller.editingCategoryId);
                 return ListView(
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
                   children: [
@@ -77,22 +91,30 @@ class _CategoryPageState extends State<CategoryPage> {
                     const CategoryUserHeader(),
                     const SizedBox(height: 24),
                     CategoryLabeledField(
+                      key: ValueKey('name-$editKey'),
                       label: 'Category Name',
                       hintText: 'Enter your Category Name',
+                      initialValue:
+                          isEditing ? widget.controller.categoryName : null,
                       onChanged: widget.controller.updateCategoryName,
                     ),
                     const SizedBox(height: 22),
                     CategoryDescriptionField(
+                      key: ValueKey('description-$editKey'),
+                      initialValue:
+                          isEditing ? widget.controller.description : null,
                       onChanged: widget.controller.updateDescription,
                     ),
                     const SizedBox(height: 22),
                     CategoryImageUpload(
                       imagePath: widget.controller.imagePath,
+                      networkImageUrl: widget.controller.existingImageUrl,
                       onSelectPressed: _onSelectImagePressed,
                     ),
                     const SizedBox(height: 24),
                     CategorySaveButton(
-                      onPressed: widget.controller.saveCategory,
+                      label: isEditing ? 'Edit' : 'Save',
+                      onPressed: _onSavePressed,
                     ),
                   ],
                 );

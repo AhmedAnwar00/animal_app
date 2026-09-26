@@ -1,3 +1,4 @@
+import 'package:animal_app/core/network/api_constants.dart';
 import 'package:animal_app/features/category/model/category.dart';
 import 'package:animal_app/features/category/model/create_category_request.dart';
 import 'package:animal_app/features/category/model/update_category_request.dart';
@@ -15,6 +16,7 @@ class CategoryController extends ChangeNotifier {
   String categoryName = '';
   String description = '';
   String? imagePath;
+  String? existingImageUrl;
   int? editingCategoryId;
   List<Category> categories = [];
   bool isLoading = false;
@@ -40,6 +42,7 @@ class CategoryController extends ChangeNotifier {
     categoryName = category.name;
     description = category.description;
     imagePath = null;
+    existingImageUrl = _resolveImageUrl(category.imagePath);
     errorMessage = null;
     successMessage = null;
     notifyListeners();
@@ -50,6 +53,7 @@ class CategoryController extends ChangeNotifier {
     categoryName = '';
     description = '';
     imagePath = null;
+    existingImageUrl = null;
     notifyListeners();
   }
 
@@ -70,6 +74,7 @@ class CategoryController extends ChangeNotifier {
       final file = await _imagePicker.pickImage(source: ImageSource.gallery);
       if (file == null) return;
       imagePath = file.path;
+      existingImageUrl = null;
       notifyListeners();
     } catch (_) {
       errorMessage = 'Failed to pick image. Please try again';
@@ -89,6 +94,7 @@ class CategoryController extends ChangeNotifier {
       final file = await _imagePicker.pickImage(source: ImageSource.camera);
       if (file == null) return;
       imagePath = file.path;
+      existingImageUrl = null;
       notifyListeners();
     } catch (_) {
       errorMessage = 'Failed to pick image. Please try again';
@@ -118,22 +124,21 @@ class CategoryController extends ChangeNotifier {
     }
   }
 
-  Future<void> saveCategory() async {
+  Future<bool> saveCategory() async {
     if (isEditing) {
-      await updateCategory();
-    } else {
-      await createCategory();
+      return updateCategory();
     }
+    return createCategory();
   }
 
-  Future<void> createCategory() async {
-    if (isCreating || isUpdating) return;
+  Future<bool> createCategory() async {
+    if (isCreating || isUpdating) return false;
 
     final validationError = _validateCreate();
     if (validationError != null) {
       errorMessage = validationError;
       notifyListeners();
-      return;
+      return false;
     }
 
     isCreating = true;
@@ -153,32 +158,34 @@ class CategoryController extends ChangeNotifier {
       if (response.statusCode == 200) {
         successMessage = response.message;
         await loadCategories();
-      } else {
-        errorMessage = response.message;
+        return true;
       }
+      errorMessage = response.message;
+      return false;
     } catch (e) {
       errorMessage = e.toString().replaceFirst('Exception: ', '');
+      return false;
     } finally {
       isCreating = false;
       notifyListeners();
     }
   }
 
-  Future<void> updateCategory() async {
-    if (isCreating || isUpdating) return;
+  Future<bool> updateCategory() async {
+    if (isCreating || isUpdating) return false;
 
     final id = editingCategoryId;
     if (id == null) {
       errorMessage = 'No category selected for update';
       notifyListeners();
-      return;
+      return false;
     }
 
     final validationError = _validateUpdate();
     if (validationError != null) {
       errorMessage = validationError;
       notifyListeners();
-      return;
+      return false;
     }
 
     isUpdating = true;
@@ -199,11 +206,13 @@ class CategoryController extends ChangeNotifier {
       if (response.statusCode == 200) {
         successMessage = response.message;
         await loadCategories();
-      } else {
-        errorMessage = response.message;
+        return true;
       }
+      errorMessage = response.message;
+      return false;
     } catch (e) {
       errorMessage = e.toString().replaceFirst('Exception: ', '');
+      return false;
     } finally {
       isUpdating = false;
       notifyListeners();
@@ -223,5 +232,18 @@ class CategoryController extends ChangeNotifier {
     if (categoryName.trim().isEmpty) return 'Category name is required';
     if (description.trim().isEmpty) return 'Description is required';
     return null;
+  }
+
+  String? _resolveImageUrl(String path) {
+    final trimmed = path.trim();
+    if (trimmed.isEmpty) return null;
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      return trimmed;
+    }
+    final base = ApiConstants.baseUrl;
+    if (trimmed.startsWith('/')) {
+      return '$base$trimmed';
+    }
+    return '$base/$trimmed';
   }
 }

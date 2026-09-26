@@ -9,11 +9,13 @@ class CategoryLabeledField extends StatelessWidget {
     required this.label,
     required this.hintText,
     required this.onChanged,
+    this.initialValue,
   });
 
   final String label;
   final String hintText;
   final ValueChanged<String> onChanged;
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +35,7 @@ class CategoryLabeledField extends StatelessWidget {
             width: 339,
             height: 44,
             child: AppTextField(
+              initialValue: initialValue,
               onChanged: onChanged,
               style: AppStyles.poppinsRegular12.copyWith(
                 color: AppColors.hintGray,

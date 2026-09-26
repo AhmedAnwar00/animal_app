@@ -6,9 +6,11 @@ class CategorySaveButton extends StatelessWidget {
   const CategorySaveButton({
     super.key,
     required this.onPressed,
+    this.label = 'Save',
   });
 
   final VoidCallback onPressed;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class CategorySaveButton extends StatelessWidget {
           padding: const EdgeInsets.all(10),
         ),
         child: Text(
-          'Save',
+          label,
           style: AppStyles.poppinsRegular14.copyWith(
             color: AppColors.white,
           ),

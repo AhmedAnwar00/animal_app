@@ -1,7 +1,8 @@
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/features/category/controller/category_controller.dart';
+import 'package:animal_app/features/category/model/category.dart';
+import 'package:animal_app/features/category/ui/category_page.dart';
 import 'package:animal_app/features/home/controller/home_controller.dart';
-import 'package:animal_app/features/home/model/home_category.dart';
 import 'package:animal_app/features/home/ui/widgets/home_animal_card.dart';
 import 'package:animal_app/features/home/ui/widgets/home_category_row.dart';
 import 'package:animal_app/features/home/ui/widgets/home_header.dart';
@@ -13,6 +14,17 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.categoryController});
 
   final CategoryController categoryController;
+
+  void _openCategoryEdit(BuildContext context, Category category) {
+    categoryController.beginEdit(category);
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute<void>(
+            builder: (_) => CategoryPage(controller: categoryController),
+          ),
+        )
+        .then((_) => categoryController.clearEdit());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +45,6 @@ class HomePage extends StatelessWidget {
                   child: ListenableBuilder(
                     listenable: categoryController,
                     builder: (context, _) {
-                      final categories = [
-                        for (final item in categoryController.categories)
-                          HomeCategory(name: item.name, count: 0),
-                      ];
-
                       return ListView(
                         padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
                         children: [
@@ -47,7 +54,11 @@ class HomePage extends StatelessWidget {
                             action: 'Add New Category',
                           ),
                           const SizedBox(height: 22),
-                          HomeCategoryRow(categories: categories),
+                          HomeCategoryRow(
+                            categories: categoryController.categories,
+                            onCategoryTap: (category) =>
+                                _openCategoryEdit(context, category),
+                          ),
                           const SizedBox(height: 20),
                           const HomeSectionHeader(
                             title: 'All Animal ( 10 )',

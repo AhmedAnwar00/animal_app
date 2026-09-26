@@ -10,13 +10,20 @@ class CategoryImageUpload extends StatelessWidget {
     super.key,
     required this.onSelectPressed,
     this.imagePath,
+    this.networkImageUrl,
   });
 
   final VoidCallback onSelectPressed;
   final String? imagePath;
+  final String? networkImageUrl;
 
   @override
   Widget build(BuildContext context) {
+    final hasLocalImage = imagePath != null && imagePath!.isNotEmpty;
+    final hasNetworkImage =
+        networkImageUrl != null && networkImageUrl!.isNotEmpty;
+    final hasImage = hasLocalImage || hasNetworkImage;
+
     return SizedBox(
       width: 339,
       child: Column(
@@ -39,42 +46,49 @@ class CategoryImageUpload extends StatelessWidget {
               child: Container(
                 width: 339,
                 height: 200,
-                padding: imagePath == null
-                    ? const EdgeInsets.symmetric(
+                padding: hasImage
+                    ? EdgeInsets.zero
+                    : const EdgeInsets.symmetric(
                         horizontal: 20,
                         vertical: 32,
-                      )
-                    : EdgeInsets.zero,
+                      ),
                 decoration: BoxDecoration(
                   color: AppColors.uploadFill,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 clipBehavior: Clip.antiAlias,
-                child: imagePath != null
+                child: hasLocalImage
                     ? Image.file(
                         File(imagePath!),
                         width: 339,
                         height: 200,
                         fit: BoxFit.cover,
                       )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Assets.auth.uploadImage.svg(
-                            width: 28,
-                            height: 28,
-                            fit: BoxFit.contain,
+                    : hasNetworkImage
+                        ? Image.network(
+                            networkImageUrl!,
+                            width: 339,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          )
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Assets.auth.uploadImage.svg(
+                                width: 28,
+                                height: 28,
+                                fit: BoxFit.contain,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'Select Your Image',
+                                textAlign: TextAlign.center,
+                                style: AppStyles.urbanistMedium16.copyWith(
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'Select Your Image',
-                            textAlign: TextAlign.center,
-                            style: AppStyles.urbanistMedium16.copyWith(
-                              color: AppColors.primary,
-                            ),
-                          ),
-                        ],
-                      ),
               ),
             ),
           ),
