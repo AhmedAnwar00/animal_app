@@ -80,6 +80,10 @@ class $AssetsHomeGen {
   AssetGenImage get categoryRabbit =>
       const AssetGenImage('assets/home/category_rabbit.png');
 
+  /// File path: assets/home/empty_state.svg
+  SvgGenImage get emptyState =>
+      const SvgGenImage('assets/home/empty_state.svg');
+
   /// File path: assets/home/logo.png
   AssetGenImage get logo => const AssetGenImage('assets/home/logo.png');
 
@@ -108,6 +112,7 @@ class $AssetsHomeGen {
     categoryCat,
     categoryDog,
     categoryRabbit,
+    emptyState,
     logo,
     moreVert,
     navAnimal,

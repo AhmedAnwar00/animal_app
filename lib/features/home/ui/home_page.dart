@@ -5,6 +5,7 @@ import 'package:animal_app/features/category/ui/category_page.dart';
 import 'package:animal_app/features/home/controller/home_controller.dart';
 import 'package:animal_app/features/home/ui/widgets/home_animal_card.dart';
 import 'package:animal_app/features/home/ui/widgets/home_category_row.dart';
+import 'package:animal_app/features/home/ui/widgets/home_empty_state.dart';
 import 'package:animal_app/features/home/ui/widgets/home_header.dart';
 import 'package:animal_app/features/home/ui/widgets/home_section_header.dart';
 import 'package:animal_app/gen/assets.gen.dart';
@@ -45,35 +46,47 @@ class HomePage extends StatelessWidget {
                   child: ListenableBuilder(
                     listenable: categoryController,
                     builder: (context, _) {
+                      final categories = categoryController.categories;
+                      final animals = homeController.animals;
+
                       return ListView(
                         padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
                         children: [
                           HomeSectionHeader(
-                            title:
-                                'Categories ( ${categoryController.categories.length} )',
+                            title: 'Categories ( ${categories.length} )',
                             action: 'Add New Category',
                           ),
                           const SizedBox(height: 22),
-                          HomeCategoryRow(
-                            categories: categoryController.categories,
-                            onCategoryTap: (category) =>
-                                _openCategoryEdit(context, category),
-                          ),
+                          if (categories.isEmpty)
+                            const HomeEmptyState(
+                              title: 'No Category Found!',
+                              message: 'There is no Category to display.',
+                            )
+                          else
+                            HomeCategoryRow(
+                              categories: categories,
+                              onCategoryTap: (category) =>
+                                  _openCategoryEdit(context, category),
+                            ),
                           const SizedBox(height: 20),
-                          const HomeSectionHeader(
-                            title: 'All Animal ( 10 )',
+                          HomeSectionHeader(
+                            title: 'All Animal ( ${animals.length} )',
                             action: 'Add New Animal',
                           ),
                           const SizedBox(height: 12),
-                          for (var i = 0;
-                              i < homeController.animals.length;
-                              i++) ...[
-                            if (i > 0) const SizedBox(height: 17),
-                            HomeAnimalCard(
-                              animal: homeController.animals[i],
-                              image: Assets.home.animalCard,
-                            ),
-                          ],
+                          if (animals.isEmpty)
+                            const HomeEmptyState(
+                              title: 'No Animal Found!',
+                              message: 'There is no Animal to display.',
+                            )
+                          else
+                            for (var i = 0; i < animals.length; i++) ...[
+                              if (i > 0) const SizedBox(height: 17),
+                              HomeAnimalCard(
+                                animal: animals[i],
+                                image: Assets.home.animalCard,
+                              ),
+                            ],
                         ],
                       );
                     },
