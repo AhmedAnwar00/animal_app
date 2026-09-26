@@ -92,7 +92,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     ),
                     const SizedBox(height: 24),
                     CategorySaveButton(
-                      onPressed: widget.controller.createCategory,
+                      onPressed: widget.controller.saveCategory,
                     ),
                   ],
                 );

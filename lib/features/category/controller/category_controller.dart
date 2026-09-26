@@ -1,5 +1,6 @@
 import 'package:animal_app/features/category/model/category.dart';
 import 'package:animal_app/features/category/model/create_category_request.dart';
+import 'package:animal_app/features/category/model/update_category_request.dart';
 import 'package:animal_app/features/category/service/category_service.dart';
 import 'package:flutter/foundation.dart' hide Category;
 import 'package:image_picker/image_picker.dart';
@@ -14,11 +15,15 @@ class CategoryController extends ChangeNotifier {
   String categoryName = '';
   String description = '';
   String? imagePath;
+  int? editingCategoryId;
   List<Category> categories = [];
   bool isLoading = false;
   bool isCreating = false;
+  bool isUpdating = false;
   String? errorMessage;
   String? successMessage;
+
+  bool get isEditing => editingCategoryId != null;
 
   void updateCategoryName(String value) {
     categoryName = value;
@@ -27,6 +32,24 @@ class CategoryController extends ChangeNotifier {
 
   void updateDescription(String value) {
     description = value;
+    notifyListeners();
+  }
+
+  void beginEdit(Category category) {
+    editingCategoryId = category.id;
+    categoryName = category.name;
+    description = category.description;
+    imagePath = null;
+    errorMessage = null;
+    successMessage = null;
+    notifyListeners();
+  }
+
+  void clearEdit() {
+    editingCategoryId = null;
+    categoryName = '';
+    description = '';
+    imagePath = null;
     notifyListeners();
   }
 
@@ -95,10 +118,18 @@ class CategoryController extends ChangeNotifier {
     }
   }
 
-  Future<void> createCategory() async {
-    if (isCreating) return;
+  Future<void> saveCategory() async {
+    if (isEditing) {
+      await updateCategory();
+    } else {
+      await createCategory();
+    }
+  }
 
-    final validationError = _validate();
+  Future<void> createCategory() async {
+    if (isCreating || isUpdating) return;
+
+    final validationError = _validateCreate();
     if (validationError != null) {
       errorMessage = validationError;
       notifyListeners();
@@ -133,12 +164,64 @@ class CategoryController extends ChangeNotifier {
     }
   }
 
-  String? _validate() {
+  Future<void> updateCategory() async {
+    if (isCreating || isUpdating) return;
+
+    final id = editingCategoryId;
+    if (id == null) {
+      errorMessage = 'No category selected for update';
+      notifyListeners();
+      return;
+    }
+
+    final validationError = _validateUpdate();
+    if (validationError != null) {
+      errorMessage = validationError;
+      notifyListeners();
+      return;
+    }
+
+    isUpdating = true;
+    errorMessage = null;
+    successMessage = null;
+    notifyListeners();
+
+    try {
+      final response = await _categoryService.updateCategory(
+        UpdateCategoryRequest(
+          id: id,
+          name: categoryName.trim(),
+          description: description.trim(),
+          imagePath: imagePath,
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        successMessage = response.message;
+        await loadCategories();
+      } else {
+        errorMessage = response.message;
+      }
+    } catch (e) {
+      errorMessage = e.toString().replaceFirst('Exception: ', '');
+    } finally {
+      isUpdating = false;
+      notifyListeners();
+    }
+  }
+
+  String? _validateCreate() {
     if (categoryName.trim().isEmpty) return 'Category name is required';
     if (description.trim().isEmpty) return 'Description is required';
     if (imagePath == null || imagePath!.isEmpty) {
       return 'Category image is required';
     }
+    return null;
+  }
+
+  String? _validateUpdate() {
+    if (categoryName.trim().isEmpty) return 'Category name is required';
+    if (description.trim().isEmpty) return 'Description is required';
     return null;
   }
 }

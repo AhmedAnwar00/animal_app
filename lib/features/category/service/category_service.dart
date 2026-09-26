@@ -3,6 +3,8 @@ import 'package:animal_app/core/network/dio_client.dart';
 import 'package:animal_app/features/category/model/categories_response.dart';
 import 'package:animal_app/features/category/model/create_category_request.dart';
 import 'package:animal_app/features/category/model/create_category_response.dart';
+import 'package:animal_app/features/category/model/update_category_request.dart';
+import 'package:animal_app/features/category/model/update_category_response.dart';
 import 'package:dio/dio.dart';
 
 class CategoryService {
@@ -62,6 +64,48 @@ class CategoryService {
         _messageFromDioException(
           e,
           'Failed to create category. Please try again.',
+        ),
+      );
+    }
+  }
+
+  Future<UpdateCategoryResponse> updateCategory(
+    UpdateCategoryRequest request,
+  ) async {
+    try {
+      final map = <String, dynamic>{
+        'id': request.id,
+        'name': request.name,
+        'description': request.description,
+      };
+
+      final imagePath = request.imagePath;
+      if (imagePath != null && imagePath.isNotEmpty) {
+        final fileName = imagePath.split(RegExp(r'[\\/]')).last;
+        map['image'] = await MultipartFile.fromFile(
+          imagePath,
+          filename: fileName,
+        );
+      }
+
+      final formData = FormData.fromMap(map);
+
+      final response = await _client.dio.post<Map<String, dynamic>>(
+        ApiConstants.updateCategory,
+        data: formData,
+      );
+
+      final data = response.data;
+      if (data == null) {
+        throw Exception('Empty response from server');
+      }
+
+      return UpdateCategoryResponse.fromJson(data);
+    } on DioException catch (e) {
+      throw Exception(
+        _messageFromDioException(
+          e,
+          'Failed to update category. Please try again.',
         ),
       );
     }

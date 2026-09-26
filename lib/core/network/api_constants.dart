@@ -8,4 +8,5 @@ abstract final class ApiConstants {
   static const generateAccessToken = '/api/generateAccessToken';
   static const allCategories = '/api/allCategories';
   static const createNewCategory = '/api/createNewCategory';
+  static const updateCategory = '/api/updateCategory';
 }
