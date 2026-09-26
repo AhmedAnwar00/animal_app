@@ -1,6 +1,8 @@
 import 'package:animal_app/core/network/api_constants.dart';
 import 'package:animal_app/core/network/dio_client.dart';
 import 'package:animal_app/features/category/model/categories_response.dart';
+import 'package:animal_app/features/category/model/create_category_request.dart';
+import 'package:animal_app/features/category/model/create_category_response.dart';
 import 'package:dio/dio.dart';
 
 class CategoryService {
@@ -25,6 +27,41 @@ class CategoryService {
         _messageFromDioException(
           e,
           'Failed to load categories. Please try again.',
+        ),
+      );
+    }
+  }
+
+  Future<CreateCategoryResponse> createCategory(
+    CreateCategoryRequest request,
+  ) async {
+    try {
+      final fileName = request.imagePath.split(RegExp(r'[\\/]')).last;
+      final formData = FormData.fromMap({
+        'name': request.name,
+        'description': request.description,
+        'image': await MultipartFile.fromFile(
+          request.imagePath,
+          filename: fileName,
+        ),
+      });
+
+      final response = await _client.dio.post<Map<String, dynamic>>(
+        ApiConstants.createNewCategory,
+        data: formData,
+      );
+
+      final data = response.data;
+      if (data == null) {
+        throw Exception('Empty response from server');
+      }
+
+      return CreateCategoryResponse.fromJson(data);
+    } on DioException catch (e) {
+      throw Exception(
+        _messageFromDioException(
+          e,
+          'Failed to create category. Please try again.',
         ),
       );
     }

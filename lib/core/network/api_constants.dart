@@ -7,4 +7,5 @@ abstract final class ApiConstants {
   static const createNewPassword = '/api/create_new_possword';
   static const generateAccessToken = '/api/generateAccessToken';
   static const allCategories = '/api/allCategories';
+  static const createNewCategory = '/api/createNewCategory';
 }
