@@ -41,35 +41,29 @@ class CategoryController extends ChangeNotifier {
   }
 
   Future<void> pickFromGallery() async {
-    await _pickImage(
-      source: ImageSource.gallery,
-      permission: Permission.photos,
-      deniedMessage: 'Photo library permission is required to select an image',
-    );
+    await Permission.photos.request();
+
+    try {
+      final file = await _imagePicker.pickImage(source: ImageSource.gallery);
+      if (file == null) return;
+      imagePath = file.path;
+      notifyListeners();
+    } catch (_) {
+      errorMessage = 'Failed to pick image. Please try again';
+      notifyListeners();
+    }
   }
 
   Future<void> pickFromCamera() async {
-    await _pickImage(
-      source: ImageSource.camera,
-      permission: Permission.camera,
-      deniedMessage: 'Camera permission is required to take a photo',
-    );
-  }
-
-  Future<void> _pickImage({
-    required ImageSource source,
-    required Permission permission,
-    required String deniedMessage,
-  }) async {
-    final status = await permission.request();
-    if (!status.isGranted && !status.isLimited) {
-      errorMessage = deniedMessage;
+    final status = await Permission.camera.request();
+    if (!status.isGranted) {
+      errorMessage = 'Camera permission is required to take a photo';
       notifyListeners();
       return;
     }
 
     try {
-      final file = await _imagePicker.pickImage(source: source);
+      final file = await _imagePicker.pickImage(source: ImageSource.camera);
       if (file == null) return;
       imagePath = file.path;
       notifyListeners();

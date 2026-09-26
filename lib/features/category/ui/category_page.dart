@@ -87,6 +87,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     ),
                     const SizedBox(height: 22),
                     CategoryImageUpload(
+                      imagePath: widget.controller.imagePath,
                       onSelectPressed: _onSelectImagePressed,
                     ),
                     const SizedBox(height: 24),
