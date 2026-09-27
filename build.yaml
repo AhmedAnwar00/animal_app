@@ -1,0 +1,21 @@
+targets:
+  $default:
+    sources:
+      - $package$
+      - assets/**
+      - benchmark/**
+      - bin/**
+      - CHANGELOG*
+      - example/**
+      - lib/**
+      - test/**
+      - integration_test/**
+      - tool/**
+      - web/**
+      - node/**
+      - LICENSE*
+      - pubspec.yaml
+      - pubspec.lock
+      - README*
+      - .env
+      - .env*

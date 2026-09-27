@@ -1,5 +1,7 @@
+import 'package:animal_app/core/env/env.dart';
+
 abstract final class ApiConstants {
-  static const baseUrl = 'http://192.168.100.15:8000';
+  static const baseUrl = Env.apiBaseUrl;
   static const signup = '/api/signup';
   static const verificationCode = '/api/verfication_code';
   static const login = '/api/login';
