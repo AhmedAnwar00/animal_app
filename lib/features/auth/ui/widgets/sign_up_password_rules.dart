@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/features/auth/ui/widgets/sign_up_password_rule_item.dart';
 import 'package:flutter/material.dart';
 
@@ -25,27 +26,27 @@ class SignUpPasswordRules extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SignUpPasswordRuleItem(
-            label: 'Minimum characters 12.',
+            label: context.l10n.minCharacters,
             isMet: hasMinLength,
           ),
           const SizedBox(height: 6),
           SignUpPasswordRuleItem(
-            label: 'One uppercase character.',
+            label: context.l10n.oneUppercase,
             isMet: hasUppercase,
           ),
           const SizedBox(height: 6),
           SignUpPasswordRuleItem(
-            label: 'One lowercase character.',
+            label: context.l10n.oneLowercase,
             isMet: hasLowercase,
           ),
           const SizedBox(height: 6),
           SignUpPasswordRuleItem(
-            label: 'One special character.',
+            label: context.l10n.oneSpecial,
             isMet: hasSpecial,
           ),
           const SizedBox(height: 6),
           SignUpPasswordRuleItem(
-            label: 'One number.',
+            label: context.l10n.oneNumber,
             isMet: hasNumber,
           ),
         ],

@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:animal_app/core/widgets/app_text_field.dart';
@@ -24,7 +25,7 @@ class LoginPasswordField extends StatelessWidget {
             top: 0,
             left: 0,
             child: Text(
-              'Password',
+              context.l10n.password,
               style: AppStyles.poppinsRegular16.copyWith(
                 color: AppColors.textSecondary,
               ),
@@ -42,7 +43,12 @@ class LoginPasswordField extends StatelessWidget {
                 style: AppStyles.poppinsMedium16.copyWith(
                   color: AppColors.labelGray,
                 ),
-                contentPadding: const EdgeInsets.fromLTRB(14, 10, 40, 10),
+                contentPadding: const EdgeInsetsDirectional.fromSTEB(
+                  14,
+                  10,
+                  40,
+                  10,
+                ),
               ),
             ),
           ),

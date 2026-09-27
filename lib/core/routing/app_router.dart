@@ -6,6 +6,7 @@ import 'package:animal_app/features/auth/ui/forget_password_page.dart';
 import 'package:animal_app/features/auth/ui/login_page.dart';
 import 'package:animal_app/features/auth/ui/otp_verification_page.dart';
 import 'package:animal_app/features/auth/ui/sign_up_page.dart';
+import 'package:animal_app/features/language/controller/language_controller.dart';
 import 'package:animal_app/features/shell/ui/app_shell.dart';
 import 'package:flutter/material.dart';
 
@@ -51,7 +52,10 @@ abstract final class AppRouter {
 
   static bool get canPop => navigator.canPop();
 
-  static Route<dynamic> onGenerateRoute(RouteSettings settings) {
+  static Route<dynamic> onGenerateRoute(
+    RouteSettings settings, {
+    required LanguageController languageController,
+  }) {
     switch (settings.name) {
       case AppRoutes.login:
         return MaterialPageRoute<void>(
@@ -87,8 +91,9 @@ abstract final class AppRouter {
           builder: (_) => OtpVerificationPage(flow: flow, email: email),
         );
       case AppRoutes.createNewPassword:
-        final email =
-            settings.arguments is String ? settings.arguments as String : '';
+        final email = settings.arguments is String
+            ? settings.arguments as String
+            : '';
         return MaterialPageRoute<void>(
           settings: settings,
           builder: (_) => CreateNewPasswordPage(email: email),
@@ -96,7 +101,7 @@ abstract final class AppRouter {
       case AppRoutes.home:
         return MaterialPageRoute<void>(
           settings: settings,
-          builder: (_) => const AppShell(),
+          builder: (_) => AppShell(languageController: languageController),
         );
       default:
         return MaterialPageRoute<void>(

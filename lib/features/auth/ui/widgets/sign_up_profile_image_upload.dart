@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:animal_app/gen/assets.gen.dart';
@@ -23,7 +24,7 @@ class SignUpProfileImageUpload extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Upload Image For Your Profile',
+            context.l10n.uploadProfileImage,
             style: AppStyles.poppinsRegular16.copyWith(
               color: AppColors.textSecondary,
             ),
@@ -40,10 +41,7 @@ class SignUpProfileImageUpload extends StatelessWidget {
                 width: 339,
                 height: 200,
                 padding: imagePath == null
-                    ? const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 32,
-                      )
+                    ? const EdgeInsets.symmetric(horizontal: 20, vertical: 32)
                     : EdgeInsets.zero,
                 decoration: BoxDecoration(
                   color: AppColors.uploadFill,
@@ -67,7 +65,7 @@ class SignUpProfileImageUpload extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            'Select file',
+                            context.l10n.selectFile,
                             textAlign: TextAlign.center,
                             style: AppStyles.urbanistMedium16.copyWith(
                               color: AppColors.primary,
@@ -85,10 +83,7 @@ class SignUpProfileImageUpload extends StatelessWidget {
 }
 
 class _DashedBorderPainter extends CustomPainter {
-  const _DashedBorderPainter({
-    required this.color,
-    required this.radius,
-  });
+  const _DashedBorderPainter({required this.color, required this.radius});
 
   final Color color;
   final double radius;

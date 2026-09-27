@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/features/animal/controller/animal_controller.dart';
 import 'package:animal_app/features/animal/model/animal.dart';
@@ -81,14 +82,16 @@ class HomePage extends StatelessWidget {
                         padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
                         children: [
                           HomeSectionHeader(
-                            title: 'Categories ( ${categories.length} )',
-                            action: 'Add New Category',
+                            title: context.l10n.categoriesCount(
+                              categories.length,
+                            ),
+                            action: context.l10n.addNewCategory,
                           ),
                           const SizedBox(height: 22),
                           if (categories.isEmpty)
-                            const HomeEmptyState(
-                              title: 'No Category Found!',
-                              message: 'There is no Category to display.',
+                            HomeEmptyState(
+                              title: context.l10n.noCategoryFound,
+                              message: context.l10n.noCategoryMessage,
                             )
                           else
                             HomeCategoryRow(
@@ -98,14 +101,14 @@ class HomePage extends StatelessWidget {
                             ),
                           const SizedBox(height: 20),
                           HomeSectionHeader(
-                            title: 'All Animal ( ${animals.length} )',
-                            action: 'Add New Animal',
+                            title: context.l10n.animalsCount(animals.length),
+                            action: context.l10n.addNewAnimal,
                           ),
                           const SizedBox(height: 12),
                           if (animals.isEmpty)
-                            const HomeEmptyState(
-                              title: 'No Animal Found!',
-                              message: 'There is no Animal to display.',
+                            HomeEmptyState(
+                              title: context.l10n.noAnimalFound,
+                              message: context.l10n.noAnimalMessage,
                             )
                           else
                             for (var i = 0; i < animals.length; i++) ...[

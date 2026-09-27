@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class LoginRememberMe extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: FittedBox(
         fit: BoxFit.scaleDown,
-        alignment: Alignment.centerLeft,
+        alignment: AlignmentDirectional.centerStart,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -35,16 +36,12 @@ class LoginRememberMe extends StatelessWidget {
                 borderRadius: BorderRadius.circular(2),
               ),
               child: value
-                  ? const Icon(
-                      Icons.check,
-                      size: 10,
-                      color: AppColors.white,
-                    )
+                  ? const Icon(Icons.check, size: 10, color: AppColors.white)
                   : null,
             ),
             const SizedBox(width: 6),
             Text(
-              'Remember Me',
+              context.l10n.rememberMe,
               maxLines: 1,
               softWrap: false,
               style: AppStyles.poppinsMedium10.copyWith(

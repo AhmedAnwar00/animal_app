@@ -1,4 +1,5 @@
 import 'package:animal_app/core/routing/app_router.dart';
+import 'package:animal_app/generated/l10n.dart';
 import 'package:animal_app/core/routing/app_routes.dart';
 import 'package:animal_app/features/auth/model/create_new_password_request.dart';
 import 'package:animal_app/features/auth/service/auth_service.dart';
@@ -28,11 +29,7 @@ class CreateNewPasswordController extends ChangeNotifier {
   bool get hasNumber => password.contains(RegExp(r'[0-9]'));
 
   bool get _passwordRulesValid =>
-      hasMinLength &&
-      hasUppercase &&
-      hasLowercase &&
-      hasSpecial &&
-      hasNumber;
+      hasMinLength && hasUppercase && hasLowercase && hasSpecial && hasNumber;
 
   void updatePassword(String value) {
     password = value;
@@ -99,11 +96,11 @@ class CreateNewPasswordController extends ChangeNotifier {
   }
 
   String? _validate() {
-    if (password.isEmpty) return 'Password is required';
+    if (password.isEmpty) return S.current.passwordRequired;
     if (!_passwordRulesValid) {
-      return 'Password does not meet the required rules';
+      return S.current.passwordRules;
     }
-    if (password != confirmPassword) return 'Passwords do not match';
+    if (password != confirmPassword) return S.current.passwordsDoNotMatch;
     return null;
   }
 }

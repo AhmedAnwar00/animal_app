@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:animal_app/gen/assets.gen.dart';
@@ -44,7 +45,7 @@ class CategoryUserHeader extends StatelessWidget {
                   ),
                   const SizedBox(width: 3),
                   Text(
-                    'Public',
+                    context.l10n.publicLabel,
                     style: AppStyles.urbanistRegular10.copyWith(
                       color: AppColors.public,
                     ),

@@ -8,13 +8,16 @@ import 'package:animal_app/features/category/controller/category_controller.dart
 import 'package:animal_app/features/category/service/category_service.dart';
 import 'package:animal_app/features/category/ui/category_page.dart';
 import 'package:animal_app/features/home/ui/home_page.dart';
+import 'package:animal_app/features/language/controller/language_controller.dart';
 import 'package:animal_app/features/me/ui/me_page.dart';
 import 'package:animal_app/features/search/ui/search_page.dart';
 import 'package:animal_app/features/shell/controller/app_shell_controller.dart';
 import 'package:flutter/material.dart';
 
 class AppShell extends StatefulWidget {
-  const AppShell({super.key});
+  const AppShell({super.key, required this.languageController});
+
+  final LanguageController languageController;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -70,7 +73,7 @@ class _AppShellState extends State<AppShell> {
                 controller: _animalController,
                 onEditingFinished: () => _controller.selectTab(0),
               ),
-              const MePage(),
+              MePage(languageController: widget.languageController),
             ],
           ),
           bottomNavigationBar: AppBottomNav(

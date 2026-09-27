@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:animal_app/gen/assets.gen.dart';
@@ -27,10 +28,8 @@ class ForgetPasswordBackButton extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           Text(
-            'Back',
-            style: AppStyles.otamaRegular20.copyWith(
-              color: AppColors.primary,
-            ),
+            context.l10n.back,
+            style: AppStyles.otamaRegular20.copyWith(color: AppColors.primary),
           ),
         ],
       ),

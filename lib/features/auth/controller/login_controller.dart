@@ -1,4 +1,5 @@
 import 'package:animal_app/core/routing/app_router.dart';
+import 'package:animal_app/generated/l10n.dart';
 import 'package:animal_app/core/routing/app_routes.dart';
 import 'package:animal_app/core/storage/token_storage.dart';
 import 'package:animal_app/features/auth/model/login_request.dart';
@@ -43,7 +44,9 @@ class LoginController extends ChangeNotifier {
 
   Future<void> onLogInPressed() async {
     debugPrint('[LOGIN DEBUG] 2 LoginController.onLogInPressed start');
-    debugPrint('[LOGIN DEBUG] 2 email="$email" passwordLen=${password.length} isLoading=$isLoading');
+    debugPrint(
+      '[LOGIN DEBUG] 2 email="$email" passwordLen=${password.length} isLoading=$isLoading',
+    );
     if (isLoading) {
       debugPrint('[LOGIN DEBUG] 2 STOP: already loading');
       return;
@@ -64,10 +67,7 @@ class LoginController extends ChangeNotifier {
     try {
       debugPrint('[LOGIN DEBUG] 2 calling AuthService.login()');
       final response = await _authService.login(
-        LoginRequest(
-          email: email.trim(),
-          password: password,
-        ),
+        LoginRequest(email: email.trim(), password: password),
       );
       debugPrint(
         '[LOGIN DEBUG] 2 AuthService.login returned statusCode=${response.statusCode} message=${response.message}',
@@ -101,11 +101,11 @@ class LoginController extends ChangeNotifier {
 
   String? _validate() {
     final trimmedEmail = email.trim();
-    if (trimmedEmail.isEmpty) return 'Email is required';
+    if (trimmedEmail.isEmpty) return S.current.emailRequired;
     if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(trimmedEmail)) {
-      return 'Please enter a valid email';
+      return S.current.invalidEmail;
     }
-    if (password.isEmpty) return 'Password is required';
+    if (password.isEmpty) return S.current.passwordRequired;
     return null;
   }
 

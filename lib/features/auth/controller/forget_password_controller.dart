@@ -1,4 +1,5 @@
 import 'package:animal_app/core/routing/app_router.dart';
+import 'package:animal_app/generated/l10n.dart';
 import 'package:animal_app/core/routing/app_routes.dart';
 import 'package:animal_app/features/auth/model/forget_password_request.dart';
 import 'package:animal_app/features/auth/model/otp_flow.dart';
@@ -32,7 +33,7 @@ class ForgetPasswordController extends ChangeNotifier {
     if (isLoading) return;
 
     if (email.trim().isEmpty) {
-      errorMessage = 'Email is required';
+      errorMessage = S.current.emailRequired;
       notifyListeners();
       return;
     }

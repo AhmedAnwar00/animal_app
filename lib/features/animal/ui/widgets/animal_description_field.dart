@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:animal_app/core/widgets/app_text_field.dart';
@@ -21,7 +22,7 @@ class AnimalDescriptionField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Animal Description',
+            context.l10n.animalDescription,
             style: AppStyles.poppinsRegular16.copyWith(
               color: AppColors.textSecondary,
             ),
@@ -37,7 +38,7 @@ class AnimalDescriptionField extends StatelessWidget {
               style: AppStyles.poppinsRegular12.copyWith(
                 color: AppColors.hintGray,
               ),
-              hintText: 'Enter your Description',
+              hintText: context.l10n.enterDescription,
               hintStyle: AppStyles.poppinsRegular12.copyWith(
                 color: AppColors.hintGray,
               ),

@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:flutter/material.dart';
@@ -18,18 +19,18 @@ class CategoryDeleteConfirmationDialog extends StatelessWidget {
     return AlertDialog(
       backgroundColor: AppColors.white,
       title: Text(
-        'Delete Category',
+        context.l10n.deleteCategory,
         style: AppStyles.urbanistSemiBold12.copyWith(color: AppColors.black),
       ),
       content: Text(
-        'Are you sure you want to delete this category?',
+        context.l10n.deleteCategoryMessage,
         style: AppStyles.urbanistRegular12.copyWith(color: AppColors.black),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
           child: Text(
-            'Cancel',
+            context.l10n.cancel,
             style: AppStyles.urbanistMedium12.copyWith(
               color: AppColors.textMuted,
             ),
@@ -38,7 +39,7 @@ class CategoryDeleteConfirmationDialog extends StatelessWidget {
         TextButton(
           onPressed: () => Navigator.of(context).pop(true),
           child: Text(
-            'Delete',
+            context.l10n.delete,
             style: AppStyles.urbanistMedium12.copyWith(
               color: AppColors.passwordError,
             ),

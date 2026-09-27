@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:flutter/material.dart';
@@ -27,9 +28,7 @@ class SignUpPrimaryButton extends StatelessWidget {
           minimumSize: const Size(342, 44),
           maximumSize: const Size(342, 44),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
           padding: const EdgeInsets.all(10),
         ),
         child: isLoading
@@ -42,7 +41,7 @@ class SignUpPrimaryButton extends StatelessWidget {
                 ),
               )
             : Text(
-                'Sign Up',
+                context.l10n.signUp,
                 style: AppStyles.poppinsRegular14.copyWith(
                   color: AppColors.white,
                 ),

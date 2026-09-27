@@ -1,4 +1,5 @@
 import 'package:animal_app/core/network/api_constants.dart';
+import 'package:animal_app/generated/l10n.dart';
 import 'package:animal_app/core/network/dio_client.dart';
 import 'package:animal_app/features/auth/model/create_new_password_request.dart';
 import 'package:animal_app/features/auth/model/create_new_password_response.dart';
@@ -41,12 +42,12 @@ class AuthService {
 
       final data = response.data;
       if (data == null) {
-        throw Exception('Empty response from server');
+        throw Exception(S.current.emptyResponse);
       }
 
       return SignupResponse.fromJson(data);
     } on DioException catch (e) {
-      throw Exception(_messageFromDioException(e, 'Signup failed. Please try again.'));
+      throw Exception(_messageFromDioException(e, S.current.signupFailed));
     }
   }
 
@@ -61,13 +62,13 @@ class AuthService {
 
       final data = response.data;
       if (data == null) {
-        throw Exception('Empty response from server');
+        throw Exception(S.current.emptyResponse);
       }
 
       return VerificationCodeResponse.fromJson(data);
     } on DioException catch (e) {
       throw Exception(
-        _messageFromDioException(e, 'Verification failed. Please try again.'),
+        _messageFromDioException(e, S.current.verificationFailed),
       );
     }
   }
@@ -83,17 +84,12 @@ class AuthService {
 
       final data = response.data;
       if (data == null) {
-        throw Exception('Empty response from server');
+        throw Exception(S.current.emptyResponse);
       }
 
       return ForgetPasswordResponse.fromJson(data);
     } on DioException catch (e) {
-      throw Exception(
-        _messageFromDioException(
-          e,
-          'Failed to send reset email. Please try again.',
-        ),
-      );
+      throw Exception(_messageFromDioException(e, S.current.sendResetFailed));
     }
   }
 
@@ -108,16 +104,13 @@ class AuthService {
 
       final data = response.data;
       if (data == null) {
-        throw Exception('Empty response from server');
+        throw Exception(S.current.emptyResponse);
       }
 
       return CreateNewPasswordResponse.fromJson(data);
     } on DioException catch (e) {
       throw Exception(
-        _messageFromDioException(
-          e,
-          'Failed to update password. Please try again.',
-        ),
+        _messageFromDioException(e, S.current.updatePasswordFailed),
       );
     }
   }
@@ -139,7 +132,7 @@ class AuthService {
 
       final data = response.data;
       if (data == null) {
-        throw Exception('Empty response from server');
+        throw Exception(S.current.emptyResponse);
       }
 
       return LoginResponse.fromJson(data);
@@ -150,10 +143,7 @@ class AuthService {
       debugPrint('[LOGIN DEBUG] 3 statusMessage=${e.response?.statusMessage}');
       debugPrint('[LOGIN DEBUG] 3 responseData=${e.response?.data}');
       debugPrint('[LOGIN DEBUG] 3 dioMessage=${e.message}');
-      final mapped = _messageFromDioException(
-        e,
-        'Login failed. Please try again.',
-      );
+      final mapped = _messageFromDioException(e, S.current.loginFailed);
       debugPrint('[LOGIN DEBUG] 3 mapped errorMessage="$mapped"');
       throw Exception(mapped);
     }
@@ -170,16 +160,13 @@ class AuthService {
 
       final data = response.data;
       if (data == null) {
-        throw Exception('Empty response from server');
+        throw Exception(S.current.emptyResponse);
       }
 
       return GenerateAccessTokenResponse.fromJson(data);
     } on DioException catch (e) {
       throw Exception(
-        _messageFromDioException(
-          e,
-          'Failed to refresh access token. Please try again.',
-        ),
+        _messageFromDioException(e, S.current.refreshTokenFailed),
       );
     }
   }

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:animal_app/gen/assets.gen.dart';
@@ -30,7 +31,7 @@ class AnimalImageUpload extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Upload Image For Your Animal',
+            context.l10n.uploadAnimalImage,
             style: AppStyles.poppinsRegular16.copyWith(
               color: AppColors.textSecondary,
             ),
@@ -78,7 +79,7 @@ class AnimalImageUpload extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            'Select Your Image',
+                            context.l10n.selectYourImage,
                             textAlign: TextAlign.center,
                             style: AppStyles.urbanistMedium16.copyWith(
                               color: AppColors.primary,

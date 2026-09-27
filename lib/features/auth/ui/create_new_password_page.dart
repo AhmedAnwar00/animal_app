@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/network/dio_client.dart';
 import 'package:animal_app/features/auth/controller/create_new_password_controller.dart';
 import 'package:animal_app/features/auth/service/auth_service.dart';
@@ -42,9 +43,9 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
     if (message == null || !mounted) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
       _controller.clearError();
     });
   }
@@ -82,7 +83,7 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
                       top: 75,
                       left: 18,
                       child: SignUpPasswordField(
-                        label: 'New Password',
+                        label: context.l10n.newPassword,
                         obscureText: _controller.obscurePassword,
                         onChanged: _controller.updatePassword,
                       ),
@@ -114,7 +115,7 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
                       top: 291,
                       left: 18,
                       child: SignUpPasswordField(
-                        label: 'Confirm Password',
+                        label: context.l10n.confirmPassword,
                         obscureText: _controller.obscureConfirmPassword,
                         onChanged: _controller.updateConfirmPassword,
                       ),

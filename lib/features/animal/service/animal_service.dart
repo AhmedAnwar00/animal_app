@@ -1,4 +1,5 @@
 import 'package:animal_app/core/network/api_constants.dart';
+import 'package:animal_app/generated/l10n.dart';
 import 'package:animal_app/core/network/dio_client.dart';
 import 'package:animal_app/features/animal/model/animals_response.dart';
 import 'package:animal_app/features/animal/model/create_animal_request.dart';
@@ -21,16 +22,13 @@ class AnimalService {
 
       final data = response.data;
       if (data == null) {
-        throw Exception('Empty response from server');
+        throw Exception(S.current.emptyResponse);
       }
 
       return AnimalsResponse.fromJson(data);
     } on DioException catch (e) {
       throw Exception(
-        _messageFromDioException(
-          e,
-          'Failed to load animals. Please try again.',
-        ),
+        _messageFromDioException(e, S.current.failedToLoadAnimals),
       );
     }
   }
@@ -56,16 +54,13 @@ class AnimalService {
 
       final data = response.data;
       if (data == null) {
-        throw Exception('Empty response from server');
+        throw Exception(S.current.emptyResponse);
       }
 
       return CreateAnimalResponse.fromJson(data);
     } on DioException catch (e) {
       throw Exception(
-        _messageFromDioException(
-          e,
-          'Failed to create animal. Please try again.',
-        ),
+        _messageFromDioException(e, S.current.createAnimalFailed),
       );
     }
   }
@@ -98,16 +93,13 @@ class AnimalService {
 
       final data = response.data;
       if (data == null) {
-        throw Exception('Empty response from server');
+        throw Exception(S.current.emptyResponse);
       }
 
       return UpdateAnimalResponse.fromJson(data);
     } on DioException catch (e) {
       throw Exception(
-        _messageFromDioException(
-          e,
-          'Failed to update animal. Please try again.',
-        ),
+        _messageFromDioException(e, S.current.updateAnimalFailed),
       );
     }
   }
@@ -121,28 +113,34 @@ class AnimalService {
 
       final data = response.data;
       if (data is Map<String, dynamic>) {
-        return DeleteAnimalResponse.fromJson(data);
+        return _deleteResponse(data);
       }
       if (data is Map) {
-        return DeleteAnimalResponse.fromJson(
+        return _deleteResponse(
           data.map((key, value) => MapEntry(key.toString(), value)),
         );
       }
       if (response.statusCode == 200) {
-        return const DeleteAnimalResponse(
+        return DeleteAnimalResponse(
           statusCode: 200,
-          message: 'Animal deleted successfully',
+          message: S.current.animalDeleted,
         );
       }
-      throw Exception('Empty response from server');
+      throw Exception(S.current.emptyResponse);
     } on DioException catch (e) {
       throw Exception(
-        _messageFromDioException(
-          e,
-          'Failed to delete animal. Please try again.',
-        ),
+        _messageFromDioException(e, S.current.deleteAnimalFailed),
       );
     }
+  }
+
+  DeleteAnimalResponse _deleteResponse(Map<String, dynamic> data) {
+    final response = DeleteAnimalResponse.fromJson(data);
+    if (response.message.isNotEmpty) return response;
+    return DeleteAnimalResponse(
+      statusCode: response.statusCode,
+      message: S.current.animalDeleted,
+    );
   }
 
   String _messageFromDioException(DioException e, String fallback) {

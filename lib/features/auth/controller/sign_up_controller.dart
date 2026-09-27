@@ -1,4 +1,5 @@
 import 'package:animal_app/core/routing/app_router.dart';
+import 'package:animal_app/generated/l10n.dart';
 import 'package:animal_app/core/routing/app_routes.dart';
 import 'package:animal_app/features/auth/model/otp_flow.dart';
 import 'package:animal_app/features/auth/model/otp_verification_args.dart';
@@ -37,11 +38,7 @@ class SignUpController extends ChangeNotifier {
   bool get hasNumber => password.contains(RegExp(r'[0-9]'));
 
   bool get _passwordRulesValid =>
-      hasMinLength &&
-      hasUppercase &&
-      hasLowercase &&
-      hasSpecial &&
-      hasNumber;
+      hasMinLength && hasUppercase && hasLowercase && hasSpecial && hasNumber;
 
   void updateFirstName(String value) {
     firstName = value;
@@ -87,7 +84,7 @@ class SignUpController extends ChangeNotifier {
     await _pickImage(
       source: ImageSource.gallery,
       permission: Permission.photos,
-      deniedMessage: 'Photo library permission is required to select an image',
+      deniedMessage: S.current.photoLibraryPermissionRequired,
     );
   }
 
@@ -95,7 +92,7 @@ class SignUpController extends ChangeNotifier {
     await _pickImage(
       source: ImageSource.camera,
       permission: Permission.camera,
-      deniedMessage: 'Camera permission is required to take a photo',
+      deniedMessage: S.current.cameraPermissionRequired,
     );
   }
 
@@ -117,7 +114,7 @@ class SignUpController extends ChangeNotifier {
       imagePath = file.path;
       notifyListeners();
     } catch (_) {
-      errorMessage = 'Failed to pick image. Please try again';
+      errorMessage = S.current.failedToPickImage;
       notifyListeners();
     }
   }
@@ -168,17 +165,17 @@ class SignUpController extends ChangeNotifier {
   }
 
   String? _validate() {
-    if (firstName.trim().isEmpty) return 'First name is required';
-    if (lastName.trim().isEmpty) return 'Last name is required';
-    if (email.trim().isEmpty) return 'Email is required';
-    if (phone.trim().isEmpty) return 'Phone is required';
-    if (password.isEmpty) return 'Password is required';
+    if (firstName.trim().isEmpty) return S.current.firstNameRequired;
+    if (lastName.trim().isEmpty) return S.current.lastNameRequired;
+    if (email.trim().isEmpty) return S.current.emailRequired;
+    if (phone.trim().isEmpty) return S.current.phoneRequired;
+    if (password.isEmpty) return S.current.passwordRequired;
     if (!_passwordRulesValid) {
-      return 'Password does not meet the required rules';
+      return S.current.passwordRules;
     }
-    if (password != confirmPassword) return 'Passwords do not match';
+    if (password != confirmPassword) return S.current.passwordsDoNotMatch;
     if (imagePath == null || imagePath!.isEmpty) {
-      return 'Profile image is required';
+      return S.current.profileImageRequired;
     }
     return null;
   }

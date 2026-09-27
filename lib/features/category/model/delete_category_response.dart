@@ -10,7 +10,7 @@ class DeleteCategoryResponse {
   factory DeleteCategoryResponse.fromJson(Map<String, dynamic> json) {
     return DeleteCategoryResponse(
       statusCode: json['statusCode'] as int,
-      message: json['message'] as String? ?? 'Category deleted successfully',
+      message: json['message'] as String? ?? '',
     );
   }
 }

@@ -1,13 +1,11 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:animal_app/core/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 
 class LoginEmailField extends StatelessWidget {
-  const LoginEmailField({
-    super.key,
-    required this.onChanged,
-  });
+  const LoginEmailField({super.key, required this.onChanged});
 
   final ValueChanged<String> onChanged;
 
@@ -22,7 +20,7 @@ class LoginEmailField extends StatelessWidget {
             top: 0,
             left: 0,
             child: Text(
-              'Email',
+              context.l10n.email,
               style: AppStyles.poppinsRegular16.copyWith(
                 color: AppColors.textSecondary,
               ),
@@ -40,7 +38,7 @@ class LoginEmailField extends StatelessWidget {
                 style: AppStyles.poppinsRegular12.copyWith(
                   color: AppColors.hintGray,
                 ),
-                hintText: 'Enter your email address',
+                hintText: context.l10n.enterEmail,
                 hintStyle: AppStyles.poppinsRegular12.copyWith(
                   color: AppColors.hintGray,
                 ),

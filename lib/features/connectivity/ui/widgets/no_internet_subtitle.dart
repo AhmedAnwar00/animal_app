@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class NoInternetSubtitle extends StatelessWidget {
     return SizedBox(
       width: 301,
       child: Text(
-        'Unable to connect to the internet. Please check your connection and try again.',
+        context.l10n.noInternetMessage,
         textAlign: TextAlign.center,
         style: AppStyles.urbanistRegular12.copyWith(color: AppColors.black),
       ),

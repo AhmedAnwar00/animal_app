@@ -6,7 +6,7 @@ class CategorySaveButton extends StatelessWidget {
   const CategorySaveButton({
     super.key,
     required this.onPressed,
-    this.label = 'Save',
+    required this.label,
   });
 
   final VoidCallback onPressed;
@@ -25,16 +25,12 @@ class CategorySaveButton extends StatelessWidget {
           minimumSize: const Size(342, 44),
           maximumSize: const Size(342, 44),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
           padding: const EdgeInsets.all(10),
         ),
         child: Text(
           label,
-          style: AppStyles.poppinsRegular14.copyWith(
-            color: AppColors.white,
-          ),
+          style: AppStyles.poppinsRegular14.copyWith(color: AppColors.white),
         ),
       ),
     );

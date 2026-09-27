@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:animal_app/core/routing/app_router.dart';
+import 'package:animal_app/generated/l10n.dart';
 import 'package:animal_app/core/routing/app_routes.dart';
 import 'package:animal_app/features/auth/model/otp_flow.dart';
 import 'package:animal_app/features/auth/model/verification_code_request.dart';
@@ -70,16 +71,13 @@ class OtpVerificationController extends ChangeNotifier {
     if (isLoading) return;
 
     if (digits.any((digit) => digit.isEmpty)) {
-      errorMessage = 'Please enter the full verification code';
+      errorMessage = S.current.verificationCodeRequired;
       notifyListeners();
       return;
     }
 
     if (flow == OtpFlow.forgotPassword) {
-      AppRouter.pushNamed(
-        AppRoutes.createNewPassword,
-        arguments: email,
-      );
+      AppRouter.pushNamed(AppRoutes.createNewPassword, arguments: email);
       return;
     }
 
@@ -89,10 +87,7 @@ class OtpVerificationController extends ChangeNotifier {
 
     try {
       final response = await _authService.verifyCode(
-        VerificationCodeRequest(
-          email: email,
-          code: _code,
-        ),
+        VerificationCodeRequest(email: email, code: _code),
       );
 
       if (response.statusCode == 200) {

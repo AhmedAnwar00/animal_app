@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/widgets/app_bottom_nav_item.dart';
 import 'package:animal_app/gen/assets.gen.dart';
@@ -29,7 +30,7 @@ class AppBottomNav extends StatelessWidget {
               Expanded(
                 child: AppBottomNavItem(
                   icon: Assets.home.navHome,
-                  label: 'Home',
+                  label: context.l10n.home,
                   selected: currentIndex == 0,
                   onTap: () => onTap(0),
                 ),
@@ -38,7 +39,7 @@ class AppBottomNav extends StatelessWidget {
               Expanded(
                 child: AppBottomNavItem(
                   icon: Assets.home.navSearch,
-                  label: 'Search',
+                  label: context.l10n.search,
                   selected: currentIndex == 1,
                   onTap: () => onTap(1),
                 ),
@@ -47,7 +48,7 @@ class AppBottomNav extends StatelessWidget {
               Expanded(
                 child: AppBottomNavItem(
                   icon: Assets.home.navCategory,
-                  label: 'category',
+                  label: context.l10n.navCategory,
                   selected: currentIndex == 2,
                   onTap: () => onTap(2),
                 ),
@@ -56,7 +57,7 @@ class AppBottomNav extends StatelessWidget {
               Expanded(
                 child: AppBottomNavItem(
                   icon: Assets.home.navAnimal,
-                  label: 'animal',
+                  label: context.l10n.navAnimal,
                   selected: currentIndex == 3,
                   onTap: () => onTap(3),
                 ),
@@ -65,7 +66,7 @@ class AppBottomNav extends StatelessWidget {
               Expanded(
                 child: AppBottomNavItem(
                   icon: Assets.home.navMe,
-                  label: 'Me',
+                  label: context.l10n.me,
                   selected: currentIndex == 4,
                   onTap: () => onTap(4),
                 ),

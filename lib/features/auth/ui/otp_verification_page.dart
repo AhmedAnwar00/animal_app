@@ -48,9 +48,9 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     if (message == null || !mounted) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
       _controller.clearError();
     });
   }
@@ -92,9 +92,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                     Positioned(
                       top: 159,
                       left: 17,
-                      child: OtpVerificationCodeFields(
-                        controller: _controller,
-                      ),
+                      child: OtpVerificationCodeFields(controller: _controller),
                     ),
                     Positioned(
                       top: 253,

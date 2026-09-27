@@ -11,9 +11,15 @@ import 'package:animal_app/features/animal/service/animal_service.dart';
 import 'package:animal_app/features/category/controller/category_controller.dart';
 import 'package:animal_app/features/category/model/category.dart';
 import 'package:animal_app/features/category/service/category_service.dart';
+import 'package:animal_app/generated/l10n.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  setUpAll(() async {
+    await S.load(const Locale('en'));
+  });
+
   const original = Animal(
     id: 1,
     name: 'ليديبول',

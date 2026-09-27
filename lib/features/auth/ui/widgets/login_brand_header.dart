@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:animal_app/gen/assets.gen.dart';
@@ -28,7 +29,7 @@ class LoginBrandHeader extends StatelessWidget {
             left: 0,
             right: 0,
             child: Text(
-              'ANIMOOO',
+              context.l10n.animooo,
               textAlign: TextAlign.center,
               style: AppStyles.brandMark.copyWith(color: AppColors.primary),
             ),

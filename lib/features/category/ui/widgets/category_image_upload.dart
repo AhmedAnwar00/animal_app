@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:animal_app/gen/assets.gen.dart';
@@ -30,7 +31,7 @@ class CategoryImageUpload extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Upload Image For Your Cateogry',
+            context.l10n.uploadCategoryImage,
             style: AppStyles.poppinsRegular16.copyWith(
               color: AppColors.textSecondary,
             ),
@@ -48,10 +49,7 @@ class CategoryImageUpload extends StatelessWidget {
                 height: 200,
                 padding: hasImage
                     ? EdgeInsets.zero
-                    : const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 32,
-                      ),
+                    : const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
                 decoration: BoxDecoration(
                   color: AppColors.uploadFill,
                   borderRadius: BorderRadius.circular(10),
@@ -65,30 +63,30 @@ class CategoryImageUpload extends StatelessWidget {
                         fit: BoxFit.cover,
                       )
                     : hasNetworkImage
-                        ? Image.network(
-                            networkImageUrl!,
-                            width: 339,
-                            height: 200,
-                            fit: BoxFit.cover,
-                          )
-                        : Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Assets.auth.uploadImage.svg(
-                                width: 28,
-                                height: 28,
-                                fit: BoxFit.contain,
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                'Select Your Image',
-                                textAlign: TextAlign.center,
-                                style: AppStyles.urbanistMedium16.copyWith(
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                            ],
+                    ? Image.network(
+                        networkImageUrl!,
+                        width: 339,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Assets.auth.uploadImage.svg(
+                            width: 28,
+                            height: 28,
+                            fit: BoxFit.contain,
                           ),
+                          const SizedBox(height: 16),
+                          Text(
+                            context.l10n.selectYourImage,
+                            textAlign: TextAlign.center,
+                            style: AppStyles.urbanistMedium16.copyWith(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
+                      ),
               ),
             ),
           ),
@@ -99,10 +97,7 @@ class CategoryImageUpload extends StatelessWidget {
 }
 
 class _DashedBorderPainter extends CustomPainter {
-  const _DashedBorderPainter({
-    required this.color,
-    required this.radius,
-  });
+  const _DashedBorderPainter({required this.color, required this.radius});
 
   final Color color;
   final double radius;

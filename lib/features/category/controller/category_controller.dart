@@ -1,4 +1,5 @@
 import 'package:animal_app/core/network/api_constants.dart';
+import 'package:animal_app/generated/l10n.dart';
 import 'package:animal_app/features/category/model/category.dart';
 import 'package:animal_app/features/category/model/create_category_request.dart';
 import 'package:animal_app/features/category/model/update_category_request.dart';
@@ -78,7 +79,7 @@ class CategoryController extends ChangeNotifier {
       existingImageUrl = null;
       notifyListeners();
     } catch (_) {
-      errorMessage = 'Failed to pick image. Please try again';
+      errorMessage = S.current.failedToPickImage;
       notifyListeners();
     }
   }
@@ -86,7 +87,7 @@ class CategoryController extends ChangeNotifier {
   Future<void> pickFromCamera() async {
     final status = await Permission.camera.request();
     if (!status.isGranted) {
-      errorMessage = 'Camera permission is required to take a photo';
+      errorMessage = S.current.cameraPermissionRequired;
       notifyListeners();
       return;
     }
@@ -98,7 +99,7 @@ class CategoryController extends ChangeNotifier {
       existingImageUrl = null;
       notifyListeners();
     } catch (_) {
-      errorMessage = 'Failed to pick image. Please try again';
+      errorMessage = S.current.failedToPickImage;
       notifyListeners();
     }
   }
@@ -115,7 +116,7 @@ class CategoryController extends ChangeNotifier {
       if (response.statusCode == 200) {
         categories = response.categories;
       } else {
-        errorMessage = 'Failed to load categories. Please try again.';
+        errorMessage = S.current.failedToLoadCategories;
       }
     } catch (e) {
       errorMessage = e.toString().replaceFirst('Exception: ', '');
@@ -177,7 +178,7 @@ class CategoryController extends ChangeNotifier {
 
     final id = editingCategoryId;
     if (id == null) {
-      errorMessage = 'No category selected for update';
+      errorMessage = S.current.noCategorySelectedForUpdate;
       notifyListeners();
       return false;
     }
@@ -225,7 +226,7 @@ class CategoryController extends ChangeNotifier {
 
     final id = editingCategoryId;
     if (id == null) {
-      errorMessage = 'No category selected for delete';
+      errorMessage = S.current.noCategorySelectedForDelete;
       notifyListeners();
       return false;
     }
@@ -255,17 +256,17 @@ class CategoryController extends ChangeNotifier {
   }
 
   String? _validateCreate() {
-    if (categoryName.trim().isEmpty) return 'Category name is required';
-    if (description.trim().isEmpty) return 'Description is required';
+    if (categoryName.trim().isEmpty) return S.current.categoryNameRequired;
+    if (description.trim().isEmpty) return S.current.descriptionRequired;
     if (imagePath == null || imagePath!.isEmpty) {
-      return 'Category image is required';
+      return S.current.categoryImageRequired;
     }
     return null;
   }
 
   String? _validateUpdate() {
-    if (categoryName.trim().isEmpty) return 'Category name is required';
-    if (description.trim().isEmpty) return 'Description is required';
+    if (categoryName.trim().isEmpty) return S.current.categoryNameRequired;
+    if (description.trim().isEmpty) return S.current.descriptionRequired;
     return null;
   }
 }

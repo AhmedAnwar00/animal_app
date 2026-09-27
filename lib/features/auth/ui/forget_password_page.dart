@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/network/dio_client.dart';
 import 'package:animal_app/features/auth/controller/forget_password_controller.dart';
 import 'package:animal_app/features/auth/service/auth_service.dart';
@@ -35,9 +36,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     if (message == null || !mounted) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
       _controller.clearError();
     });
   }
@@ -80,8 +81,8 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       top: 192,
                       left: 18,
                       child: SignUpLabeledField(
-                        label: 'Email',
-                        hintText: 'Enter your email address',
+                        label: context.l10n.email,
+                        hintText: context.l10n.enterEmail,
                         keyboardType: TextInputType.emailAddress,
                         onChanged: _controller.updateEmail,
                       ),

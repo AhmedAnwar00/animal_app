@@ -7,7 +7,7 @@ class DeleteAnimalResponse {
   factory DeleteAnimalResponse.fromJson(Map<String, dynamic> json) {
     return DeleteAnimalResponse(
       statusCode: json['statusCode'] as int,
-      message: json['message'] as String? ?? 'Animal deleted successfully',
+      message: json['message'] as String? ?? '',
     );
   }
 }

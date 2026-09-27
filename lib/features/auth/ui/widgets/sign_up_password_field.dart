@@ -44,7 +44,12 @@ class SignUpPasswordField extends StatelessWidget {
                 style: AppStyles.poppinsMedium16.copyWith(
                   color: AppColors.labelGray,
                 ),
-                contentPadding: const EdgeInsets.fromLTRB(14, 10, 40, 10),
+                contentPadding: const EdgeInsetsDirectional.fromSTEB(
+                  14,
+                  10,
+                  40,
+                  10,
+                ),
               ),
             ),
           ),

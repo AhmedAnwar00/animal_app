@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class HomeSeeAllButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
       ),
       child: Text(
-        'See All',
+        context.l10n.seeAll,
         style: AppStyles.poppinsRegular8.copyWith(color: AppColors.white),
       ),
     );

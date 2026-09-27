@@ -1,4 +1,5 @@
 import 'package:animal_app/core/network/api_constants.dart';
+import 'package:animal_app/generated/l10n.dart';
 import 'package:animal_app/features/animal/model/animal.dart';
 import 'package:animal_app/features/animal/model/create_animal_request.dart';
 import 'package:animal_app/features/animal/model/update_animal_request.dart';
@@ -100,7 +101,7 @@ class AnimalController extends ChangeNotifier {
       existingImageUrl = null;
       notifyListeners();
     } catch (_) {
-      errorMessage = 'Failed to pick image. Please try again';
+      errorMessage = S.current.failedToPickImage;
       notifyListeners();
     }
   }
@@ -108,7 +109,7 @@ class AnimalController extends ChangeNotifier {
   Future<void> pickFromCamera() async {
     final status = await Permission.camera.request();
     if (!status.isGranted) {
-      errorMessage = 'Camera permission is required to take a photo';
+      errorMessage = S.current.cameraPermissionRequired;
       notifyListeners();
       return;
     }
@@ -120,7 +121,7 @@ class AnimalController extends ChangeNotifier {
       existingImageUrl = null;
       notifyListeners();
     } catch (_) {
-      errorMessage = 'Failed to pick image. Please try again';
+      errorMessage = S.current.failedToPickImage;
       notifyListeners();
     }
   }
@@ -137,7 +138,7 @@ class AnimalController extends ChangeNotifier {
       if (response.statusCode == 200) {
         animals = response.animals;
       } else {
-        loadErrorMessage = 'Failed to load animals. Please try again.';
+        loadErrorMessage = S.current.failedToLoadAnimals;
       }
     } catch (e) {
       loadErrorMessage = e.toString().replaceFirst('Exception: ', '');
@@ -166,7 +167,7 @@ class AnimalController extends ChangeNotifier {
 
     final categoryId = _categoryIdForName(categoryName);
     if (categoryId == null) {
-      errorMessage = 'Category not found';
+      errorMessage = S.current.categoryNotFound;
       notifyListeners();
       return false;
     }
@@ -209,7 +210,7 @@ class AnimalController extends ChangeNotifier {
 
     final id = editingAnimalId;
     if (id == null) {
-      errorMessage = 'No animal selected for update';
+      errorMessage = S.current.noAnimalSelectedForUpdate;
       notifyListeners();
       return false;
     }
@@ -223,7 +224,7 @@ class AnimalController extends ChangeNotifier {
 
     final categoryId = _categoryIdForName(categoryName);
     if (categoryId == null) {
-      errorMessage = 'Category not found';
+      errorMessage = S.current.categoryNotFound;
       notifyListeners();
       return false;
     }
@@ -267,7 +268,7 @@ class AnimalController extends ChangeNotifier {
 
     final id = editingAnimalId;
     if (id == null) {
-      errorMessage = 'No animal selected for delete';
+      errorMessage = S.current.noAnimalSelectedForDelete;
       notifyListeners();
       return false;
     }
@@ -321,33 +322,33 @@ class AnimalController extends ChangeNotifier {
   }
 
   String? _validateCreate() {
-    if (animalName.trim().isEmpty) return 'Animal name is required';
-    if (description.trim().isEmpty) return 'Description is required';
+    if (animalName.trim().isEmpty) return S.current.animalNameRequired;
+    if (description.trim().isEmpty) return S.current.descriptionRequired;
     if (imagePath == null || imagePath!.isEmpty) {
-      return 'Animal image is required';
+      return S.current.animalImageRequired;
     }
-    if (price.trim().isEmpty) return 'Animal price is required';
+    if (price.trim().isEmpty) return S.current.animalPriceRequired;
     if (double.tryParse(price.trim()) == null) {
-      return 'Animal price must be a number';
+      return S.current.animalPriceNumber;
     }
-    if (categoryName.trim().isEmpty) return 'Category name is required';
+    if (categoryName.trim().isEmpty) return S.current.categoryNameRequired;
     return null;
   }
 
   String? _validateUpdate() {
-    if (animalName.trim().isEmpty) return 'Animal name is required';
-    if (description.trim().isEmpty) return 'Description is required';
+    if (animalName.trim().isEmpty) return S.current.animalNameRequired;
+    if (description.trim().isEmpty) return S.current.descriptionRequired;
     final hasNewImage = imagePath != null && imagePath!.isNotEmpty;
     final hasExistingImage =
         existingImageUrl != null && existingImageUrl!.isNotEmpty;
     if (!hasNewImage && !hasExistingImage) {
-      return 'Animal image is required';
+      return S.current.animalImageRequired;
     }
-    if (price.trim().isEmpty) return 'Animal price is required';
+    if (price.trim().isEmpty) return S.current.animalPriceRequired;
     if (double.tryParse(price.trim()) == null) {
-      return 'Animal price must be a number';
+      return S.current.animalPriceNumber;
     }
-    if (categoryName.trim().isEmpty) return 'Category name is required';
+    if (categoryName.trim().isEmpty) return S.current.categoryNameRequired;
     return null;
   }
 

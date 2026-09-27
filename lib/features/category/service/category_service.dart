@@ -1,4 +1,5 @@
 import 'package:animal_app/core/network/api_constants.dart';
+import 'package:animal_app/generated/l10n.dart';
 import 'package:animal_app/core/network/dio_client.dart';
 import 'package:animal_app/features/category/model/categories_response.dart';
 import 'package:animal_app/features/category/model/create_category_request.dart';
@@ -21,16 +22,13 @@ class CategoryService {
 
       final data = response.data;
       if (data == null) {
-        throw Exception('Empty response from server');
+        throw Exception(S.current.emptyResponse);
       }
 
       return CategoriesResponse.fromJson(data);
     } on DioException catch (e) {
       throw Exception(
-        _messageFromDioException(
-          e,
-          'Failed to load categories. Please try again.',
-        ),
+        _messageFromDioException(e, S.current.failedToLoadCategories),
       );
     }
   }
@@ -56,16 +54,13 @@ class CategoryService {
 
       final data = response.data;
       if (data == null) {
-        throw Exception('Empty response from server');
+        throw Exception(S.current.emptyResponse);
       }
 
       return CreateCategoryResponse.fromJson(data);
     } on DioException catch (e) {
       throw Exception(
-        _messageFromDioException(
-          e,
-          'Failed to create category. Please try again.',
-        ),
+        _messageFromDioException(e, S.current.createCategoryFailed),
       );
     }
   }
@@ -98,16 +93,13 @@ class CategoryService {
 
       final data = response.data;
       if (data == null) {
-        throw Exception('Empty response from server');
+        throw Exception(S.current.emptyResponse);
       }
 
       return UpdateCategoryResponse.fromJson(data);
     } on DioException catch (e) {
       throw Exception(
-        _messageFromDioException(
-          e,
-          'Failed to update category. Please try again.',
-        ),
+        _messageFromDioException(e, S.current.updateCategoryFailed),
       );
     }
   }
@@ -121,28 +113,34 @@ class CategoryService {
 
       final data = response.data;
       if (data is Map<String, dynamic>) {
-        return DeleteCategoryResponse.fromJson(data);
+        return _deleteResponse(data);
       }
       if (data is Map) {
-        return DeleteCategoryResponse.fromJson(
+        return _deleteResponse(
           data.map((key, value) => MapEntry(key.toString(), value)),
         );
       }
       if (response.statusCode == 200) {
-        return const DeleteCategoryResponse(
+        return DeleteCategoryResponse(
           statusCode: 200,
-          message: 'Category deleted successfully',
+          message: S.current.categoryDeleted,
         );
       }
-      throw Exception('Empty response from server');
+      throw Exception(S.current.emptyResponse);
     } on DioException catch (e) {
       throw Exception(
-        _messageFromDioException(
-          e,
-          'Failed to delete category. Please try again.',
-        ),
+        _messageFromDioException(e, S.current.deleteCategoryFailed),
       );
     }
+  }
+
+  DeleteCategoryResponse _deleteResponse(Map<String, dynamic> data) {
+    final response = DeleteCategoryResponse.fromJson(data);
+    if (response.message.isNotEmpty) return response;
+    return DeleteCategoryResponse(
+      statusCode: response.statusCode,
+      message: S.current.categoryDeleted,
+    );
   }
 
   String _messageFromDioException(DioException e, String fallback) {

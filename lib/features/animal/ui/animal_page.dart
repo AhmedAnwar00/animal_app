@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/features/animal/controller/animal_controller.dart';
 import 'package:animal_app/features/animal/ui/widgets/animal_delete_confirmation_dialog.dart';
@@ -121,8 +122,8 @@ class _AnimalPageState extends State<AnimalPage> {
                     const SizedBox(height: 24),
                     CategoryLabeledField(
                       key: ValueKey('name-$formKey'),
-                      label: 'Animal Name',
-                      hintText: 'Enter your Animal Name',
+                      label: context.l10n.animalName,
+                      hintText: context.l10n.enterAnimalName,
                       initialValue: isEditing
                           ? widget.controller.animalName
                           : null,
@@ -145,16 +146,16 @@ class _AnimalPageState extends State<AnimalPage> {
                     const SizedBox(height: 22),
                     CategoryLabeledField(
                       key: ValueKey('price-$formKey'),
-                      label: 'Animal Price',
-                      hintText: 'Enter your Animal Price',
+                      label: context.l10n.animalPrice,
+                      hintText: context.l10n.enterAnimalPrice,
                       initialValue: isEditing ? widget.controller.price : null,
                       onChanged: widget.controller.updatePrice,
                     ),
                     const SizedBox(height: 22),
                     CategoryLabeledField(
                       key: ValueKey('category-$formKey'),
-                      label: 'Category Name',
-                      hintText: 'Enter your Category Name',
+                      label: context.l10n.categoryName,
+                      hintText: context.l10n.enterCategoryName,
                       initialValue: isEditing
                           ? widget.controller.categoryName
                           : null,
@@ -162,7 +163,7 @@ class _AnimalPageState extends State<AnimalPage> {
                     ),
                     const SizedBox(height: 24),
                     CategorySaveButton(
-                      label: isEditing ? 'Edit' : 'Save',
+                      label: isEditing ? context.l10n.edit : context.l10n.save,
                       onPressed: _onSavePressed,
                     ),
                     if (isEditing) ...[

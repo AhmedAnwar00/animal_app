@@ -1,10 +1,13 @@
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
+import 'package:animal_app/features/me/ui/widgets/me_language_button.dart';
 import 'package:animal_app/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 
 class MeProfileHeader extends StatelessWidget {
-  const MeProfileHeader({super.key});
+  const MeProfileHeader({super.key, required this.onLanguagePressed});
+
+  final VoidCallback onLanguagePressed;
 
   @override
   Widget build(BuildContext context) {
@@ -31,30 +34,7 @@ class MeProfileHeader extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-            Container(
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: AppColors.public.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(32),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Assets.category.globeAsia.svg(
-                    width: 10,
-                    height: 10,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(width: 3),
-                  Text(
-                    'Profile Details',
-                    style: AppStyles.urbanistRegular10.copyWith(
-                      color: AppColors.public,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            MeLanguageButton(onPressed: onLanguagePressed),
           ],
         ),
       ],

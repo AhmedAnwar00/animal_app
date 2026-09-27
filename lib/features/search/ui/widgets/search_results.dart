@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/features/animal/model/animal.dart';
 import 'package:animal_app/features/home/ui/widgets/home_animal_card.dart';
 import 'package:animal_app/features/home/ui/widgets/home_empty_state.dart';
@@ -11,9 +12,9 @@ class SearchResults extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (animals.isEmpty) {
-      return const HomeEmptyState(
-        title: 'No Animal Found!',
-        message: 'There is no Animal to display.',
+      return HomeEmptyState(
+        title: context.l10n.noAnimalFound,
+        message: context.l10n.noAnimalMessage,
       );
     }
 

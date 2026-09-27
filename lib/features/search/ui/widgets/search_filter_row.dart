@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/features/search/model/search_filter.dart';
 import 'package:animal_app/features/search/ui/widgets/search_filter_chip.dart';
 import 'package:flutter/material.dart';
@@ -17,13 +18,13 @@ class SearchFilterRow extends StatelessWidget {
     return Row(
       children: [
         SearchFilterChip(
-          label: 'Category',
+          label: context.l10n.category,
           selected: selectedFilter == SearchFilter.category,
           onTap: () => onFilterSelected(SearchFilter.category),
         ),
         const SizedBox(width: 12),
         SearchFilterChip(
-          label: 'Animal',
+          label: context.l10n.animal,
           selected: selectedFilter == SearchFilter.animal,
           onTap: () => onFilterSelected(SearchFilter.animal),
         ),

@@ -1,13 +1,11 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class LoginSignUpPrompt extends StatefulWidget {
-  const LoginSignUpPrompt({
-    super.key,
-    required this.onSignUpPressed,
-  });
+  const LoginSignUpPrompt({super.key, required this.onSignUpPressed});
 
   final VoidCallback onSignUpPressed;
 
@@ -21,8 +19,7 @@ class _LoginSignUpPromptState extends State<LoginSignUpPrompt> {
   @override
   void initState() {
     super.initState();
-    _signUpRecognizer = TapGestureRecognizer()
-      ..onTap = widget.onSignUpPressed;
+    _signUpRecognizer = TapGestureRecognizer()..onTap = widget.onSignUpPressed;
   }
 
   @override
@@ -49,17 +46,14 @@ class _LoginSignUpPromptState extends State<LoginSignUpPrompt> {
           TextSpan(
             children: [
               TextSpan(
-                text: 'Don’t have an account?',
+                text: context.l10n.noAccount,
                 style: AppStyles.poppinsMedium14.copyWith(
                   color: AppColors.textMuted,
                 ),
               ),
+              TextSpan(text: ' ', style: AppStyles.poppinsMedium14),
               TextSpan(
-                text: ' ',
-                style: AppStyles.poppinsMedium14,
-              ),
-              TextSpan(
-                text: 'Sign up now',
+                text: context.l10n.signUpNow,
                 style: AppStyles.poppinsSemiBold14.copyWith(
                   color: AppColors.primary,
                   decoration: TextDecoration.underline,

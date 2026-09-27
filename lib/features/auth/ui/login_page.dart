@@ -40,9 +40,9 @@ class _LoginPageState extends State<LoginPage> {
     if (message == null || !mounted) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
       _controller.clearError();
     });
   }
@@ -69,11 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                       left: 152,
                       child: LoginBrandHeader(),
                     ),
-                    const Positioned(
-                      top: 102,
-                      left: 134,
-                      child: LoginTitle(),
-                    ),
+                    const Positioned(top: 102, left: 134, child: LoginTitle()),
                     Positioned(
                       top: 192,
                       left: 18,
@@ -106,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             Flexible(
                               child: Align(
-                                alignment: Alignment.centerLeft,
+                                alignment: AlignmentDirectional.centerStart,
                                 child: LoginRememberMe(
                                   value: _controller.rememberMe,
                                   onToggle: _controller.toggleRememberMe,

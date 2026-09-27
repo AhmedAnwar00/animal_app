@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/features/auth/ui/widgets/sign_up_image_source_sheet.dart';
 import 'package:animal_app/features/category/controller/category_controller.dart';
@@ -32,15 +33,15 @@ class _CategoryPageState extends State<CategoryPage> {
       final error = widget.controller.errorMessage;
       final success = widget.controller.successMessage;
       if (error != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(error)));
         widget.controller.clearError();
       }
       if (success != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(success)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(success)));
         widget.controller.clearSuccessMessage();
       }
     });
@@ -105,17 +106,19 @@ class _CategoryPageState extends State<CategoryPage> {
                     const SizedBox(height: 24),
                     CategoryLabeledField(
                       key: ValueKey('name-$editKey'),
-                      label: 'Category Name',
-                      hintText: 'Enter your Category Name',
-                      initialValue:
-                          isEditing ? widget.controller.categoryName : null,
+                      label: context.l10n.categoryName,
+                      hintText: context.l10n.enterCategoryName,
+                      initialValue: isEditing
+                          ? widget.controller.categoryName
+                          : null,
                       onChanged: widget.controller.updateCategoryName,
                     ),
                     const SizedBox(height: 22),
                     CategoryDescriptionField(
                       key: ValueKey('description-$editKey'),
-                      initialValue:
-                          isEditing ? widget.controller.description : null,
+                      initialValue: isEditing
+                          ? widget.controller.description
+                          : null,
                       onChanged: widget.controller.updateDescription,
                     ),
                     const SizedBox(height: 22),
@@ -126,7 +129,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     ),
                     const SizedBox(height: 24),
                     CategorySaveButton(
-                      label: isEditing ? 'Edit' : 'Save',
+                      label: isEditing ? context.l10n.edit : context.l10n.save,
                       onPressed: _onSavePressed,
                     ),
                     if (isEditing) ...[

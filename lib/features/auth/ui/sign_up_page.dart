@@ -1,3 +1,4 @@
+import 'package:animal_app/core/l10n/l10n_extension.dart';
 import 'package:animal_app/core/network/dio_client.dart';
 import 'package:animal_app/features/auth/controller/sign_up_controller.dart';
 import 'package:animal_app/features/auth/service/auth_service.dart';
@@ -41,9 +42,9 @@ class _SignUpPageState extends State<SignUpPage> {
     if (message == null || !mounted) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
       _controller.clearError();
     });
   }
@@ -95,8 +96,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         top: 192,
                         left: 18,
                         child: SignUpLabeledField(
-                          label: 'First Name',
-                          hintText: 'Enter your First Name',
+                          label: context.l10n.firstName,
+                          hintText: context.l10n.enterFirstName,
                           onChanged: _controller.updateFirstName,
                         ),
                       ),
@@ -104,8 +105,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         top: 282,
                         left: 18,
                         child: SignUpLabeledField(
-                          label: 'Last Name',
-                          hintText: 'Enter your Last Name',
+                          label: context.l10n.lastName,
+                          hintText: context.l10n.enterLastName,
                           onChanged: _controller.updateLastName,
                         ),
                       ),
@@ -113,8 +114,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         top: 372,
                         left: 18,
                         child: SignUpLabeledField(
-                          label: 'Email',
-                          hintText: 'Enter your email address',
+                          label: context.l10n.email,
+                          hintText: context.l10n.enterEmail,
                           keyboardType: TextInputType.emailAddress,
                           onChanged: _controller.updateEmail,
                         ),
@@ -123,8 +124,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         top: 462,
                         left: 18,
                         child: SignUpLabeledField(
-                          label: 'Phone',
-                          hintText: 'Enter your Phone',
+                          label: context.l10n.phone,
+                          hintText: context.l10n.enterPhone,
                           keyboardType: TextInputType.phone,
                           onChanged: _controller.updatePhone,
                         ),
@@ -133,7 +134,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         top: 552,
                         left: 18,
                         child: SignUpPasswordField(
-                          label: 'Password',
+                          label: context.l10n.password,
                           obscureText: _controller.obscurePassword,
                           onChanged: _controller.updatePassword,
                         ),
@@ -165,7 +166,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         top: 766,
                         left: 18,
                         child: SignUpPasswordField(
-                          label: 'Confirm Password',
+                          label: context.l10n.confirmPassword,
                           obscureText: _controller.obscureConfirmPassword,
                           onChanged: _controller.updateConfirmPassword,
                         ),
