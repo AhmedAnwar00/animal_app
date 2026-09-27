@@ -12,6 +12,7 @@ abstract final class ApiConstants {
   static const deleteCategory = '/api/deleteCategory';
   static const allAnimals = '/api/allAnimal';
   static const addNewAnimal = '/api/addNewAnimal';
+  static const updateAnimal = '/api/updateAnimal';
 
   static String? resolveMediaUrl(String? path) {
     if (path == null) return null;

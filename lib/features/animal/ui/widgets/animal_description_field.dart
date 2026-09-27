@@ -7,9 +7,11 @@ class AnimalDescriptionField extends StatelessWidget {
   const AnimalDescriptionField({
     super.key,
     required this.onChanged,
+    this.initialValue,
   });
 
   final ValueChanged<String> onChanged;
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class AnimalDescriptionField extends StatelessWidget {
             width: 339,
             height: 94,
             child: AppTextField(
+              initialValue: initialValue,
               onChanged: onChanged,
               maxLines: 4,
               style: AppStyles.poppinsRegular12.copyWith(

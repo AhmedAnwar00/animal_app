@@ -44,6 +44,15 @@ class _AnimalPageState extends State<AnimalPage> {
     });
   }
 
+  Future<void> _onSavePressed() async {
+    final wasEditing = widget.controller.isEditing;
+    final success = await widget.controller.saveAnimal();
+    if (!mounted) return;
+    if (wasEditing && success) {
+      Navigator.of(context).pop();
+    }
+  }
+
   Future<void> _onSelectImagePressed() async {
     final source = await SignUpImageSourceSheet.show(context);
     if (!mounted) return;
@@ -72,7 +81,9 @@ class _AnimalPageState extends State<AnimalPage> {
               listenable: widget.controller,
               builder: (context, _) {
                 _handleMessages();
-                final formKey = widget.controller.formVersion;
+                final isEditing = widget.controller.isEditing;
+                final formKey =
+                    '${widget.controller.editingAnimalId}-${widget.controller.formVersion}';
                 return ListView(
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
                   children: [
@@ -84,16 +95,23 @@ class _AnimalPageState extends State<AnimalPage> {
                       key: ValueKey('name-$formKey'),
                       label: 'Animal Name',
                       hintText: 'Enter your Animal Name',
+                      initialValue: isEditing
+                          ? widget.controller.animalName
+                          : null,
                       onChanged: widget.controller.updateAnimalName,
                     ),
                     const SizedBox(height: 22),
                     AnimalDescriptionField(
                       key: ValueKey('description-$formKey'),
+                      initialValue: isEditing
+                          ? widget.controller.description
+                          : null,
                       onChanged: widget.controller.updateDescription,
                     ),
                     const SizedBox(height: 22),
                     AnimalImageUpload(
                       imagePath: widget.controller.imagePath,
+                      networkImageUrl: widget.controller.existingImageUrl,
                       onSelectPressed: _onSelectImagePressed,
                     ),
                     const SizedBox(height: 22),
@@ -101,6 +119,7 @@ class _AnimalPageState extends State<AnimalPage> {
                       key: ValueKey('price-$formKey'),
                       label: 'Animal Price',
                       hintText: 'Enter your Animal Price',
+                      initialValue: isEditing ? widget.controller.price : null,
                       onChanged: widget.controller.updatePrice,
                     ),
                     const SizedBox(height: 22),
@@ -108,12 +127,13 @@ class _AnimalPageState extends State<AnimalPage> {
                       key: ValueKey('category-$formKey'),
                       label: 'Category Name',
                       hintText: 'Enter your Category Name',
+                      initialValue: isEditing
+                          ? widget.controller.categoryName
+                          : null,
                       onChanged: widget.controller.updateCategoryName,
                     ),
                     const SizedBox(height: 24),
-                    CategorySaveButton(
-                      onPressed: widget.controller.createAnimal,
-                    ),
+                    CategorySaveButton(onPressed: _onSavePressed),
                   ],
                 );
               },

@@ -10,14 +10,19 @@ class AnimalImageUpload extends StatelessWidget {
     super.key,
     required this.onSelectPressed,
     this.imagePath,
+    this.networkImageUrl,
   });
 
   final VoidCallback onSelectPressed;
   final String? imagePath;
+  final String? networkImageUrl;
 
   @override
   Widget build(BuildContext context) {
-    final hasImage = imagePath != null && imagePath!.isNotEmpty;
+    final hasLocalImage = imagePath != null && imagePath!.isNotEmpty;
+    final hasNetworkImage =
+        networkImageUrl != null && networkImageUrl!.isNotEmpty;
+    final hasImage = hasLocalImage || hasNetworkImage;
 
     return SizedBox(
       width: 339,
@@ -49,9 +54,16 @@ class AnimalImageUpload extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 clipBehavior: Clip.antiAlias,
-                child: hasImage
+                child: hasLocalImage
                     ? Image.file(
                         File(imagePath!),
+                        width: 339,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      )
+                    : hasNetworkImage
+                    ? Image.network(
+                        networkImageUrl!,
                         width: 339,
                         height: 200,
                         fit: BoxFit.cover,

@@ -1,5 +1,7 @@
+import 'package:animal_app/core/network/api_constants.dart';
 import 'package:animal_app/features/animal/model/animal.dart';
 import 'package:animal_app/features/animal/model/create_animal_request.dart';
+import 'package:animal_app/features/animal/model/update_animal_request.dart';
 import 'package:animal_app/features/animal/service/animal_service.dart';
 import 'package:animal_app/features/category/controller/category_controller.dart';
 import 'package:flutter/foundation.dart';
@@ -18,13 +20,39 @@ class AnimalController extends ChangeNotifier {
   String price = '';
   String categoryName = '';
   String? imagePath;
+  String? existingImageUrl;
+  int? editingAnimalId;
   int formVersion = 0;
   List<Animal> animals = [];
   bool isLoading = false;
   bool isCreating = false;
+  bool isUpdating = false;
   String? errorMessage;
   String? loadErrorMessage;
   String? successMessage;
+
+  bool get isEditing => editingAnimalId != null;
+
+  void beginEdit(Animal animal) {
+    editingAnimalId = animal.id;
+    animalName = animal.name;
+    description = animal.description;
+    price = animal.price.toString();
+    categoryName = _categoryNameForId(animal.categoryId) ?? '';
+    imagePath = null;
+    existingImageUrl = ApiConstants.resolveMediaUrl(animal.image);
+    errorMessage = null;
+    successMessage = null;
+    formVersion++;
+    notifyListeners();
+  }
+
+  void clearEdit() {
+    editingAnimalId = null;
+    existingImageUrl = null;
+    _clearForm();
+    notifyListeners();
+  }
 
   void updateAnimalName(String value) {
     animalName = value;
@@ -68,6 +96,7 @@ class AnimalController extends ChangeNotifier {
       final file = await _imagePicker.pickImage(source: ImageSource.gallery);
       if (file == null) return;
       imagePath = file.path;
+      existingImageUrl = null;
       notifyListeners();
     } catch (_) {
       errorMessage = 'Failed to pick image. Please try again';
@@ -87,6 +116,7 @@ class AnimalController extends ChangeNotifier {
       final file = await _imagePicker.pickImage(source: ImageSource.camera);
       if (file == null) return;
       imagePath = file.path;
+      existingImageUrl = null;
       notifyListeners();
     } catch (_) {
       errorMessage = 'Failed to pick image. Please try again';
@@ -116,8 +146,15 @@ class AnimalController extends ChangeNotifier {
     }
   }
 
+  Future<bool> saveAnimal() async {
+    if (isEditing) {
+      return updateAnimal();
+    }
+    return createAnimal();
+  }
+
   Future<bool> createAnimal() async {
-    if (isCreating) return false;
+    if (isCreating || isUpdating) return false;
 
     final validationError = _validateCreate();
     if (validationError != null) {
@@ -166,6 +203,71 @@ class AnimalController extends ChangeNotifier {
     }
   }
 
+  Future<bool> updateAnimal() async {
+    if (isCreating || isUpdating) return false;
+
+    final id = editingAnimalId;
+    if (id == null) {
+      errorMessage = 'No animal selected for update';
+      notifyListeners();
+      return false;
+    }
+
+    final validationError = _validateUpdate();
+    if (validationError != null) {
+      errorMessage = validationError;
+      notifyListeners();
+      return false;
+    }
+
+    final categoryId = _categoryIdForName(categoryName);
+    if (categoryId == null) {
+      errorMessage = 'Category not found';
+      notifyListeners();
+      return false;
+    }
+
+    isUpdating = true;
+    errorMessage = null;
+    successMessage = null;
+    notifyListeners();
+
+    try {
+      final response = await _animalService.updateAnimal(
+        UpdateAnimalRequest(
+          id: id,
+          name: animalName.trim(),
+          description: description.trim(),
+          imagePath: imagePath,
+          price: double.parse(price.trim()),
+          categoryId: categoryId,
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        successMessage = response.message;
+        _replaceAnimal(response.animal);
+        await loadAnimals();
+        return true;
+      }
+      errorMessage = response.message;
+      return false;
+    } catch (e) {
+      errorMessage = e.toString().replaceFirst('Exception: ', '');
+      return false;
+    } finally {
+      isUpdating = false;
+      notifyListeners();
+    }
+  }
+
+  void _replaceAnimal(Animal updated) {
+    animals = [
+      for (final animal in animals)
+        if (animal.id == updated.id) updated else animal,
+    ];
+  }
+
   int? _categoryIdForName(String name) {
     final normalized = name.trim().toLowerCase();
     for (final category in _categoryController.categories) {
@@ -176,10 +278,34 @@ class AnimalController extends ChangeNotifier {
     return null;
   }
 
+  String? _categoryNameForId(int id) {
+    for (final category in _categoryController.categories) {
+      if (category.id == id) return category.name;
+    }
+    return null;
+  }
+
   String? _validateCreate() {
     if (animalName.trim().isEmpty) return 'Animal name is required';
     if (description.trim().isEmpty) return 'Description is required';
     if (imagePath == null || imagePath!.isEmpty) {
+      return 'Animal image is required';
+    }
+    if (price.trim().isEmpty) return 'Animal price is required';
+    if (double.tryParse(price.trim()) == null) {
+      return 'Animal price must be a number';
+    }
+    if (categoryName.trim().isEmpty) return 'Category name is required';
+    return null;
+  }
+
+  String? _validateUpdate() {
+    if (animalName.trim().isEmpty) return 'Animal name is required';
+    if (description.trim().isEmpty) return 'Description is required';
+    final hasNewImage = imagePath != null && imagePath!.isNotEmpty;
+    final hasExistingImage =
+        existingImageUrl != null && existingImageUrl!.isNotEmpty;
+    if (!hasNewImage && !hasExistingImage) {
       return 'Animal image is required';
     }
     if (price.trim().isEmpty) return 'Animal price is required';

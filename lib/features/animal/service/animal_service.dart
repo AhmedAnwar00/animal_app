@@ -3,6 +3,8 @@ import 'package:animal_app/core/network/dio_client.dart';
 import 'package:animal_app/features/animal/model/animals_response.dart';
 import 'package:animal_app/features/animal/model/create_animal_request.dart';
 import 'package:animal_app/features/animal/model/create_animal_response.dart';
+import 'package:animal_app/features/animal/model/update_animal_request.dart';
+import 'package:animal_app/features/animal/model/update_animal_response.dart';
 import 'package:dio/dio.dart';
 
 class AnimalService {
@@ -62,6 +64,48 @@ class AnimalService {
         _messageFromDioException(
           e,
           'Failed to create animal. Please try again.',
+        ),
+      );
+    }
+  }
+
+  Future<UpdateAnimalResponse> updateAnimal(UpdateAnimalRequest request) async {
+    try {
+      final map = <String, dynamic>{
+        'id': request.id,
+        'name': request.name,
+        'description': request.description,
+        'animal_price': request.price,
+        'category_id': request.categoryId,
+      };
+
+      final imagePath = request.imagePath;
+      if (imagePath != null && imagePath.isNotEmpty) {
+        final fileName = imagePath.split(RegExp(r'[\\/]')).last;
+        map['animal_image'] = await MultipartFile.fromFile(
+          imagePath,
+          filename: fileName,
+        );
+      }
+
+      final formData = FormData.fromMap(map);
+
+      final response = await _client.dio.post<Map<String, dynamic>>(
+        ApiConstants.updateAnimal,
+        data: formData,
+      );
+
+      final data = response.data;
+      if (data == null) {
+        throw Exception('Empty response from server');
+      }
+
+      return UpdateAnimalResponse.fromJson(data);
+    } on DioException catch (e) {
+      throw Exception(
+        _messageFromDioException(
+          e,
+          'Failed to update animal. Please try again.',
         ),
       );
     }

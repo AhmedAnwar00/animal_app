@@ -6,9 +6,10 @@ import 'package:animal_app/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 
 class HomeAnimalCard extends StatelessWidget {
-  const HomeAnimalCard({super.key, required this.animal});
+  const HomeAnimalCard({super.key, required this.animal, this.onEditPressed});
 
   final Animal animal;
+  final VoidCallback? onEditPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +56,10 @@ class HomeAnimalCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Assets.home.moreVert.svg(),
+                  GestureDetector(
+                    onTap: onEditPressed,
+                    child: Assets.home.moreVert.svg(),
+                  ),
                 ],
               ),
             ),

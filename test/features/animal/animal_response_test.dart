@@ -1,5 +1,6 @@
 import 'package:animal_app/features/animal/model/animals_response.dart';
 import 'package:animal_app/features/animal/model/create_animal_response.dart';
+import 'package:animal_app/features/animal/model/update_animal_response.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -48,5 +49,38 @@ void main() {
     expect(response.animal.name, 'بيبول 34');
     expect(response.animal.price, 100);
     expect(response.animal.categoryId, 2);
+  });
+
+  test('parses POST /api/updateAnimal animal from Animals', () {
+    final response = UpdateAnimalResponse.fromJson({
+      'statusCode': 200,
+      'Animals': {
+        'animal_id': 1,
+        'animal_name': 'ليديبول 3',
+        'animal_description': 'sdds',
+        'animal_image': 'http://localhost:8000/api/uploads/1790511979334.png',
+        'animal_price': 200.0,
+        'category_id': 2,
+        'user_id': 17,
+        'animal_created_at': '2026-09-27 14:40:42.000Z',
+        'animal_update_at': '2026-09-27 14:40:42.000Z',
+      },
+      'message': 'Animal updated successfully',
+    });
+
+    expect(response.statusCode, 200);
+    expect(response.message, 'Animal updated successfully');
+    expect(response.animal.id, 1);
+    expect(response.animal.name, 'ليديبول 3');
+    expect(response.animal.description, 'sdds');
+    expect(
+      response.animal.image,
+      'http://localhost:8000/api/uploads/1790511979334.png',
+    );
+    expect(response.animal.price, 200);
+    expect(response.animal.categoryId, 2);
+    expect(response.animal.userId, 17);
+    expect(response.animal.createdAt, '2026-09-27 14:40:42.000Z');
+    expect(response.animal.updatedAt, '2026-09-27 14:40:42.000Z');
   });
 }

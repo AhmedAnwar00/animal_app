@@ -1,5 +1,7 @@
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/features/animal/controller/animal_controller.dart';
+import 'package:animal_app/features/animal/model/animal.dart';
+import 'package:animal_app/features/animal/ui/animal_page.dart';
 import 'package:animal_app/features/category/controller/category_controller.dart';
 import 'package:animal_app/features/category/model/category.dart';
 import 'package:animal_app/features/category/ui/category_page.dart';
@@ -29,6 +31,17 @@ class HomePage extends StatelessWidget {
           ),
         )
         .then((_) => categoryController.clearEdit());
+  }
+
+  void _openAnimalEdit(BuildContext context, Animal animal) {
+    animalController.beginEdit(animal);
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute<void>(
+            builder: (_) => AnimalPage(controller: animalController),
+          ),
+        )
+        .then((_) => animalController.clearEdit());
   }
 
   void _handleLoadError(BuildContext context) {
@@ -102,7 +115,11 @@ class HomePage extends StatelessWidget {
                           else
                             for (var i = 0; i < animals.length; i++) ...[
                               if (i > 0) const SizedBox(height: 17),
-                              HomeAnimalCard(animal: animals[i]),
+                              HomeAnimalCard(
+                                animal: animals[i],
+                                onEditPressed: () =>
+                                    _openAnimalEdit(context, animals[i]),
+                              ),
                             ],
                         ],
                       );
