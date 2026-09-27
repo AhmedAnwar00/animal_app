@@ -1,18 +1,25 @@
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/features/animal/controller/animal_controller.dart';
+import 'package:animal_app/features/animal/ui/widgets/animal_delete_confirmation_dialog.dart';
 import 'package:animal_app/features/animal/ui/widgets/animal_description_field.dart';
 import 'package:animal_app/features/animal/ui/widgets/animal_image_upload.dart';
 import 'package:animal_app/features/animal/ui/widgets/animal_title.dart';
 import 'package:animal_app/features/auth/ui/widgets/sign_up_image_source_sheet.dart';
+import 'package:animal_app/features/category/ui/widgets/category_delete_button.dart';
 import 'package:animal_app/features/category/ui/widgets/category_labeled_field.dart';
 import 'package:animal_app/features/category/ui/widgets/category_save_button.dart';
 import 'package:animal_app/features/category/ui/widgets/category_user_header.dart';
 import 'package:flutter/material.dart';
 
 class AnimalPage extends StatefulWidget {
-  const AnimalPage({super.key, required this.controller});
+  const AnimalPage({
+    super.key,
+    required this.controller,
+    this.onEditingFinished,
+  });
 
   final AnimalController controller;
+  final VoidCallback? onEditingFinished;
 
   @override
   State<AnimalPage> createState() => _AnimalPageState();
@@ -49,8 +56,29 @@ class _AnimalPageState extends State<AnimalPage> {
     final success = await widget.controller.saveAnimal();
     if (!mounted) return;
     if (wasEditing && success) {
-      Navigator.of(context).pop();
+      _leaveEdit();
     }
+  }
+
+  Future<void> _onDeletePressed() async {
+    final confirmed = await AnimalDeleteConfirmationDialog.show(context);
+    if (!confirmed || !mounted) return;
+
+    final success = await widget.controller.deleteAnimal();
+    if (!mounted) return;
+    if (success) {
+      _leaveEdit();
+    }
+  }
+
+  void _leaveEdit() {
+    widget.controller.clearEdit();
+    final onEditingFinished = widget.onEditingFinished;
+    if (onEditingFinished != null) {
+      onEditingFinished();
+      return;
+    }
+    Navigator.of(context).pop();
   }
 
   Future<void> _onSelectImagePressed() async {
@@ -133,7 +161,14 @@ class _AnimalPageState extends State<AnimalPage> {
                       onChanged: widget.controller.updateCategoryName,
                     ),
                     const SizedBox(height: 24),
-                    CategorySaveButton(onPressed: _onSavePressed),
+                    CategorySaveButton(
+                      label: isEditing ? 'Edit' : 'Save',
+                      onPressed: _onSavePressed,
+                    ),
+                    if (isEditing) ...[
+                      const SizedBox(height: 12),
+                      CategoryDeleteButton(onPressed: _onDeletePressed),
+                    ],
                   ],
                 );
               },

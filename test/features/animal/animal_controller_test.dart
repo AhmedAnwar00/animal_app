@@ -4,6 +4,7 @@ import 'package:animal_app/core/network/dio_client.dart';
 import 'package:animal_app/features/animal/controller/animal_controller.dart';
 import 'package:animal_app/features/animal/model/animal.dart';
 import 'package:animal_app/features/animal/model/animals_response.dart';
+import 'package:animal_app/features/animal/model/delete_animal_response.dart';
 import 'package:animal_app/features/animal/model/update_animal_request.dart';
 import 'package:animal_app/features/animal/model/update_animal_response.dart';
 import 'package:animal_app/features/animal/service/animal_service.dart';
@@ -140,6 +141,27 @@ void main() {
     expect(controller.animals.single.name, 'ليديبول');
   });
 
+  test('delete requires a selected animal', () async {
+    final success = await controller.deleteAnimal();
+
+    expect(success, isFalse);
+    expect(controller.errorMessage, 'No animal selected for delete');
+    expect(service.deletedId, isNull);
+  });
+
+  test('delete removes the selected animal', () async {
+    controller.beginEdit(original);
+
+    final success = await controller.deleteAnimal();
+
+    expect(success, isTrue);
+    expect(service.deletedId, 1);
+    expect(controller.animals, isEmpty);
+    expect(controller.successMessage, 'Animal deleted successfully');
+    expect(controller.isDeleting, isFalse);
+    expect(controller.errorMessage, isNull);
+  });
+
   test('update keeps loading set until the request finishes', () async {
     service.holdRequest = true;
     controller.beginEdit(original);
@@ -162,6 +184,7 @@ class _FakeAnimalService extends AnimalService {
 
   final Animal updated;
   UpdateAnimalRequest? request;
+  int? deletedId;
   Exception? error;
   bool holdRequest = false;
   final started = Completer<void>();
@@ -187,6 +210,17 @@ class _FakeAnimalService extends AnimalService {
       statusCode: 200,
       animal: updated,
       message: 'Animal updated successfully',
+    );
+  }
+
+  @override
+  Future<DeleteAnimalResponse> deleteAnimal(int animalId) async {
+    deletedId = animalId;
+    final failure = error;
+    if (failure != null) throw failure;
+    return const DeleteAnimalResponse(
+      statusCode: 200,
+      message: 'Animal deleted successfully',
     );
   }
 }

@@ -27,6 +27,7 @@ class AnimalController extends ChangeNotifier {
   bool isLoading = false;
   bool isCreating = false;
   bool isUpdating = false;
+  bool isDeleting = false;
   String? errorMessage;
   String? loadErrorMessage;
   String? successMessage;
@@ -154,7 +155,7 @@ class AnimalController extends ChangeNotifier {
   }
 
   Future<bool> createAnimal() async {
-    if (isCreating || isUpdating) return false;
+    if (isCreating || isUpdating || isDeleting) return false;
 
     final validationError = _validateCreate();
     if (validationError != null) {
@@ -204,7 +205,7 @@ class AnimalController extends ChangeNotifier {
   }
 
   Future<bool> updateAnimal() async {
-    if (isCreating || isUpdating) return false;
+    if (isCreating || isUpdating || isDeleting) return false;
 
     final id = editingAnimalId;
     if (id == null) {
@@ -257,6 +258,40 @@ class AnimalController extends ChangeNotifier {
       return false;
     } finally {
       isUpdating = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> deleteAnimal() async {
+    if (isCreating || isUpdating || isDeleting) return false;
+
+    final id = editingAnimalId;
+    if (id == null) {
+      errorMessage = 'No animal selected for delete';
+      notifyListeners();
+      return false;
+    }
+
+    isDeleting = true;
+    errorMessage = null;
+    successMessage = null;
+    notifyListeners();
+
+    try {
+      final response = await _animalService.deleteAnimal(id);
+
+      if (response.statusCode == 200) {
+        animals = animals.where((animal) => animal.id != id).toList();
+        successMessage = response.message;
+        return true;
+      }
+      errorMessage = response.message;
+      return false;
+    } catch (e) {
+      errorMessage = e.toString().replaceFirst('Exception: ', '');
+      return false;
+    } finally {
+      isDeleting = false;
       notifyListeners();
     }
   }

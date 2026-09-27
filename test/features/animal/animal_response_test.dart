@@ -1,5 +1,6 @@
 import 'package:animal_app/features/animal/model/animals_response.dart';
 import 'package:animal_app/features/animal/model/create_animal_response.dart';
+import 'package:animal_app/features/animal/model/delete_animal_response.dart';
 import 'package:animal_app/features/animal/model/update_animal_response.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -82,5 +83,15 @@ void main() {
     expect(response.animal.userId, 17);
     expect(response.animal.createdAt, '2026-09-27 14:40:42.000Z');
     expect(response.animal.updatedAt, '2026-09-27 14:40:42.000Z');
+  });
+
+  test('parses DELETE /api/deleteAnimal', () {
+    final response = DeleteAnimalResponse.fromJson({
+      'statusCode': 200,
+      'message': 'Animal deleted successfully',
+    });
+
+    expect(response.statusCode, 200);
+    expect(response.message, 'Animal deleted successfully');
   });
 }

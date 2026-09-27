@@ -1,7 +1,6 @@
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/features/animal/controller/animal_controller.dart';
 import 'package:animal_app/features/animal/model/animal.dart';
-import 'package:animal_app/features/animal/ui/animal_page.dart';
 import 'package:animal_app/features/category/controller/category_controller.dart';
 import 'package:animal_app/features/category/model/category.dart';
 import 'package:animal_app/features/category/ui/category_page.dart';
@@ -17,10 +16,12 @@ class HomePage extends StatelessWidget {
     super.key,
     required this.categoryController,
     required this.animalController,
+    required this.onOpenAnimals,
   });
 
   final CategoryController categoryController;
   final AnimalController animalController;
+  final VoidCallback onOpenAnimals;
 
   void _openCategoryEdit(BuildContext context, Category category) {
     categoryController.beginEdit(category);
@@ -33,15 +34,9 @@ class HomePage extends StatelessWidget {
         .then((_) => categoryController.clearEdit());
   }
 
-  void _openAnimalEdit(BuildContext context, Animal animal) {
+  void _openAnimalEdit(Animal animal) {
     animalController.beginEdit(animal);
-    Navigator.of(context)
-        .push(
-          MaterialPageRoute<void>(
-            builder: (_) => AnimalPage(controller: animalController),
-          ),
-        )
-        .then((_) => animalController.clearEdit());
+    onOpenAnimals();
   }
 
   void _handleLoadError(BuildContext context) {
@@ -117,8 +112,9 @@ class HomePage extends StatelessWidget {
                               if (i > 0) const SizedBox(height: 17),
                               HomeAnimalCard(
                                 animal: animals[i],
+                                onTap: () => _openAnimalEdit(animals[i]),
                                 onEditPressed: () =>
-                                    _openAnimalEdit(context, animals[i]),
+                                    _openAnimalEdit(animals[i]),
                               ),
                             ],
                         ],

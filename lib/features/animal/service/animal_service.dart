@@ -3,6 +3,7 @@ import 'package:animal_app/core/network/dio_client.dart';
 import 'package:animal_app/features/animal/model/animals_response.dart';
 import 'package:animal_app/features/animal/model/create_animal_request.dart';
 import 'package:animal_app/features/animal/model/create_animal_response.dart';
+import 'package:animal_app/features/animal/model/delete_animal_response.dart';
 import 'package:animal_app/features/animal/model/update_animal_request.dart';
 import 'package:animal_app/features/animal/model/update_animal_response.dart';
 import 'package:dio/dio.dart';
@@ -106,6 +107,39 @@ class AnimalService {
         _messageFromDioException(
           e,
           'Failed to update animal. Please try again.',
+        ),
+      );
+    }
+  }
+
+  Future<DeleteAnimalResponse> deleteAnimal(int animalId) async {
+    try {
+      final response = await _client.dio.delete<dynamic>(
+        ApiConstants.deleteAnimal,
+        queryParameters: {'id': animalId},
+      );
+
+      final data = response.data;
+      if (data is Map<String, dynamic>) {
+        return DeleteAnimalResponse.fromJson(data);
+      }
+      if (data is Map) {
+        return DeleteAnimalResponse.fromJson(
+          data.map((key, value) => MapEntry(key.toString(), value)),
+        );
+      }
+      if (response.statusCode == 200) {
+        return const DeleteAnimalResponse(
+          statusCode: 200,
+          message: 'Animal deleted successfully',
+        );
+      }
+      throw Exception('Empty response from server');
+    } on DioException catch (e) {
+      throw Exception(
+        _messageFromDioException(
+          e,
+          'Failed to delete animal. Please try again.',
         ),
       );
     }

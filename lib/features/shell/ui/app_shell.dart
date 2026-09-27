@@ -59,10 +59,14 @@ class _AppShellState extends State<AppShell> {
               HomePage(
                 categoryController: _categoryController,
                 animalController: _animalController,
+                onOpenAnimals: () => _controller.selectTab(3),
               ),
               const SearchPage(),
               CategoryPage(controller: _categoryController),
-              AnimalPage(controller: _animalController),
+              AnimalPage(
+                controller: _animalController,
+                onEditingFinished: () => _controller.selectTab(0),
+              ),
               const MePage(),
             ],
           ),
