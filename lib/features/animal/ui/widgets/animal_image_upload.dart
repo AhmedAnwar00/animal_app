@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
 import 'package:animal_app/gen/assets.gen.dart';
@@ -7,12 +9,16 @@ class AnimalImageUpload extends StatelessWidget {
   const AnimalImageUpload({
     super.key,
     required this.onSelectPressed,
+    this.imagePath,
   });
 
   final VoidCallback onSelectPressed;
+  final String? imagePath;
 
   @override
   Widget build(BuildContext context) {
+    final hasImage = imagePath != null && imagePath!.isNotEmpty;
+
     return SizedBox(
       width: 339,
       child: Column(
@@ -35,32 +41,39 @@ class AnimalImageUpload extends StatelessWidget {
               child: Container(
                 width: 339,
                 height: 200,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 32,
-                ),
+                padding: hasImage
+                    ? EdgeInsets.zero
+                    : const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
                 decoration: BoxDecoration(
                   color: AppColors.uploadFill,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Assets.auth.uploadImage.svg(
-                      width: 28,
-                      height: 28,
-                      fit: BoxFit.contain,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Select Your Image',
-                      textAlign: TextAlign.center,
-                      style: AppStyles.urbanistMedium16.copyWith(
-                        color: AppColors.primary,
+                clipBehavior: Clip.antiAlias,
+                child: hasImage
+                    ? Image.file(
+                        File(imagePath!),
+                        width: 339,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      )
+                    : Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Assets.auth.uploadImage.svg(
+                            width: 28,
+                            height: 28,
+                            fit: BoxFit.contain,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Select Your Image',
+                            textAlign: TextAlign.center,
+                            style: AppStyles.urbanistMedium16.copyWith(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
               ),
             ),
           ),
@@ -71,10 +84,7 @@ class AnimalImageUpload extends StatelessWidget {
 }
 
 class _DashedBorderPainter extends CustomPainter {
-  const _DashedBorderPainter({
-    required this.color,
-    required this.radius,
-  });
+  const _DashedBorderPainter({required this.color, required this.radius});
 
   final Color color;
   final double radius;

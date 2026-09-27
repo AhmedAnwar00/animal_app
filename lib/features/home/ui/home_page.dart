@@ -1,20 +1,24 @@
 import 'package:animal_app/core/theme/colors.dart';
+import 'package:animal_app/features/animal/controller/animal_controller.dart';
 import 'package:animal_app/features/category/controller/category_controller.dart';
 import 'package:animal_app/features/category/model/category.dart';
 import 'package:animal_app/features/category/ui/category_page.dart';
-import 'package:animal_app/features/home/controller/home_controller.dart';
 import 'package:animal_app/features/home/ui/widgets/home_animal_card.dart';
 import 'package:animal_app/features/home/ui/widgets/home_category_row.dart';
 import 'package:animal_app/features/home/ui/widgets/home_empty_state.dart';
 import 'package:animal_app/features/home/ui/widgets/home_header.dart';
 import 'package:animal_app/features/home/ui/widgets/home_section_header.dart';
-import 'package:animal_app/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.categoryController});
+  const HomePage({
+    super.key,
+    required this.categoryController,
+    required this.animalController,
+  });
 
   final CategoryController categoryController;
+  final AnimalController animalController;
 
   void _openCategoryEdit(BuildContext context, Category category) {
     categoryController.beginEdit(category);
@@ -27,10 +31,22 @@ class HomePage extends StatelessWidget {
         .then((_) => categoryController.clearEdit());
   }
 
+  void _handleLoadError(BuildContext context) {
+    final error = animalController.loadErrorMessage;
+    if (error == null) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!context.mounted) return;
+      if (animalController.loadErrorMessage == null) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(error)));
+      animalController.clearLoadError();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    const homeController = HomeController();
-
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
@@ -44,10 +60,14 @@ class HomePage extends StatelessWidget {
                 const HomeHeader(),
                 Expanded(
                   child: ListenableBuilder(
-                    listenable: categoryController,
+                    listenable: Listenable.merge([
+                      categoryController,
+                      animalController,
+                    ]),
                     builder: (context, _) {
+                      _handleLoadError(context);
                       final categories = categoryController.categories;
-                      final animals = homeController.animals;
+                      final animals = animalController.animals;
 
                       return ListView(
                         padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
@@ -82,10 +102,7 @@ class HomePage extends StatelessWidget {
                           else
                             for (var i = 0; i < animals.length; i++) ...[
                               if (i > 0) const SizedBox(height: 17),
-                              HomeAnimalCard(
-                                animal: animals[i],
-                                image: Assets.home.animalCard,
-                              ),
+                              HomeAnimalCard(animal: animals[i]),
                             ],
                         ],
                       );

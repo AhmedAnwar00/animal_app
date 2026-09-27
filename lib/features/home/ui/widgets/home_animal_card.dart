@@ -1,21 +1,19 @@
+import 'package:animal_app/core/network/api_constants.dart';
 import 'package:animal_app/core/theme/colors.dart';
 import 'package:animal_app/core/theme/styles.dart';
-import 'package:animal_app/features/home/model/home_animal.dart';
+import 'package:animal_app/features/animal/model/animal.dart';
 import 'package:animal_app/gen/assets.gen.dart';
 import 'package:flutter/material.dart';
 
 class HomeAnimalCard extends StatelessWidget {
-  const HomeAnimalCard({
-    super.key,
-    required this.animal,
-    required this.image,
-  });
+  const HomeAnimalCard({super.key, required this.animal});
 
-  final HomeAnimal animal;
-  final AssetGenImage image;
+  final Animal animal;
 
   @override
   Widget build(BuildContext context) {
+    final imageUrl = ApiConstants.resolveMediaUrl(animal.image);
+
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.fieldFill,
@@ -42,7 +40,7 @@ class HomeAnimalCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          animal.creator,
+                          '${animal.userId}',
                           style: AppStyles.urbanistRegular12.copyWith(
                             color: AppColors.textCaption,
                           ),
@@ -51,7 +49,7 @@ class HomeAnimalCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    animal.price,
+                    '${animal.price}',
                     style: AppStyles.urbanistSemiBold12.copyWith(
                       color: AppColors.primary,
                     ),
@@ -65,11 +63,14 @@ class HomeAnimalCard extends StatelessWidget {
             SizedBox(
               height: 173,
               width: double.infinity,
-              child: image.image(
-                height: 173,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+              child: imageUrl == null
+                  ? const SizedBox.shrink()
+                  : Image.network(
+                      imageUrl,
+                      height: 173,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
             ),
             const SizedBox(height: 11),
             Padding(
