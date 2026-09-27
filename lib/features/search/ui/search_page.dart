@@ -1,11 +1,21 @@
 import 'package:animal_app/core/theme/colors.dart';
+import 'package:animal_app/features/animal/controller/animal_controller.dart';
+import 'package:animal_app/features/category/controller/category_controller.dart';
 import 'package:animal_app/features/search/controller/search_controller.dart';
 import 'package:animal_app/features/search/ui/widgets/search_field.dart';
 import 'package:animal_app/features/search/ui/widgets/search_filter_row.dart';
+import 'package:animal_app/features/search/ui/widgets/search_results.dart';
 import 'package:flutter/material.dart' hide SearchController;
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  const SearchPage({
+    super.key,
+    required this.animalController,
+    required this.categoryController,
+  });
+
+  final AnimalController animalController;
+  final CategoryController categoryController;
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -17,7 +27,10 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
-    _controller = SearchController();
+    _controller = SearchController(
+      widget.animalController,
+      widget.categoryController,
+    );
   }
 
   @override
@@ -56,7 +69,7 @@ class _SearchPageState extends State<SearchPage> {
                         onFilterSelected: _controller.selectFilter,
                       ),
                     ),
-                    const Expanded(child: SizedBox.shrink()),
+                    Expanded(child: SearchResults(animals: _controller.results)),
                   ],
                 );
               },
